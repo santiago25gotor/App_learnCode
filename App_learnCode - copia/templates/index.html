@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Learning Platform - Aprende Python Paso a Paso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐍 Python<span>Learn</span></a>
+            <nav>
+                <a href="/login">Iniciar Sesión</a>
+                <a href="/register">Registrarse</a>
+            </nav>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Aprende Python desde Cero</h1>
+            <p>
+                Curso interactivo con lecciones estructuradas, ejemplos prácticos 
+                y seguimiento de tu progreso. ¡Comienza tu viaje en la programación hoy!
+            </p>
+            <div class="cta-buttons">
+                <a href="/register" class="btn btn-primary">Comenzar Gratis</a>
+                <a href="/login" class="btn btn-secondary">Ya tengo cuenta</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características -->
+    <section class="container">
+        <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+            ¿Por qué elegir PythonLearn?
+        </h2>
+        
+        <div class="lessons-grid">
+            <div class="card">
+                <h3>📚 Contenido Estructurado</h3>
+                <p>
+                    Aprende desde lo básico hasta temas avanzados con lecciones 
+                    organizadas por nivel de dificultad.
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>💻 Ejemplos Prácticos</h3>
+                <p>
+                    Cada lección incluye ejemplos de código reales que puedes 
+                    ejecutar y modificar para aprender haciendo.
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>📊 Seguimiento de Progreso</h3>
+                <p>
+                    Monitorea tu avance, gana puntos por cada lección completada 
+                    y visualiza tu crecimiento.
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>🎯 Aprende a tu Ritmo</h3>
+                <p>
+                    Estudia cuando quieras, desde donde quieras. El curso se 
+                    adapta a tu velocidad de aprendizaje.
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>🔥 Contenido de W3Schools</h3>
+                <p>
+                    Basado en el reconocido tutorial de Python de W3Schools, 
+                    con contenido de calidad probada.
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>🚀 Gratis y Accesible</h3>
+                <p>
+                    Acceso completo a todas las lecciones sin costo. 
+                    Solo necesitas registrarte para comenzar.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Niveles del curso -->
+    <section class="container" style="margin-top: 4rem;">
+        <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+            Estructura del Curso
+        </h2>
+        
+        <div class="lessons-grid">
+            <div class="card" style="border-left: 4px solid #10B981;">
+                <h3>🌱 Python Básico</h3>
+                <p>
+                    Aprende los fundamentos: variables, tipos de datos, 
+                    operadores, condicionales, bucles y funciones básicas.
+                </p>
+                <span class="lesson-category" style="background: #10B981;">
+                    Nivel Principiante
+                </span>
+            </div>
+            
+            <div class="card" style="border-left: 4px solid #F59E0B;">
+                <h3>⚡ Python Intermedio</h3>
+                <p>
+                    Domina listas, diccionarios, manejo de archivos, 
+                    excepciones y programación orientada a objetos.
+                </p>
+                <span class="lesson-category" style="background: #F59E0B;">
+                    Nivel Intermedio
+                </span>
+            </div>
+            
+            <div class="card" style="border-left: 4px solid #EF4444;">
+                <h3>🚀 Python Avanzado</h3>
+                <p>
+                    Explora temas avanzados: decoradores, generadores, 
+                    programación funcional y bibliotecas populares.
+                </p>
+                <span class="lesson-category" style="background: #EF4444;">
+                    Nivel Avanzado
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Final -->
+    <section class="container" style="margin-top: 4rem; text-align: center;">
+        <div class="card" style="padding: 3rem; background: linear-gradient(135deg, #4F46E5, #7C3AED);">
+            <h2 style="color: white; margin-bottom: 1rem; font-size: 2rem;">
+                ¿Listo para comenzar?
+            </h2>
+            <p style="color: white; opacity: 0.9; margin-bottom: 2rem; font-size: 1.125rem;">
+                Únete a miles de estudiantes que están aprendiendo Python
+            </p>
+            <a href="/register" class="btn btn-primary" style="background: white; color: #4F46E5;">
+                Crear Cuenta Gratis
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #1F2937; color: white; padding: 2rem 0; margin-top: 4rem;">
+        <div class="container" style="text-align: center;">
+            <p>© 2026 PythonLearn - Plataforma de aprendizaje de Python</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">
+                Contenido basado en W3Schools | Desarrollado con Flask + Firebase
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
