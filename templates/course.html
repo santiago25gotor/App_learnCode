@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Curso - PythonLearn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/course" class="logo">🐍 Python<span>Learn</span></a>
+            <nav>
+                <span style="color: var(--text-secondary); margin-right: 1rem;">
+                    👤 {{ username }}
+                </span>
+                <a href="#" id="logoutBtn">Cerrar Sesión</a>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Sección de Progreso -->
+        <div class="progress-container">
+            <h2>Tu Progreso</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="completedCount">0</div>
+                    <div class="stat-label">Lecciones Completadas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalPoints">0</div>
+                    <div class="stat-label">Puntos Totales</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="currentLevel">-</div>
+                    <div class="stat-label">Nivel Actual</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros por Categoría -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all">
+                Todas las Lecciones
+            </button>
+            <button class="category-btn" data-category="Python Básico">
+                🌱 Python Básico
+            </button>
+            <button class="category-btn" data-category="Python Intermedio">
+                ⚡ Python Intermedio
+            </button>
+            <button class="category-btn" data-category="Python Avanzado">
+                🚀 Python Avanzado
+            </button>
+        </div>
+
+        <!-- Lista de Lecciones -->
+        <div id="lessonsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Cargando lecciones...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allLessons = [];
+        let userProgress = {};
+        let currentCategory = 'all';
+
+        // Cargar progreso del usuario
+        async function loadUserProgress() {
+            try {
+                const response = await fetch('/api/progress');
+                const data = await response.json();
+                
+                if (data.success) {
+                    userProgress = data.progress;
+                    updateProgressUI();
+                }
+            } catch (error) {
+                console.error('Error al cargar progreso:', error);
+            }
+        }
+
+        // Cargar lecciones
+        async function loadLessons(category = null) {
+            try {
+                const url = category ? `/api/lessons?category=${encodeURIComponent(category)}` : '/api/lessons';
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    allLessons = data.lessons;
+                    renderLessons(allLessons);
+                }
+            } catch (error) {
+                console.error('Error al cargar lecciones:', error);
+                document.getElementById('lessonsContainer').innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ Error al cargar las lecciones. Por favor, recarga la página.
+                    </div>
+                `;
+            }
+        }
+
+        // Renderizar lecciones
+        function renderLessons(lessons) {
+            const container = document.getElementById('lessonsContainer');
+            
+            if (lessons.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info">
+                        ℹ️ No hay lecciones disponibles en esta categoría.
+                    </div>
+                `;
+                return;
+            }
+
+            const lessonsHTML = lessons.map(lesson => {
+                const isCompleted = userProgress.completed_lessons?.includes(lesson.id);
+                const categoryColors = {
+                    'Python Básico': '#10B981',
+                    'Python Intermedio': '#F59E0B',
+                    'Python Avanzado': '#EF4444'
+                };
+                
+                return `
+                    <div class="lesson-card ${isCompleted ? 'completed' : ''}" 
+                         onclick="window.location.href='/lesson/${lesson.id}'"
+                         style="border-left-color: ${categoryColors[lesson.categoria] || '#4F46E5'}">
+                        <div class="lesson-number">Lección #${lesson.numero_leccion}</div>
+                        <div class="lesson-title">${lesson.titulo}</div>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                            ${lesson.descripcion ? lesson.descripcion.substring(0, 100) + '...' : ''}
+                        </p>
+                        <span class="lesson-category" style="background: ${categoryColors[lesson.categoria] || '#4F46E5'}">
+                            ${lesson.categoria}
+                        </span>
+                        ${isCompleted ? '<span style="margin-left: 0.5rem;">✅</span>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `<div class="lessons-grid">${lessonsHTML}</div>`;
+        }
+
+        // Actualizar UI de progreso
+        function updateProgressUI() {
+            const completedCount = userProgress.completed_lessons?.length || 0;
+            const totalPoints = userProgress.total_points || 0;
+            const currentLevel = userProgress.current_level || 'Python Básico';
+            
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('currentLevel').textContent = currentLevel;
+            
+            // Calcular porcentaje de progreso (asumiendo 100 lecciones totales como ejemplo)
+            const progressPercent = allLessons.length > 0 
+                ? (completedCount / allLessons.length) * 100 
+                : 0;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+        }
+
+        // Manejar filtros de categoría
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                // Actualizar botones activos
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Cargar lecciones de la categoría
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                if (category === 'all') {
+                    renderLessons(allLessons);
+                } else {
+                    const filtered = allLessons.filter(l => l.categoria === category);
+                    renderLessons(filtered);
+                }
+            });
+        });
+
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const response = await fetch('/api/logout', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+            }
+        });
+
+        // Cargar datos al iniciar
+        (async () => {
+            await loadUserProgress();
+            await loadLessons();
+        })();
+    </script>
+</body>
+</html>

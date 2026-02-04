@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página no encontrada</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐍 Python<span>Learn</span></a>
+        </div>
+    </nav>
+
+    <div class="container" style="text-align: center; padding: 4rem 1.5rem;">
+        <h1 style="font-size: 6rem; color: var(--primary-color); margin-bottom: 1rem;">404</h1>
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Página no encontrada</h2>
+        <p style="color: var(--text-secondary); font-size: 1.125rem; margin-bottom: 2rem;">
+            Lo sentimos, la página que buscas no existe o ha sido movida.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/" class="btn btn-primary">Ir al Inicio</a>
+            <a href="/course" class="btn btn-secondary">Ir al Curso</a>
+        </div>
+    </div>
+</body>
+</html>

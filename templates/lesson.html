@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección - PythonLearn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/course" class="logo">🐍 Python<span>Learn</span></a>
+            <nav>
+                <a href="/course">← Volver al Curso</a>
+                <a href="#" id="logoutBtn">Cerrar Sesión</a>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="lessonContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Cargando lección...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const lessonId = '{{ lesson_id }}';
+        let lessonData = null;
+
+        // Cargar datos de la lección
+        async function loadLesson() {
+            try {
+                const response = await fetch(`/api/lessons/${lessonId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    lessonData = data.lesson;
+                    renderLesson(lessonData);
+                } else {
+                    document.getElementById('lessonContainer').innerHTML = `
+                        <div class="alert alert-error">
+                            ❌ Lección no encontrada
+                        </div>
+                        <a href="/course" class="btn btn-primary">Volver al Curso</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error al cargar lección:', error);
+                document.getElementById('lessonContainer').innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ Error al cargar la lección
+                    </div>
+                `;
+            }
+        }
+
+        // Renderizar lección
+        function renderLesson(lesson) {
+            const categoryColors = {
+                'Python Básico': '#10B981',
+                'Python Intermedio': '#F59E0B',
+                'Python Avanzado': '#EF4444'
+            };
+
+            const container = document.getElementById('lessonContainer');
+            container.innerHTML = `
+                <div style="margin-bottom: 2rem;">
+                    <span class="lesson-category" style="background: ${categoryColors[lesson.categoria] || '#4F46E5'}">
+                        ${lesson.categoria}
+                    </span>
+                    <span style="margin-left: 1rem; color: var(--text-secondary); font-weight: 600;">
+                        Lección #${lesson.numero_leccion}
+                    </span>
+                </div>
+
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary-color);">
+                    ${lesson.titulo}
+                </h1>
+
+                ${lesson.url ? `
+                    <div style="margin-bottom: 2rem;">
+                        <a href="${lesson.url}" target="_blank" 
+                           style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                            📖 Ver en W3Schools →
+                        </a>
+                    </div>
+                ` : ''}
+
+                <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                    <h2 style="margin-bottom: 1rem;">📚 Descripción</h2>
+                    <p style="line-height: 1.8; color: var(--text-secondary);">
+                        ${lesson.descripcion || 'No hay descripción disponible.'}
+                    </p>
+                </div>
+
+                ${lesson.ejemplos_codigo ? `
+                    <div class="card" style="margin-bottom: 2rem; padding: 2rem;">
+                        <h2 style="margin-bottom: 1rem;">💻 Ejemplos de Código</h2>
+                        <div class="code-block">
+                            ${formatCode(lesson.ejemplos_codigo)}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button id="completeBtn" class="btn btn-success">
+                        ✅ Marcar como Completada
+                    </button>
+                    <a href="/course" class="btn btn-secondary">
+                        ← Volver al Curso
+                    </a>
+                </div>
+
+                <div id="completionAlert" style="margin-top: 1rem;"></div>
+            `;
+
+            // Agregar evento al botón de completar
+            document.getElementById('completeBtn').addEventListener('click', completeLesson);
+        }
+
+        // Formatear código para mejor visualización
+        function formatCode(code) {
+            // Reemplazar los separadores --- por saltos de línea
+            const sections = code.split('---');
+            return sections.map(section => {
+                return section.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }).join('\n\n');
+        }
+
+        // Marcar lección como completada
+        async function completeLesson() {
+            const btn = document.getElementById('completeBtn');
+            const alertContainer = document.getElementById('completionAlert');
+            
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
+
+            try {
+                const response = await fetch(`/api/progress/complete/${lessonId}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-success">
+                            ${data.message}
+                        </div>
+                    `;
+                    btn.textContent = '✅ Completada';
+                    btn.style.background = '#10B981';
+                } else {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            ❌ ${data.message}
+                        </div>
+                    `;
+                    btn.disabled = false;
+                    btn.textContent = '✅ Marcar como Completada';
+                }
+            } catch (error) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ Error al guardar el progreso
+                    </div>
+                `;
+                btn.disabled = false;
+                btn.textContent = '✅ Marcar como Completada';
+            }
+        }
+
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const response = await fetch('/api/logout', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+            }
+        });
+
+        // Cargar lección al iniciar
+        loadLesson();
+    </script>
+</body>
+</html>
