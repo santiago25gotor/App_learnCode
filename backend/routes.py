@@ -266,6 +266,44 @@ def get_categories():
     }), 200
 
 
+@api.route("/search", methods=["GET"])
+@login_required
+def search():
+    """
+    Buscar lecciones
+    Query param:
+        ?q=variables
+        ?q=variables&category=Python%20Basico
+        ?q=variables&category=Python%20Intermedio&difficulty=2
+    """
+    query = request.args.get("q", "").strip()
+    category = request.args.get("category", "").strip()
+    difficulty = request.args.get("difficulty", type=int)
+
+    if not query:
+        return jsonify({
+            "success": False,
+            "message": "Parámetro de búsqueda vacío"
+        }), 400
+
+    # Usar busqueda avanzada si hay filtros
+    if category or difficulty is not None:
+        results = firebase_service.search_lessons_advanced(query, category, difficulty)
+    else:
+        results = firebase_service.search_lessons(query)
+
+    return jsonify({
+        "success": True,
+        "query": query,
+        "filters": {
+            "category": category or None,
+            "difficulty": difficulty
+        },
+        "results": results,
+        "count": len(results)
+    }), 200
+
+
 # ============================================
 # ENDPOINTS DE PROGRESO
 # ============================================

@@ -18,12 +18,9 @@ def import_lessons_from_csv():
     # Directorio donde están los CSV
     data_dir = 'data'
     
-    # Lista de archivos CSV
+    # Lista de archivos CSV - Solo importar el archivo completo para evitar duplicados
     csv_files = [
-        'python_python_básico.csv',
-        'python_python_intermedio.csv',
-        'python_python_avanzado.csv',
-        # 'python_w3schools.csv'  # Este contiene todas las lecciones
+        'python_w3schools.csv'  # Este contiene todas las lecciones
     ]
     
     total_imported = 0

@@ -58,6 +58,15 @@
                 🚀 Python Avanzado
             </button>
         </div>
+        <!-- Buscador de lecciones -->
+        <div class="search-container">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Buscar lecciones (ej: variables, for, print...)"
+            >
+            <button id="searchBtn">Buscar</button>
+        </div>
 
         <!-- Lista de Lecciones -->
         <div id="lessonsContainer">
@@ -186,6 +195,35 @@
                 }
             });
         });
+        // Buscar lecciones
+        async function searchLessons() {
+            const query = document.getElementById("searchInput").value.trim();
+
+            if (!query) {
+                renderLessons(allLessons);
+                return;
+            }
+            // Resetear botones de categoría
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-category="all"]').classList.add('active');
+
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    renderLessons(data.results);
+                } else {
+                    document.getElementById('lessonsContainer').innerHTML = `
+                        <div class="alert alert-info">
+                            🔍 No se encontraron resultados para "<strong>${query}</strong>"
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error en búsqueda:", error);
+            }
+        }
 
         // Cerrar sesión
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
@@ -208,6 +246,15 @@
             await loadUserProgress();
             await loadLessons();
         })();
+        // Eventos del buscador
+        document.getElementById("searchBtn").addEventListener("click", searchLessons);
+
+        document.getElementById("searchInput").addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                searchLessons();
+            }
+        });
     </script>
 </body>
 </html>

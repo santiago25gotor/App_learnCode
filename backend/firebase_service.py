@@ -42,10 +42,8 @@ class FirebaseService:
             # Obtener referencia a Firestore
             self.db = firestore.client()
             
-            print("✅ Firebase inicializado correctamente")
             
         except Exception as e:
-            print(f"❌ Error al inicializar Firebase: {str(e)}")
             raise
     
     # ============================================
@@ -260,6 +258,50 @@ class FirebaseService:
         except Exception as e:
             print(f"Error al obtener lección: {str(e)}")
             return None
+        
+    def search_lessons(self, query):
+        """
+        Buscar lecciones por texto (título, descripción o código)
+        Busca en: titulo, descripcion, ejemplos_codigo, categoria
+        """
+        try:
+            query = query.lower().strip()
+
+            if not query:
+                return []
+
+            lessons = self.db.collection(Config.LESSONS_COLLECTION).get()
+            results = []
+
+            for lesson in lessons:
+                data = lesson.to_dict()
+
+                # Construir texto buscable desde múltiples campos
+                searchable_text = " ".join([
+                    str(data.get("titulo", "")),
+                    str(data.get("descripcion", "")),
+                    str(data.get("ejemplos_codigo", "")),
+                    str(data.get("categoria", ""))
+                ]).lower()
+
+                # Buscar coincidencia
+                if query in searchable_text:
+                    results.append({
+                        **data,
+                        "id": lesson.id
+                    })
+
+            # Ordenar por relevancia (coincidencias en título primero)
+            results.sort(key=lambda x: (
+                query not in str(x.get("titulo", "")).lower(),
+                x.get("numero_leccion", 0)
+            ))
+
+            return results
+
+        except Exception as e:
+            print(f"[ERROR] Error en busqueda: {str(e)}")
+            return []
     
     # ============================================
     # OPERACIONES DE PROGRESO DEL USUARIO
@@ -319,7 +361,8 @@ class FirebaseService:
         except Exception as e:
             print(f"Error al obtener progreso: {str(e)}")
             return {}
-
+    
+    
 
 # Crear instancia global
 firebase_service = FirebaseService()

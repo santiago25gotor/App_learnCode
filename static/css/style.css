@@ -304,6 +304,31 @@ body {
     font-weight: 600;
     margin-top: 0.5rem;
 }
+/* ============================================
+   BARRA DE BÚSQUEDA
+   ============================================ */
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.search-container button {
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #4F46E5;
+    color: white;
+}
+
 
 /* ============================================
    CATEGORÍAS / FILTROS
