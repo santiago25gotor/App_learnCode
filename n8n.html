@@ -3,127 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat con IA</title>
+    <title>Videos Educativos de YouTube</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f0f2f5;
+            color: #333;
         }
-        #chat-container {
-            border: 1px solid #ccc;
-            height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
-        .message {
-            margin: 10px 0;
-            padding: 8px;
-            border-radius: 5px;
-        }
-        .user-message {
-            background-color: #007bff;
-            color: white;
-            text-align: right;
-        }
-        .bot-message {
-            background-color: #e9ecef;
-            color: black;
-        }
-        #input-container {
+
+        /* --- Estilos del Interruptor de Modo Test --- */
+        .mode-switch-container {
             display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            align-items: center;
             gap: 10px;
         }
-        #user-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
         }
-        #send-button {
-            padding: 10px 20px;
-            background-color: #007bff;
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #e67e22; /* Naranja n8n */
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .mode-label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* Estilos de la Búsqueda */
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px;
+            border: 2px solid #e1e4e8;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        #search-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        #search-button {
+            padding: 15px 30px;
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
-        #send-button:disabled {
-            background-color: #ccc;
+        #search-button:hover {
+            background-color: #2980b9;
+        }
+        #search-button:disabled {
+            background-color: #bdc3c7;
             cursor: not-allowed;
+        }
+
+        /* Grid de Videos */
+        #videos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .video-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .video-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .video-theory {
+            flex-grow: 1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #576574;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .video-link {
+            text-align: center;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            box-sizing: border-box;
+        }
+        .video-link:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Estados */
+        .loading, .error {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        .error { color: #e74c3c; }
+        
+        /* Indicador de modo */
+        .mode-indicator {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: #e67e22;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>Chat con IA</h1>
-    <div id="chat-container"></div>
-    <div id="input-container">
-        <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-        <button id="send-button">Enviar</button>
+
+    <div class="mode-switch-container">
+        <span class="mode-label">Modo Producción</span>
+        <label class="switch">
+            <input type="checkbox" id="test-mode-toggle">
+            <span class="slider"></span>
+        </label>
+        <span class="mode-label" style="color: #e67e22;">Modo Test (Dev)</span>
+    </div>
+
+    <h1>📚 Plataforma de Aprendizaje con IA</h1>
+    <div id="test-mode-warning" class="mode-indicator">⚠️ MODO TEST ACTIVADO: Asegúrate de dar a "Execute Workflow" en n8n antes de buscar.</div>
+    
+    <div class="search-section">
+        <input type="text" id="search-input" placeholder="¿Qué quieres aprender hoy? (Ej: Curso de Python)">
+        <button id="search-button">Buscar y Analizar</button>
+    </div>
+
+    <div id="videos-container">
+        <div class="loading">Conectando con tu base de datos...</div>
     </div>
 
     <script>
-        // REEMPLAZA ESTA URL CON TU URL DE WEBHOOK DE N8N
-        const WEBHOOK_URL = 'https://tonicuadradomarquez.app.n8n.cloud/webhook-test/youtube-education';
+        // ==========================================
+        // CONFIGURACIÓN DE URLS
+        // ==========================================
+        const URL_PROD = 'https://tonicuadradomarquez.app.n8n.cloud/webhook/youtube-education'; 
+        const URL_TEST = 'https://tonicuadradomarquez.app.n8n.cloud/webhook-test/youtube-education';
 
-        const chatContainer = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
+        const videosContainer = document.getElementById('videos-container');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const testModeToggle = document.getElementById('test-mode-toggle');
+        const warningMsg = document.getElementById('test-mode-warning');
 
-        function addMessage(message, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            messageDiv.textContent = message;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        // Función para obtener la URL correcta según el interruptor
+        function getWebhookUrl() {
+            return testModeToggle.checked ? URL_TEST : URL_PROD;
         }
 
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            // Mostrar mensaje del usuario
-            addMessage(message, true);
-            userInput.value = '';
-            sendButton.disabled = true;
-
-            try {
-                // Enviar mensaje al webhook de n8n
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chatInput: message
-                    })
-                });
-
-                const data = await response.json();
-                
-                // Mostrar respuesta del bot
-                addMessage(data.output || data.message || 'Sin respuesta', false);
-            } catch (error) {
-                addMessage('Error al conectar con el servidor', false);
-                console.error('Error:', error);
-            } finally {
-                sendButton.disabled = false;
-                userInput.focus();
-            }
-        }
-
-        // Enviar con botón
-        sendButton.addEventListener('click', sendMessage);
-
-        // Enviar con Enter
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
+        // Manejar el cambio de interruptor
+        testModeToggle.addEventListener('change', () => {
+            if (testModeToggle.checked) {
+                warningMsg.style.display = 'block';
+                videosContainer.innerHTML = '<div class="loading">Modo Test activado. Esperando evento...</div>';
+            } else {
+                warningMsg.style.display = 'none';
+                loadVideos(); // Recargar videos reales
             }
         });
+
+        // --- FUNCIÓN 1: CARGAR VIDEOS ---
+        async function loadVideos() {
+            const url = getWebhookUrl();
+            
+            // Si estamos en modo test, no cargamos automáticamente al inicio para evitar errores,
+            // a menos que el usuario lo intente explícitamente.
+            if (testModeToggle.checked) {
+                console.log("En modo test: recuerda activar 'Listen' en n8n");
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: "getVideos" }) 
+                });
+
+                if (!response.ok) throw new Error("Error en la respuesta (¿Está activo el workflow?)");
+
+                const data = await response.json();
+                displayVideos(data);
+
+            } catch (error) {
+                videosContainer.innerHTML = `<div class="error">
+                    Error conectando con: <b>${testModeToggle.checked ? 'TEST' : 'PRODUCCIÓN'}</b><br>
+                    ${error.message}
+                </div>`;
+                console.error('Error:', error);
+            }
+        }
+
+        // --- FUNCIÓN 2: MOSTRAR EN PANTALLA ---
+        function displayVideos(videos) {
+            const list = Array.isArray(videos) ? videos : [videos];
+
+            if (!list || list.length === 0) {
+                videosContainer.innerHTML = '<div class="loading">No hay videos guardados aún. ¡Busca uno arriba!</div>';
+                return;
+            }
+
+            videosContainer.innerHTML = ''; 
+
+            list.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+
+                const fecha = video.fecha_creacion ? new Date(video.fecha_creacion).toLocaleDateString() : 'Fecha desconocida';
+                
+                card.innerHTML = `
+                    <div class="video-title">${video.video_title || 'Video sin título'}</div>
+                    <div class="video-meta">
+                        📅 Añadido el: ${fecha} <br>
+                        🆔 ID: ${video.video_id || 'N/A'}
+                    </div>
+                    <div class="video-theory">
+                        <strong>Resumen IA:</strong><br>
+                        ${video.teoria || 'Analizando contenido...'}
+                    </div>
+                    ${video.video_url ? `<a href="${video.video_url}" target="_blank" class="video-link">▶ Ver en YouTube</a>` : ''}
+                `;
+                videosContainer.appendChild(card);
+            });
+        }
+
+        // --- FUNCIÓN 3: BUSCAR NUEVO VIDEO ---
+        async function searchNewVideo() {
+            const query = searchInput.value.trim();
+            if (!query) return alert('Escribe algo para buscar');
+
+            searchButton.disabled = true;
+            searchButton.textContent = '🤖 La IA está trabajando...';
+            videosContainer.innerHTML = '<div class="loading">Procesando solicitud...</div>';
+
+            try {
+                const response = await fetch(getWebhookUrl(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ searchQuery: query }) 
+                });
+
+                if (response.ok) {
+                    setTimeout(() => {
+                        searchInput.value = '';
+                        loadVideos();
+                        alert('¡Video analizado y guardado con éxito!');
+                    }, 1000);
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+
+            } catch (error) {
+                alert('Hubo un error: ' + error.message);
+                // Si falla en modo test, no recargamos automáticamente para no perder el error en pantalla
+                if (!testModeToggle.checked) loadVideos(); 
+            } finally {
+                searchButton.disabled = false;
+                searchButton.textContent = 'Buscar y Analizar';
+            }
+        }
+
+        // --- EVENTOS ---
+        searchButton.addEventListener('click', searchNewVideo);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchNewVideo();
+        });
+
+        // Cargar al inicio (Asumimos producción por defecto)
+        loadVideos();
+
     </script>
 </body>
 </html>
