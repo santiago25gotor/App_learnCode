@@ -544,10 +544,19 @@
                 </div>
             `;
 
-            // External link
+            // External link - add to exercises if available
             if (currentLesson.url) {
-                document.getElementById('externalLinkSection').classList.remove('hidden');
-                document.getElementById('externalLink').href = currentLesson.url;
+                const exercisesEl = document.getElementById('exercisesContent');
+                exercisesEl.innerHTML += `
+                    <a href="${currentLesson.url}" target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors">
+                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">open_in_new</span>
+                        <div>
+                            <div class="font-bold text-sm text-gray-900 dark:text-white">Material Externo</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${currentLesson.url}</div>
+                        </div>
+                    </a>
+                `;
             }
         }
 
