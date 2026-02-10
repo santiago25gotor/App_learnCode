@@ -233,17 +233,44 @@
         async function loadLesson() {
             try {
                 const response = await fetch(`/api/lessons/${lessonId}`);
+
+                // Check if response is JSON
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Respuesta inválida del servidor");
+                }
+
                 const data = await response.json();
 
                 if (data.success) {
                     currentLesson = data.lesson;
                     renderLesson();
                 } else {
-                    showError('No se pudo cargar la lección: ' + (data.message || 'Error desconocido'));
+                    handleError(data.message || 'Error al cargar la lección');
                 }
             } catch (error) {
                 console.error('Error loading lesson:', error);
-                showError('Error al cargar la lección');
+                handleError('Error de conexión o servidor: ' + error.message);
+            }
+        }
+
+        function handleError(message) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('lessonContent').classList.remove('hidden');
+            document.getElementById('lessonContent').innerHTML = `
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Algo salió mal</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">${message}</p>
+                    <button onclick="location.reload()" class="bg-primary px-6 py-2 rounded-lg font-bold">
+                        Reintentar
+                    </button>
+                    <a href="/course" class="block mt-4 text-sm text-blue-500 hover:underline">Volver al curso</a>
+                </div>
+            `;
+            // Try modal too
+            if (typeof Modal !== 'undefined') {
+                Modal.error(message);
             }
         }
 
