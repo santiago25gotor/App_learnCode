@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Lección - PYLEARN</title>
+    <title id="pageTitle">Leccion - PYLEARN</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -71,6 +71,13 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #666;
         }
+
+        /* Code editor textarea */
+        #codeEditor {
+            tab-size: 4;
+            -moz-tab-size: 4;
+            resize: none;
+        }
     </style>
 </head>
 
@@ -90,9 +97,13 @@
 
         <div class="flex items-center gap-4">
             <div class="bg-primary/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                <span class="text-xl">⭐</span>
+                <span class="material-symbols-outlined text-primary">star</span>
                 <span class="font-bold text-gray-900 dark:text-white" id="lessonPoints">10 XP</span>
             </div>
+            <a href="/n8n" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                title="Buscar videos IA">
+                <span class="material-symbols-outlined text-gray-600 dark:text-gray-300">smart_toy</span>
+            </a>
             <button onclick="toggleDarkMode()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
                 <span class="material-symbols-outlined dark:hidden text-gray-900">dark_mode</span>
                 <span class="material-symbols-outlined hidden dark:block text-primary">light_mode</span>
@@ -101,7 +112,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-8">
+    <main class="max-w-7xl mx-auto px-6 py-8">
         <!-- Loading skeleton -->
         <div id="loadingState" class="space-y-6">
             <div class="animate-pulse">
@@ -114,100 +125,155 @@
         </div>
 
         <!-- Lesson Content (hidden until loaded) -->
-        <div id="lessonContent" class="hidden space-y-8">
+        <div id="lessonContent" class="hidden">
+            <!-- Two column layout: Content + Code Editor -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-            <!-- Theory Section -->
-            <section id="theorySection"
-                class="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800 shadow-sm">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                        <span class="text-xl">📖</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Teoría</h2>
-                </div>
-                <div id="theoryContent" class="text-gray-700 dark:text-gray-300 space-y-4 leading-relaxed">
-                </div>
-            </section>
-
-            <!-- Code Examples Section -->
-            <section id="codeExamplesSection"
-                class="hidden bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800 shadow-sm">
-                <div class="flex items-center gap-3 mb-6">
-                    <div
-                        class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
-                        <span class="text-xl">💻</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Ejemplo de Código</h2>
-                </div>
-                <div class="bg-gray-900 rounded-xl overflow-hidden">
-                    <div class="flex items-center gap-2 px-4 py-3 bg-gray-800 border-b border-gray-700">
-                        <div class="flex gap-1.5">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <!-- Left Column: Theory & Content -->
+                <div class="space-y-6">
+                    <!-- Theory Section -->
+                    <section id="theorySection"
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div
+                                class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-blue-600 dark:text-blue-400">menu_book</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Teoria</h2>
                         </div>
-                        <span class="text-gray-400 text-xs font-mono ml-2">ejemplo.py</span>
-                    </div>
-                    <pre id="codeExampleContent"
-                        class="p-6 text-gray-100 font-mono text-sm leading-relaxed overflow-x-auto"></pre>
-                </div>
-            </section>
-
-            <!-- Video Section -->
-            <section id="videoSection"
-                class="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800 shadow-sm">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-                        <span class="text-xl">🎬</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Video Tutorial</h2>
-                </div>
-                <div id="videoContainer">
-                    <!-- Filled dynamically -->
-                </div>
-            </section>
-
-            <!-- Exercises Section -->
-            <section id="exercisesSection"
-                class="bg-white dark:bg-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-800 shadow-sm">
-                <div class="flex items-center gap-3 mb-6">
-                    <div
-                        class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
-                        <span class="text-xl">🧩</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Ejercicio Práctico</h2>
-                </div>
-                <div id="exercisesContent" class="space-y-4">
-                    <!-- Filled dynamically -->
-                </div>
-            </section>
-
-            <!-- External Link -->
-            <div id="externalLinkSection" class="hidden">
-                <a id="externalLink" href="#" target="_blank"
-                    class="block bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm hover:border-primary transition-colors">
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                            <span class="text-xl">🔗</span>
+                        <div id="theoryContent"
+                            class="text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed text-sm">
                         </div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 dark:text-white">Recurso Externo</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Abre en una nueva pestaña para más
-                                información</p>
-                        </div>
-                        <span class="material-symbols-outlined ml-auto text-gray-400">open_in_new</span>
-                    </div>
-                </a>
-            </div>
+                    </section>
 
-            <!-- Complete Lesson Button -->
-            <div class="flex gap-4">
-                <button onclick="completeLesson()"
-                    class="flex-1 bg-primary hover:bg-yellow-400 text-black font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-3 text-lg">
-                    <span class="text-2xl">🏆</span>
-                    <span>Completar Lección</span>
-                </button>
+                    <!-- Code Examples Section -->
+                    <section id="codeExamplesSection"
+                        class="hidden bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+                                    <span
+                                        class="material-symbols-outlined text-purple-600 dark:text-purple-400">code</span>
+                                </div>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Ejemplo de Codigo</h2>
+                            </div>
+                            <button onclick="copyExampleToEditor()"
+                                class="text-xs bg-primary/20 hover:bg-primary/40 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">content_copy</span>
+                                Copiar al Editor
+                            </button>
+                        </div>
+                        <div class="bg-gray-900 rounded-xl overflow-hidden">
+                            <div class="flex items-center gap-2 px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+                                <div class="flex gap-1.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <span class="text-gray-400 text-xs font-mono ml-2">ejemplo.py</span>
+                            </div>
+                            <pre id="codeExampleContent"
+                                class="p-4 text-gray-100 font-mono text-sm leading-relaxed overflow-x-auto"></pre>
+                        </div>
+                    </section>
+
+                    <!-- Video Section -->
+                    <section id="videoSection"
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div
+                                class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-red-600 dark:text-red-400">play_circle</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Video Tutorial</h2>
+                        </div>
+                        <div id="videoContainer">
+                            <!-- Filled dynamically -->
+                        </div>
+                    </section>
+
+                    <!-- Exercises Section -->
+                    <section id="exercisesSection"
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div
+                                class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
+                                <span
+                                    class="material-symbols-outlined text-yellow-600 dark:text-yellow-400">fitness_center</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Ejercicio Practico</h2>
+                        </div>
+                        <div id="exercisesContent" class="space-y-4">
+                            <!-- Filled dynamically -->
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column: Code Editor & Terminal -->
+                <div class="space-y-4 lg:sticky lg:top-20 lg:self-start">
+                    <!-- Code Editor -->
+                    <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700 shadow-lg">
+                        <!-- Editor Header -->
+                        <div class="flex items-center justify-between px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+                            <div class="flex items-center gap-3">
+                                <div class="flex gap-1.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <span class="text-gray-400 text-xs font-mono">mi_codigo.py</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="clearEditor()"
+                                    class="text-gray-400 hover:text-white text-xs px-2 py-1 rounded hover:bg-gray-700 transition-colors flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                    Limpiar
+                                </button>
+                                <button onclick="runCode()"
+                                    class="bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                    Ejecutar
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Editor Area -->
+                        <div class="relative">
+                            <div class="absolute left-0 top-0 bottom-0 w-10 bg-gray-800/50 flex flex-col items-center pt-4 text-gray-500 text-xs font-mono select-none"
+                                id="lineNumbers">
+                            </div>
+                            <textarea id="codeEditor"
+                                class="w-full bg-transparent text-gray-100 font-mono text-sm p-4 pl-12 min-h-[350px] focus:outline-none border-none focus:ring-0"
+                                placeholder="# Escribe tu codigo Python aqui...&#10;&#10;print('Hola mundo!')"
+                                spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Output -->
+                    <div class="bg-gray-950 rounded-2xl overflow-hidden border border-gray-700">
+                        <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-400 text-sm">terminal</span>
+                                <span class="text-gray-400 text-xs font-mono">Terminal</span>
+                            </div>
+                            <button onclick="clearTerminal()"
+                                class="text-gray-500 hover:text-gray-300 text-xs">Limpiar</button>
+                        </div>
+                        <div id="terminalOutput"
+                            class="p-4 font-mono text-sm text-green-400 min-h-[120px] max-h-[250px] overflow-y-auto whitespace-pre-wrap">
+                            <span class="text-gray-500">>>> Pulsa "Ejecutar" para ver el resultado aqui...</span>
+                        </div>
+                    </div>
+
+                    <!-- Complete Lesson Button -->
+                    <button onclick="completeLesson()"
+                        class="w-full bg-primary hover:bg-yellow-400 text-black font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-3 text-lg">
+                        <span class="material-symbols-outlined text-2xl">emoji_events</span>
+                        <span>Completar Leccion</span>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -222,6 +288,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             loadLesson();
+            setupEditor();
 
             // Load dark mode
             if (localStorage.getItem('darkMode') === 'true') {
@@ -229,15 +296,115 @@
             }
         });
 
-        // Load lesson data
+        // ============================================
+        // CODE EDITOR
+        // ============================================
+
+        function setupEditor() {
+            const editor = document.getElementById('codeEditor');
+            updateLineNumbers();
+
+            editor.addEventListener('input', updateLineNumbers);
+            editor.addEventListener('scroll', () => {
+                document.getElementById('lineNumbers').style.transform = `translateY(-${editor.scrollTop}px)`;
+            });
+
+            // Tab support
+            editor.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = editor.selectionStart;
+                    const end = editor.selectionEnd;
+                    editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+                    editor.selectionStart = editor.selectionEnd = start + 4;
+                    updateLineNumbers();
+                }
+            });
+        }
+
+        function updateLineNumbers() {
+            const editor = document.getElementById('codeEditor');
+            const lines = editor.value.split('\n').length;
+            const lineNums = document.getElementById('lineNumbers');
+            lineNums.innerHTML = '';
+            for (let i = 1; i <= Math.max(lines, 15); i++) {
+                lineNums.innerHTML += `<div class="leading-[1.625rem] text-center w-full">${i}</div>`;
+            }
+        }
+
+        function clearEditor() {
+            document.getElementById('codeEditor').value = '';
+            updateLineNumbers();
+        }
+
+        function clearTerminal() {
+            document.getElementById('terminalOutput').innerHTML = '<span class="text-gray-500">>>> Terminal limpiada</span>';
+        }
+
+        function copyExampleToEditor() {
+            const example = document.getElementById('codeExampleContent').textContent;
+            document.getElementById('codeEditor').value = example;
+            updateLineNumbers();
+        }
+
+        async function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const terminal = document.getElementById('terminalOutput');
+
+            if (!code.trim()) {
+                terminal.innerHTML = '<span class="text-yellow-400">>>> No hay codigo para ejecutar</span>';
+                return;
+            }
+
+            terminal.innerHTML = '<span class="text-gray-500">>>> Ejecutando...</span>';
+
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    terminal.innerHTML = `<span class="text-green-400">${escapeHtml(data.output)}</span>`;
+                    if (data.error) {
+                        terminal.innerHTML += `\n<span class="text-yellow-400">${escapeHtml(data.error)}</span>`;
+                    }
+                } else {
+                    terminal.innerHTML = `<span class="text-red-400">${escapeHtml(data.error || data.message)}</span>`;
+                }
+            } catch (error) {
+                terminal.innerHTML = `<span class="text-red-400">Error de conexion: ${error.message}</span>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // LESSON LOADING
+        // ============================================
+
         async function loadLesson() {
             try {
-                const response = await fetch(`/api/lessons/${lessonId}`);
+                // Timeout controller
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-                // Check if response is JSON
+                const response = await fetch(`/api/lessons/${lessonId}`, {
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Respuesta inválida del servidor");
+                    throw new Error("Respuesta invalida del servidor");
                 }
 
                 const data = await response.json();
@@ -246,11 +413,17 @@
                     currentLesson = data.lesson;
                     renderLesson();
                 } else {
-                    handleError(data.message || 'Error al cargar la lección');
+                    handleError(data.message || 'Error al cargar la leccion');
                 }
             } catch (error) {
                 console.error('Error loading lesson:', error);
-                handleError('Error de conexión o servidor: ' + error.message);
+                let msg = 'Error de conexion o servidor.';
+                if (error.name === 'AbortError') {
+                    msg = 'El servidor tardo demasiado en responder.';
+                } else if (error.message) {
+                    msg = error.message;
+                }
+                handleError(msg);
             }
         }
 
@@ -258,9 +431,9 @@
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('lessonContent').classList.remove('hidden');
             document.getElementById('lessonContent').innerHTML = `
-                <div class="text-center py-12">
-                    <div class="text-6xl mb-4">⚠️</div>
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Algo salió mal</h2>
+                <div class="text-center py-12 col-span-2">
+                    <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4 block">error_outline</span>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Algo salio mal</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">${message}</p>
                     <button onclick="location.reload()" class="bg-primary px-6 py-2 rounded-lg font-bold">
                         Reintentar
@@ -268,38 +441,37 @@
                     <a href="/course" class="block mt-4 text-sm text-blue-500 hover:underline">Volver al curso</a>
                 </div>
             `;
-            // Try modal too
-            if (typeof Modal !== 'undefined') {
-                Modal.error(message);
-            }
         }
 
-        // Render lesson content
+        // ============================================
+        // RENDER LESSON
+        // ============================================
+
         function renderLesson() {
             // Hide loading, show content
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('lessonContent').classList.remove('hidden');
 
             // Update header
-            document.getElementById('lessonTitle').textContent = currentLesson.titulo;
-            document.getElementById('lessonCategory').textContent = currentLesson.categoria;
+            document.getElementById('lessonTitle').textContent = currentLesson.titulo || 'Leccion';
+            document.getElementById('lessonCategory').textContent = currentLesson.categoria || '';
             document.getElementById('pageTitle').textContent = `${currentLesson.titulo} - PYLEARN`;
 
             // Theory content
+            const desc = currentLesson.descripcion || 'Aprende los conceptos fundamentales de esta leccion.';
             document.getElementById('theoryContent').innerHTML = `
-                <p class="text-lg">${currentLesson.descripcion || 'Aprende los conceptos fundamentales de Python.'}</p>
+                <p class="text-base leading-relaxed">${desc}</p>
                 
-                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                    <h3 class="font-bold mb-2 flex items-center gap-2 text-gray-900 dark:text-white">
-                        <span class="text-lg">📝</span>
-                        Contenido de la Lección
+                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg mt-4">
+                    <h3 class="font-bold mb-2 flex items-center gap-2 text-gray-900 dark:text-white text-sm">
+                        <span class="material-symbols-outlined text-blue-500 text-lg">lightbulb</span>
+                        Contenido de la Leccion
                     </h3>
-                    <div class="text-sm space-y-2">
-                        <p>En esta lección aprenderás:</p>
-                        <ul class="list-disc list-inside space-y-1 mt-2">
+                    <div class="text-sm space-y-1">
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-300">
                             <li>Conceptos clave de ${currentLesson.titulo}</li>
-                            <li>Sintaxis y buenas prácticas</li>
-                            <li>Ejemplos prácticos aplicados</li>
+                            <li>Sintaxis y buenas practicas</li>
+                            <li>Ejemplos practicos aplicados</li>
                         </ul>
                     </div>
                 </div>
@@ -309,6 +481,9 @@
             if (currentLesson.ejemplos_codigo) {
                 document.getElementById('codeExamplesSection').classList.remove('hidden');
                 document.getElementById('codeExampleContent').textContent = currentLesson.ejemplos_codigo;
+                // Pre-load into editor
+                document.getElementById('codeEditor').value = currentLesson.ejemplos_codigo;
+                updateLineNumbers();
             }
 
             // Video section
@@ -324,10 +499,13 @@
                 `;
             } else {
                 document.getElementById('videoContainer').innerHTML = `
-                    <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                        <span class="text-4xl block mb-2">📹</span>
-                        <p class="text-sm">No hay video disponible para esta lección</p>
-                        <p class="text-xs mt-1">Próximamente se añadirán videos explicativos</p>
+                    <div class="text-center py-6 text-gray-400 dark:text-gray-500">
+                        <span class="material-symbols-outlined text-4xl block mb-2">videocam_off</span>
+                        <p class="text-sm">No hay video disponible para esta leccion</p>
+                        <a href="/n8n" class="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2">
+                            <span class="material-symbols-outlined text-sm">smart_toy</span>
+                            Buscar videos con IA
+                        </a>
                     </div>
                 `;
             }
@@ -336,43 +514,33 @@
             document.getElementById('exercisesContent').innerHTML = `
                 <div class="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-primary rounded-xl p-4">
                     <div class="flex items-start gap-3">
-                        <span class="text-2xl">💡</span>
+                        <span class="material-symbols-outlined text-primary text-2xl">tips_and_updates</span>
                         <div>
-                            <h4 class="font-bold mb-2 text-gray-900 dark:text-white">Ejercicio: ${currentLesson.titulo}</h4>
-                            <p class="text-sm text-gray-700 dark:text-gray-300">Practica lo aprendido aplicando los conceptos de esta lección.</p>
+                            <h4 class="font-bold mb-1 text-gray-900 dark:text-white">Ejercicio: ${currentLesson.titulo}</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">Practica lo aprendido usando el editor de codigo de la derecha.</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-                    <h4 class="font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
-                        <span class="text-lg">📋</span>
-                        Tareas a completar
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <h4 class="font-bold mb-3 flex items-center gap-2 text-gray-900 dark:text-white text-sm">
+                        <span class="material-symbols-outlined text-lg">checklist</span>
+                        Tareas
                     </h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-start gap-3 p-3 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
-                            <span class="text-lg mt-0.5">⭕</span>
-                            <span class="text-gray-700 dark:text-gray-300">Lee la teoría y comprende los conceptos clave</span>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2 p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">radio_button_unchecked</span>
+                            <span class="text-gray-700 dark:text-gray-300">Lee la teoria y comprende los conceptos</span>
                         </li>
-                        <li class="flex items-start gap-3 p-3 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
-                            <span class="text-lg mt-0.5">⭕</span>
-                            <span class="text-gray-700 dark:text-gray-300">Estudia los ejemplos de código proporcionados</span>
+                        <li class="flex items-center gap-2 p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">radio_button_unchecked</span>
+                            <span class="text-gray-700 dark:text-gray-300">Estudia y ejecuta los ejemplos de codigo</span>
                         </li>
-                        <li class="flex items-start gap-3 p-3 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
-                            <span class="text-lg mt-0.5">⭕</span>
-                            <span class="text-gray-700 dark:text-gray-300">Mira el video tutorial si está disponible</span>
+                        <li class="flex items-center gap-2 p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">radio_button_unchecked</span>
+                            <span class="text-gray-700 dark:text-gray-300">Escribe tu propio codigo y ejecutalo</span>
                         </li>
                     </ul>
-                </div>
-
-                <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
-                    <h4 class="font-bold mb-2 flex items-center gap-2 text-green-700 dark:text-green-400">
-                        <span class="text-lg">💡</span>
-                        Consejo
-                    </h4>
-                    <p class="text-sm text-green-700 dark:text-green-300">
-                        Tómate tu tiempo para entender cada concepto antes de avanzar. La práctica constante es la clave del aprendizaje.
-                    </p>
                 </div>
             `;
 
@@ -383,7 +551,10 @@
             }
         }
 
-        // Get YouTube embed URL from any YouTube URL
+        // ============================================
+        // HELPERS
+        // ============================================
+
         function getYouTubeEmbedUrl(url) {
             if (!url) return '';
             let videoId = '';
@@ -397,16 +568,16 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
         }
 
-        // Complete lesson
         async function completeLesson() {
-            const confirmed = await Modal.confirm({
-                title: 'Completar Lección',
-                message: '¿Completar esta lección y ganar 10 XP?',
-                confirmText: 'Sí, Completar',
-                type: 'success'
-            });
-
-            if (!confirmed) return;
+            if (typeof Modal !== 'undefined') {
+                const confirmed = await Modal.confirm({
+                    title: 'Completar Leccion',
+                    message: 'Completar esta leccion y ganar 10 XP?',
+                    confirmText: 'Si, Completar',
+                    type: 'success'
+                });
+                if (!confirmed) return;
+            }
 
             try {
                 const response = await fetch(`/api/progress/complete/${lessonId}`, {
@@ -416,13 +587,21 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    await Modal.success('¡Felicidades! Lección completada.\n+10 XP ganados', '🎉 ¡Éxito!');
+                    if (typeof Modal !== 'undefined') {
+                        await Modal.success('Leccion completada! +10 XP ganados', 'Exito!');
+                    } else {
+                        alert('Leccion completada! +10 XP');
+                    }
                     window.location.href = '/course';
                 } else {
-                    await Modal.error(data.message);
+                    if (typeof Modal !== 'undefined') {
+                        await Modal.error(data.message);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
                 }
             } catch (error) {
-                await Modal.error('Error al completar la lección');
+                alert('Error al completar la leccion');
             }
         }
 
@@ -430,11 +609,6 @@
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-        }
-
-        // Helpers
-        async function showError(message) {
-            await Modal.error(message);
         }
     </script>
 </body>

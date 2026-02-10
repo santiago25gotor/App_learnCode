@@ -282,7 +282,7 @@
             const bgColor = type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800';
 
             alertContainer.innerHTML = `
-                <div class="${bgColor} border rounded-lg p-4 text-sm font-medium">
+                <div class="${bgColor} border rounded-lg p-4 text-sm font-medium animate-pulse">
                     ${message}
                 </div>
             `;
@@ -293,21 +293,53 @@
             }, 5000);
         }
 
+        function setLoading(formId, isLoading) {
+            const form = document.getElementById(formId);
+            const button = form.querySelector('button[type="submit"]');
+
+            if (isLoading) {
+                const originalText = button.dataset.originalText || button.innerHTML;
+                button.dataset.originalText = originalText;
+                button.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                `;
+                button.disabled = true;
+                button.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                button.innerHTML = button.dataset.originalText;
+                button.disabled = false;
+                button.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
         // Handle login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log("Login submitted");
 
+            setLoading('loginForm', true);
             const identifier = document.getElementById('login-identifier').value.trim();
             const password = document.getElementById('login-password').value;
 
             try {
+                // Timeout controller
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ identifier, password })
+                    body: JSON.stringify({ identifier, password }),
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
 
                 const data = await response.json();
 
@@ -318,16 +350,23 @@
                     }, 1000);
                 } else {
                     showAlert(data.message || 'Login failed. Please try again.');
+                    setLoading('loginForm', false);
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showAlert('An error occurred. Please try again.');
+                let msg = 'An error occurred. Please try again.';
+                if (error.name === 'AbortError') {
+                    msg = 'Connection timed out. Check your server.';
+                }
+                showAlert(msg);
+                setLoading('loginForm', false);
             }
         });
 
         // Handle register
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            setLoading('registerForm', true);
 
             const username = document.getElementById('register-username').value.trim();
             const email = document.getElementById('register-email').value.trim();
@@ -345,17 +384,19 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    showAlert('Account created successfully! Redirecting to placement test...', 'success');
+                    showAlert('Account created successfully! Redirecting...', 'success');
                     setTimeout(() => {
                         // Nuevos usuarios van al placement test
                         window.location.href = '/placement-test';
                     }, 1000);
                 } else {
                     showAlert(data.message || 'Registration failed. Please try again.');
+                    setLoading('registerForm', false);
                 }
             } catch (error) {
                 console.error('Registration error:', error);
                 showAlert('An error occurred. Please try again.');
+                setLoading('registerForm', false);
             }
         });
     </script>

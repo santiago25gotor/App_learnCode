@@ -91,7 +91,7 @@ def create_admin():
             'current_level': 'Python Avanzado',
             'total_points': total_points,
             'placement_test_completed': True,
-            'unlocked_categories': ['Python Basico', 'Python Intermedio', 'Python Avanzado'],
+            'unlocked_categories': ['Python Básico', 'Python Intermedio', 'Python Avanzado'],
             'placement_test': {
                 'scores': {
                     'basic': 100,

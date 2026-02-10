@@ -81,6 +81,13 @@ def create_app():
             return redirect(url_for('login_page'))
         return render_template('placement_test.html')
     
+    @app.route('/n8n')
+    def n8n_page():
+        """Pagina de busqueda de videos con IA (n8n)"""
+        if 'user_id' not in session:
+            return redirect(url_for('login_page'))
+        return render_template('n8n.html')
+    
     # ============================================
     # MANEJADORES DE ERRORES
     # ============================================
