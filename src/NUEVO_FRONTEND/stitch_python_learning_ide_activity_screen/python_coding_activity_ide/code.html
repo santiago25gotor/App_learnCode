@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Python Edu - IDE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                        "editor-bg": "#1e1e1e",
+                        "editor-sidebar": "#252526",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "mono": ["Fira Code", "monospace"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .code-line-numbers {
+            color: #858585;
+            text-align: right;
+            user-select: none;
+        }
+        .syntax-keyword { color: #569cd6; }
+        .syntax-function { color: #dcdcaa; }
+        .syntax-string { color: #ce9178; }
+        .syntax-comment { color: #6a9955; font-style: italic; }
+        .syntax-number { color: #b5cea8; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#181711] dark:text-white h-screen flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e6e4db] dark:border-gray-800 px-6 py-3 bg-white dark:bg-[#1a180e] shrink-0">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-[#181711] dark:text-white">
+<div class="size-6 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Python Edu</h2>
+</div>
+<!-- Breadcrumbs -->
+<div class="hidden md:flex items-center gap-2 text-sm">
+<span class="text-gray-400">/</span>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#">Course 101</a>
+<span class="text-gray-400">/</span>
+<a class="text-gray-500 hover:text-primary transition-colors" href="#">Module 2</a>
+<span class="text-gray-400">/</span>
+<span class="font-medium text-[#181711] dark:text-gray-100">Loops</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Timer -->
+<div class="flex items-center gap-2 bg-background-light dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-gray-500 text-[20px]">timer</span>
+<span class="font-mono font-bold text-sm text-[#181711] dark:text-white">45:00</span>
+</div>
+<div class="flex gap-2">
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-[#f5f4f0] hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-[#181711] dark:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-[#f5f4f0] hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-[#181711] dark:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-9 ring-2 ring-white dark:ring-gray-700" data-alt="User profile picture showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA3rid2_pbhd3NWiJ_4yHEfueDbBbCaDS16_I5muGdQz9vq2Ix3dvkNUVKIjuBaA5iXK5DL4scDzLywqFy3h9hMAKOa8nB3NLRV4FKUTL4vpRSqKPwU1jlDbPFqcz1EnL4I82B8nQtTp8zfxsoWsKuu6mU19g5wpPROZk4d8DPlA0pMM5Q5WdKwU_KScs-mFIXZy_bfD4kexV3T1wWbMXJSvKK0JsQ2oh5wh7GeJsAtnQaV2g6DORRYLZo8h1G0YbA48LtoWaVSrW4");'></div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Column: Instructions -->
+<aside class="w-[350px] flex flex-col border-r border-[#e6e4db] dark:border-gray-800 bg-white dark:bg-[#1a180e] overflow-hidden shrink-0">
+<!-- Tabs -->
+<div class="flex border-b border-[#e6e4db] dark:border-gray-800">
+<button class="flex-1 py-3 text-sm font-bold text-[#181711] dark:text-white border-b-2 border-[#181711] dark:border-primary">Task</button>
+<button class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Hints</button>
+<button class="flex-1 py-3 text-sm font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Resources</button>
+</div>
+<!-- Content -->
+<div class="flex-1 overflow-y-auto p-6 scrollbar-hide">
+<h1 class="text-2xl font-bold mb-4 text-[#181711] dark:text-white leading-tight">Activity: Fibonacci Sequence</h1>
+<div class="mb-6">
+<span class="bg-primary/20 text-yellow-800 dark:text-primary px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">Step 2 of 5</span>
+</div>
+<div class="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+<p class="mb-4">
+                        In this task, you will write a Python function that generates a Fibonacci sequence up to a given number <code class="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm font-mono text-red-500">n</code>.
+                    </p>
+<p class="mb-4 font-bold">Objectives:</p>
+<ul class="list-disc pl-5 mb-4 space-y-1">
+<li>Define a function named <code>fibonacci(n)</code>.</li>
+<li>Initialize the first two terms: 0 and 1.</li>
+<li>Use a <code>while</code> loop to generate numbers less than or equal to <code>n</code>.</li>
+<li>Return the sequence as a list.</li>
+</ul>
+<div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r mb-4">
+<p class="text-sm text-blue-800 dark:text-blue-200">
+<strong>Note:</strong> Be careful with the loop condition to avoid infinite loops!
+                        </p>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="p-4 border-t border-[#e6e4db] dark:border-gray-800 bg-gray-50 dark:bg-[#1a180e] flex justify-between items-center">
+<button class="text-sm font-medium text-gray-500 hover:text-[#181711] dark:hover:text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span> Previous
+                </button>
+<button class="bg-[#181711] hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-black px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors">
+                    Next Step <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</aside>
+<!-- Center Column: Code Editor -->
+<section class="flex-1 flex flex-col bg-[#1e1e1e] min-w-[400px] relative border-r border-[#e6e4db] dark:border-gray-800">
+<!-- Editor Tabs -->
+<div class="flex items-center bg-[#252526] text-gray-400 text-sm overflow-x-auto scrollbar-hide">
+<div class="px-4 py-2 bg-[#1e1e1e] text-white border-t-2 border-primary flex items-center gap-2 min-w-[120px] cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-blue-400">code</span>
+                    main.py
+                    <span class="material-symbols-outlined text-[14px] hover:text-white ml-auto">close</span>
+</div>
+<div class="px-4 py-2 hover:bg-[#2d2d2d] cursor-pointer border-t-2 border-transparent flex items-center gap-2 min-w-[120px]">
+<span class="material-symbols-outlined text-[16px] text-yellow-400">description</span>
+                    readme.md
+                </div>
+<div class="flex-1"></div>
+<div class="px-3 py-2 flex items-center gap-3">
+<span class="text-xs text-gray-500">Python 3.9</span>
+</div>
+</div>
+<!-- Code Area -->
+<div class="flex-1 relative font-mono text-sm overflow-hidden flex">
+<!-- Line Numbers -->
+<div class="w-12 bg-[#1e1e1e] pt-4 pr-3 text-right flex flex-col gap-[2px] code-line-numbers select-none border-r border-gray-700/50">
+<div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
+</div>
+<!-- Code Content -->
+<div class="flex-1 p-4 pt-4 outline-none resize-none bg-[#1e1e1e] text-gray-300 leading-relaxed overflow-auto">
+<pre><code><span class="syntax-keyword">def</span> <span class="syntax-function">fibonacci</span>(n):
+    <span class="syntax-comment"># Initialize variables</span>
+    a, b = <span class="syntax-number">0</span>, <span class="syntax-number">1</span>
+    result = []
+    
+    <span class="syntax-comment"># While loop to generate sequence</span>
+    <span class="syntax-keyword">while</span> a &lt;= n:
+        result.append(a)
+        <span class="syntax-comment"># Update variables</span>
+        a, b = b, a + b
+        
+    <span class="syntax-keyword">return</span> result
+
+<span class="syntax-comment"># Test the function</span>
+n_terms = <span class="syntax-number">100</span>
+<span class="syntax-keyword">print</span>(<span class="syntax-string">f"Fibonacci sequence up to {n_terms}:"</span>)
+<span class="syntax-keyword">print</span>(fibonacci(n_terms))</code></pre>
+</div>
+<!-- Floating Run Button -->
+<div class="absolute bottom-6 right-6 z-10">
+<button class="bg-primary hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-transform active:scale-95 group">
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500">play_arrow</span>
+                        Run Code
+                    </button>
+</div>
+</div>
+<!-- Editor Status Bar -->
+<div class="bg-[#007acc] text-white text-xs px-3 py-1 flex justify-between items-center select-none">
+<div class="flex gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">error</span> 0</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">warning</span> 0</span>
+</div>
+<div class="flex gap-4">
+<span>Ln 12, Col 24</span>
+<span>Spaces: 4</span>
+<span>UTF-8</span>
+</div>
+</div>
+</section>
+<!-- Right Column: Output & Feedback -->
+<aside class="w-[320px] flex flex-col bg-background-light dark:bg-[#151515] shrink-0">
+<!-- Console Output (Top Half) -->
+<div class="flex-1 flex flex-col min-h-[50%] border-b border-[#e6e4db] dark:border-gray-800">
+<div class="px-4 py-2 bg-gray-100 dark:bg-[#1a180e] border-b border-[#e6e4db] dark:border-gray-800 flex justify-between items-center">
+<h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">Console Output</h3>
+<button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+</div>
+<div class="flex-1 p-4 font-mono text-sm overflow-auto bg-white dark:bg-[#1a180e] text-[#181711] dark:text-gray-300">
+<div class="mb-2">
+<span class="text-green-600 font-bold">➜</span> <span class="text-gray-500">python main.py</span>
+</div>
+<div class="mb-2">
+                        Fibonacci sequence up to 100:
+                    </div>
+<div class="mb-4 text-gray-800 dark:text-gray-200">
+                        [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+                    </div>
+<div class="text-green-600 dark:text-green-400 mt-4 flex items-center gap-2 text-xs">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> Process finished with exit code 0
+                    </div>
+</div>
+</div>
+<!-- AI Feedback (Bottom Half) -->
+<div class="flex-1 flex flex-col bg-white dark:bg-[#1a180e]">
+<div class="px-4 py-2 bg-gray-50 dark:bg-[#201e15] border-b border-[#e6e4db] dark:border-gray-800 flex justify-between items-center">
+<h3 class="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span> AI Coach
+                    </h3>
+</div>
+<div class="flex-1 p-4 overflow-y-auto bg-white dark:bg-[#1a180e]">
+<!-- AI Card -->
+<div class="bg-blue-50 dark:bg-gray-800 rounded-lg p-4 border border-blue-100 dark:border-gray-700 shadow-sm mb-3">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<div>
+<h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">Great logic!</h4>
+<p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Your use of tuple unpacking <code>a, b = b, a + b</code> is pythonic and efficient. Keep it up!
+                                </p>
+</div>
+</div>
+</div>
+<!-- AI Card 2 -->
+<div class="bg-yellow-50 dark:bg-yellow-900/10 rounded-lg p-4 border border-yellow-100 dark:border-yellow-900/30 shadow-sm">
+<div class="flex gap-3">
+<div class="size-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center shrink-0 text-yellow-600 dark:text-yellow-500">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+</div>
+<div>
+<h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">Tip</h4>
+<p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Try adding a type hint for the return value to make your function more robust. E.g., <code>-&gt; list[int]</code>.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="p-4 border-t border-[#e6e4db] dark:border-gray-800 bg-gray-50 dark:bg-[#1a180e] flex gap-3">
+<button class="flex-1 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        Reset
+                    </button>
+<button class="flex-[2] py-2.5 rounded-lg bg-primary hover:bg-yellow-400 text-black font-bold text-sm shadow-sm transition-colors flex justify-center items-center gap-2">
+                        Submit Solution
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+</body></html>

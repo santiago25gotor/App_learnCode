@@ -362,7 +362,63 @@ class FirebaseService:
             print(f"Error al obtener progreso: {str(e)}")
             return {}
     
+    def save_placement_test_results(self, user_id, scores, unlocked_categories):
+        """Guardar resultados del placement test y desbloquear categorias"""
+        try:
+            user_ref = self.db.collection(Config.USERS_COLLECTION).document(user_id)
+            user_doc = user_ref.get()
+            
+            if not user_doc.exists:
+                return False, "Usuario no encontrado"
+            
+            user_data = user_doc.to_dict()
+            progress = user_data.get('progress', {})
+            
+            progress['placement_test'] = {
+                'scores': scores,
+                'completed_at': firestore.SERVER_TIMESTAMP
+            }
+            progress['unlocked_categories'] = unlocked_categories
+            progress['placement_test_completed'] = True
+            
+            user_ref.update({'progress': progress})
+            return True, "Resultados guardados"
+            
+        except Exception as e:
+            return False, f"Error: {str(e)}"
     
+    def unlock_all_lessons_for_category(self, user_id, category):
+        """Marcar todas las lecciones de una categoria como completadas"""
+        try:
+            lessons = self.get_lessons_by_category(category)
+            
+            user_ref = self.db.collection(Config.USERS_COLLECTION).document(user_id)
+            user_doc = user_ref.get()
+            
+            if not user_doc.exists:
+                return False, 0
+            
+            user_data = user_doc.to_dict()
+            progress = user_data.get('progress', {})
+            completed_lessons = progress.get('completed_lessons', [])
+            
+            count = 0
+            for lesson in lessons:
+                lesson_id = lesson.get('id')
+                if lesson_id and lesson_id not in completed_lessons:
+                    completed_lessons.append(lesson_id)
+                    count += 1
+            
+            progress['completed_lessons'] = completed_lessons
+            progress['total_points'] = progress.get('total_points', 0) + (count * 10)
+            
+            user_ref.update({'progress': progress})
+            return True, count
+            
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return False, 0
+
 
 # Crear instancia global
 firebase_service = FirebaseService()

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
+        .conic-chart {
+            background: conic-gradient(var(--tw-text-opacity, 1) #f4d125 0% 32%, #f3f4f6 32% 100%);
+        }
+        .dark .conic-chart {
+            background: conic-gradient(#f4d125 0% 32%, #374151 32% 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#181711] dark:text-[#f8f8f5] font-display h-screen flex flex-col overflow-hidden transition-colors duration-200">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e6e4db] dark:border-[#333023] bg-white dark:bg-[#1a180e] px-6 py-3 h-16 shrink-0 z-20">
+<div class="flex items-center gap-4 text-[#181711] dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">PyLearn</h2>
+</div>
+<div class="flex items-center justify-end gap-6">
+<div class="hidden sm:flex items-center gap-2 bg-primary/10 dark:bg-primary/5 rounded-full pl-1 pr-4 py-1 border border-primary/20">
+<div class="bg-primary text-[#181711] rounded-full size-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">bolt</span>
+</div>
+<span class="text-[#181711] dark:text-[#f8f8f5] text-sm font-bold">1,250 XP</span>
+</div>
+<button class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#2a271b] p-1 rounded-full transition-colors">
+<div class="size-9 rounded-full bg-cover bg-center border border-gray-200 dark:border-gray-700" data-alt="User profile picture of a student smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPRz0HWgHopkjHbR_KNNDRcDKZIlIJ38c7pi2XWwKe_T_IbEvmzx8ghndTk5jwY7FC9qIPforPcYSQNZLrSU7Hyi0wKgFSyJcbp27q4kcQ4beHf6V68HTdxQg5OsCeClDKqLWtW3Kl0Uaw7ItPuI6UeX3kOc1WfCLEiT-Neq_dDpU4Uu9zm6jypqtfMF4UWtl-XQ6qMLSpf7dsheEPeNUoaok8r7O1IB1fHnpZJ0S9M3ceRx1wIy1etj0EHcfDiI4tFAPak5pc4a4');"></div>
+<span class="hidden md:block text-sm font-medium pr-2">Student Name</span>
+<span class="material-symbols-outlined text-gray-400">expand_more</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-20 lg:w-64 bg-white dark:bg-[#1a180e] border-r border-[#e6e4db] dark:border-[#333023] flex flex-col justify-between py-6 shrink-0 transition-all duration-300">
+<div class="flex flex-col gap-2 px-3">
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl bg-primary text-[#181711] shadow-sm group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="hidden lg:block text-sm font-bold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-[#6b6650] dark:text-[#a09a85] hover:bg-gray-50 dark:hover:bg-[#2a271b] hover:text-[#181711] dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="hidden lg:block text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-[#6b6650] dark:text-[#a09a85] hover:bg-gray-50 dark:hover:bg-[#2a271b] hover:text-[#181711] dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="hidden lg:block text-sm font-medium">History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-[#6b6650] dark:text-[#a09a85] hover:bg-gray-50 dark:hover:bg-[#2a271b] hover:text-[#181711] dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="hidden lg:block text-sm font-medium">Settings</span>
+</a>
+</div>
+<div class="px-3">
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-[#6b6650] dark:text-[#a09a85] hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="hidden lg:block text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-6 lg:p-10">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-[#181711] dark:text-white text-3xl font-bold tracking-tight">Welcome back, Student!</h1>
+<p class="text-[#6b6650] dark:text-[#a09a85] mt-1">You're on a 5-day streak. Ready to continue coding?</p>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Tabs & Topic Grid -->
+<div class="xl:col-span-8 flex flex-col gap-6">
+<!-- Level Selector Tabs -->
+<div class="border-b border-[#e6e4db] dark:border-[#333023]">
+<nav aria-label="Tabs" class="flex gap-8">
+<a aria-current="page" class="border-b-4 border-[#181711] dark:border-primary py-4 px-1 text-sm font-bold text-[#181711] dark:text-white" href="#">
+                                    Básico
+                                </a>
+<a class="border-b-4 border-transparent py-4 px-1 text-sm font-medium text-[#6b6650] dark:text-[#a09a85] hover:text-[#181711] dark:hover:text-white hover:border-gray-300 transition-colors" href="#">
+                                    Intermedio
+                                </a>
+<a class="border-b-4 border-transparent py-4 px-1 text-sm font-medium text-[#6b6650] dark:text-[#a09a85] hover:text-[#181711] dark:hover:text-white hover:border-gray-300 transition-colors" href="#">
+                                    Avanzado
+                                </a>
+</nav>
+</div>
+<!-- Topics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1: Completed -->
+<div class="group relative flex flex-col bg-white dark:bg-[#1a180e] rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none dark:border dark:border-[#333023] hover:shadow-md transition-all cursor-pointer">
+<div class="absolute top-4 right-4 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 p-1.5 rounded-full">
+<span class="material-symbols-outlined text-lg font-bold">check</span>
+</div>
+<div class="size-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+<span class="material-symbols-outlined text-2xl">data_object</span>
+</div>
+<h3 class="text-lg font-bold text-[#181711] dark:text-white mb-1">Variables &amp; Types</h3>
+<p class="text-sm text-[#6b6650] dark:text-[#a09a85] mb-4">Master the building blocks of Python data.</p>
+<div class="mt-auto">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+<span class="text-xs font-medium text-[#6b6650]">100%</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+<div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<!-- Hover Action -->
+<div class="absolute inset-0 bg-white/80 dark:bg-[#1a180e]/90 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-2xl transition-opacity duration-200">
+<button class="bg-primary text-[#181711] font-bold py-2 px-6 rounded-lg shadow-sm transform translate-y-2 group-hover:translate-y-0 transition-transform">Review</button>
+</div>
+</div>
+<!-- Card 2: In Progress (Active) -->
+<div class="relative flex flex-col bg-white dark:bg-[#1a180e] rounded-2xl p-5 shadow-[0_4px_12px_rgba(244,209,37,0.15)] ring-2 ring-primary dark:ring-primary/50 dark:shadow-none dark:border dark:border-[#333023] cursor-pointer">
+<div class="absolute top-0 right-0 bg-primary text-[#181711] text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg">
+                                    RESUME
+                                </div>
+<div class="size-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 mb-4">
+<span class="material-symbols-outlined text-2xl">account_tree</span>
+</div>
+<h3 class="text-lg font-bold text-[#181711] dark:text-white mb-1">Control Flow</h3>
+<p class="text-sm text-[#6b6650] dark:text-[#a09a85] mb-4">If statements, for loops, and while loops.</p>
+<div class="mt-auto">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-primary dark:text-primary uppercase tracking-wider">In Progress</span>
+<span class="text-xs font-medium text-[#181711] dark:text-white">45%</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full shadow-[0_0_10px_rgba(244,209,37,0.5)]" style="width: 45%"></div>
+</div>
+</div>
+</div>
+<!-- Card 3: Locked -->
+<div class="relative flex flex-col bg-gray-50 dark:bg-[#15140c] rounded-2xl p-5 border border-dashed border-gray-200 dark:border-gray-800 opacity-70">
+<div class="size-12 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400 mb-4 grayscale">
+<span class="material-symbols-outlined text-2xl">function</span>
+</div>
+<h3 class="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1">Functions</h3>
+<p class="text-sm text-gray-400 dark:text-gray-600 mb-4">Reusable code blocks and scope.</p>
+<div class="mt-auto flex items-center gap-2 text-gray-400 dark:text-gray-600">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-xs font-bold uppercase tracking-wider">Locked</span>
+</div>
+</div>
+<!-- Card 4: Locked -->
+<div class="relative flex flex-col bg-gray-50 dark:bg-[#15140c] rounded-2xl p-5 border border-dashed border-gray-200 dark:border-gray-800 opacity-70">
+<div class="size-12 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400 mb-4 grayscale">
+<span class="material-symbols-outlined text-2xl">view_list</span>
+</div>
+<h3 class="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1">Lists &amp; Tuples</h3>
+<p class="text-sm text-gray-400 dark:text-gray-600 mb-4">Managing collections of data.</p>
+<div class="mt-auto flex items-center gap-2 text-gray-400 dark:text-gray-600">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-xs font-bold uppercase tracking-wider">Locked</span>
+</div>
+</div>
+<!-- Card 5: Locked -->
+<div class="relative flex flex-col bg-gray-50 dark:bg-[#15140c] rounded-2xl p-5 border border-dashed border-gray-200 dark:border-gray-800 opacity-70">
+<div class="size-12 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400 mb-4 grayscale">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+</div>
+<h3 class="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1">Dictionaries</h3>
+<p class="text-sm text-gray-400 dark:text-gray-600 mb-4">Key-value pairs and lookups.</p>
+<div class="mt-auto flex items-center gap-2 text-gray-400 dark:text-gray-600">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-xs font-bold uppercase tracking-wider">Locked</span>
+</div>
+</div>
+<!-- Card 6: Locked -->
+<div class="relative flex flex-col bg-gray-50 dark:bg-[#15140c] rounded-2xl p-5 border border-dashed border-gray-200 dark:border-gray-800 opacity-70">
+<div class="size-12 rounded-xl bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400 mb-4 grayscale">
+<span class="material-symbols-outlined text-2xl">bug_report</span>
+</div>
+<h3 class="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1">Error Handling</h3>
+<p class="text-sm text-gray-400 dark:text-gray-600 mb-4">Try, except, and troubleshooting.</p>
+<div class="mt-auto flex items-center gap-2 text-gray-400 dark:text-gray-600">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-xs font-bold uppercase tracking-wider">Locked</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Global Progress Widget & Extras -->
+<div class="xl:col-span-4 flex flex-col gap-6">
+<!-- Global Progress Widget -->
+<div class="bg-white dark:bg-[#1a180e] rounded-2xl p-6 shadow-sm dark:border dark:border-[#333023]">
+<h2 class="text-lg font-bold text-[#181711] dark:text-white mb-6">Global Progress</h2>
+<div class="flex items-center justify-center mb-8 relative">
+<!-- Conic Gradient Donut -->
+<div class="size-48 rounded-full conic-chart relative flex items-center justify-center">
+<!-- Inner White Circle -->
+<div class="size-36 bg-white dark:bg-[#1a180e] rounded-full flex flex-col items-center justify-center">
+<span class="text-4xl font-bold text-[#181711] dark:text-white">32%</span>
+<span class="text-xs text-[#6b6650] dark:text-[#a09a85] uppercase tracking-wide font-medium mt-1">Complete</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 bg-background-light dark:bg-[#221f10] rounded-xl flex flex-col items-center justify-center text-center">
+<span class="text-2xl font-bold text-[#181711] dark:text-white">12</span>
+<span class="text-xs text-[#6b6650] dark:text-[#a09a85]">Topics Done</span>
+</div>
+<div class="p-3 bg-background-light dark:bg-[#221f10] rounded-xl flex flex-col items-center justify-center text-center">
+<span class="text-2xl font-bold text-[#181711] dark:text-white">45h</span>
+<span class="text-xs text-[#6b6650] dark:text-[#a09a85]">Time Spent</span>
+</div>
+</div>
+<button class="w-full mt-6 bg-[#181711] dark:bg-white text-white dark:text-[#181711] font-bold py-3 rounded-xl text-sm hover:opacity-90 transition-opacity">
+                                View Detailed Stats
+                            </button>
+</div>
+<!-- Daily Challenge Mini Widget -->
+<div class="bg-primary/10 dark:bg-primary/5 rounded-2xl p-6 border border-primary/20">
+<div class="flex items-center gap-3 mb-3">
+<div class="p-2 bg-primary text-[#181711] rounded-lg">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<div>
+<h3 class="font-bold text-[#181711] dark:text-white">Daily Challenge</h3>
+<p class="text-xs text-[#6b6650] dark:text-[#a09a85]">+50 XP Reward</p>
+</div>
+</div>
+<p class="text-sm text-[#181711] dark:text-[#f8f8f5] mb-4">Solve a random Python puzzle involving list comprehensions.</p>
+<button class="w-full bg-primary text-[#181711] font-bold py-2 rounded-lg text-sm hover:bg-yellow-400 transition-colors">
+                                Start Challenge
+                            </button>
+</div>
+<!-- Community Section -->
+<div class="bg-white dark:bg-[#1a180e] rounded-2xl p-6 shadow-sm dark:border dark:border-[#333023]">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold text-[#181711] dark:text-white">Leaderboard</h2>
+<a class="text-xs font-bold text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-[#6b6650] w-4">1</span>
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Avatar of user Sarah" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4hPo9Wiq8fKKHFYxZDT8eAaJFD-E-cbMZCgtigVb9n6pRd50xZebkL47fr4Mtb_8mwtftr8c8RrjGUO8kqrKspVg1swj8g8i-hId3GKPuSgylpTfs0Dbzdv8DWzvU5VofyAz7kbL6oTnZO6YPDjPmzj_2bq-VQDjxG6zeIJSTqvoNAp9V4sNIOml68a_IGFv-r2cdVFg5FLHluOX9D0KfLreQ2FAHHPMtmjgNPPyQr0eewZEe3oTjl-VQinnCxKHN3NxpZMy1JT4');"></div>
+<div class="flex-1">
+<p class="text-sm font-bold text-[#181711] dark:text-white">Sarah Jenkins</p>
+<p class="text-xs text-[#6b6650] dark:text-[#a09a85]">2,450 XP</p>
+</div>
+<span class="material-symbols-outlined text-yellow-500 text-sm">workspace_premium</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-[#6b6650] w-4">2</span>
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Avatar of user Mike" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmR8sgAh-WxUtAIWOfvuuU371lNHgkxMLCv9A0KOLFKeS2SB_BQfbq-_PWSxxUGwWtuta1CMcZwrXcsjZsCsrEch1Hf7xikExlXh0Tz4GJKMdQ1KCKcegpSgKfV0slaaV4yWZTSB2k8tq6Q63scfcUisbgQ3KXQlll-wMcTykKuMPIMnObLILt28QYB_ULvMOa0nVy4uzYOj5Axefca42PZpT8EVGhYNg00b5zZt0imKzSXBawq6wgYyT8vgNuGQCH4GSQhZikSQU');"></div>
+<div class="flex-1">
+<p class="text-sm font-bold text-[#181711] dark:text-white">Mike Chen</p>
+<p class="text-xs text-[#6b6650] dark:text-[#a09a85]">2,310 XP</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-gray-50 dark:bg-[#221f10] p-2 rounded-lg -mx-2">
+<span class="text-sm font-bold text-[#181711] dark:text-white w-4">14</span>
+<div class="size-8 rounded-full bg-cover bg-center border border-primary" data-alt="Your avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtYA1_WwVf55ZEbcFW4DRliWGMIgLhlREbH0xIF3AOGLfaZ_yXicuEBNCDVxOYj98Sxyu0LM3H8F0ekA9f1NUxFfhCI2C9zrRgByWRr8ml9PgxiboRmS7jyJP2Upo-Ce-KTCXEXzsWY0xmecsDYoylDOvFozM2tI9rA4bwUtq2LqJGqsBO5I11izt6Xb1V-MJxai7pKAIrYGUtzHg9N3rkO_1w5BF1pLEnzAoPLFqkmzIonaxuEuVuG1yk5DFh_A7iJqR6MU5SXfU');"></div>
+<div class="flex-1">
+<p class="text-sm font-bold text-[#181711] dark:text-white">You</p>
+<p class="text-xs text-[#6b6650] dark:text-[#a09a85]">1,250 XP</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

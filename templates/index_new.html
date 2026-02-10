@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYLEARN - Domina Python de forma interactiva</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .typing-demo {
+            overflow: hidden;
+            border-right: 3px solid hsl(50, 90%, 55%);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40) 1s both, blink 0.75s step-end infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #f4d125 0%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .code-window {
+            background: linear-gradient(to bottom, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light font-display antialiased overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-60 -left-40 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3 float">
+                    <div class="bg-black text-primary p-2 rounded-xl shadow-lg">
+                        <span class="material-symbols-outlined text-3xl">terminal</span>
+                    </div>
+                    <span class="text-2xl font-black tracking-tight">PYLEARN</span>
+                </div>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="#features"
+                        class="text-gray-700 hover:text-black font-medium transition-colors">Características</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-black font-medium transition-colors">Cómo
+                        Funciona</a>
+                    <a href="#testimonials"
+                        class="text-gray-700 hover:text-black font-medium transition-colors">Testimonios</a>
+                    <a href="/login"
+                        class="px-6 py-2 bg-primary text-black font-bold rounded-lg hover:bg-yellow-400 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        Comenzar Gratis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 pb-16 px-4">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Left: Content -->
+            <div class="space-y-8 slide-in">
+                <div class="inline-block">
+                    <span
+                        class="bg-primary/20 text-black px-4 py-2 rounded-full text-sm font-bold border-2 border-primary">
+                        🚀 100% Gratis · IDE Integrado · Certificación
+                    </span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-black leading-tight">
+                    Aprende Python
+                    <span class="block gradient-text">Programando</span>
+                    <span class="block">En Vivo</span>
+                </h1>
+
+                <p class="text-xl text-gray-600 max-w-xl">
+                    Desde cero hasta experto con nuestro <strong>IDE interactivo</strong>,
+                    ejercicios prácticos y exámenes de certificación.
+                    <strong>¡Empieza a programar desde el primer día!</strong>
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/login"
+                        class="group px-8 py-4 bg-black text-white font-bold text-lg rounded-xl shadow-2xl hover:shadow-primary/50 hover:bg-gray-900 transition-all flex items-center justify-center gap-2">
+                        <span>Empezar Ahora</span>
+                        <span
+                            class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <button onclick="document.getElementById('demo-video').scrollIntoView({behavior: 'smooth'})"
+                        class="px-8 py-4 bg-white text-black font-bold text-lg rounded-xl border-2 border-black hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">play_circle</span>
+                        <span>Ver Demo</span>
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-6 pt-8">
+                    <div>
+                        <div class="text-3xl font-black text-black">500+</div>
+                        <div class="text-sm text-gray-600">Ejercicios</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-black text-black">50K+</div>
+                        <div class="text-sm text-gray-600">Estudiantes</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-black text-black">4.9★</div>
+                        <div class="text-sm text-gray-600">Valoración</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Interactive Code Demo -->
+            <div class="slide-in" style="animation-delay: 0.3s;">
+                <div class="code-window rounded-2xl shadow-2xl overflow-hidden border-4 border-black">
+                    <!-- Window Header -->
+                    <div class="bg-gray-800 px-4 py-3 flex items-center gap-2 border-b border-gray-700">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="flex-1 text-center">
+                            <span class="text-gray-400 text-sm font-mono">lesson_001.py</span>
+                        </div>
+                    </div>
+
+                    <!-- Code Content -->
+                    <div class="p-6 font-mono text-sm space-y-3">
+                        <div>
+                            <span class="text-purple-400">def</span>
+                            <span class="text-blue-400"> aprender_python</span>
+                            <span class="text-gray-300">():</span>
+                        </div>
+                        <div class="pl-8">
+                            <span class="text-gray-500"># Tu viaje empieza aquí</span>
+                        </div>
+                        <div class="pl-8">
+                            <span class="text-green-400">print</span>
+                            <span class="text-gray-300">(</span>
+                            <span class="text-yellow-300">"¡Hola Mundo!"</span>
+                            <span class="text-gray-300">)</span>
+                        </div>
+                        <div class="pl-8">
+                            <span class="text-pink-400">return</span>
+                            <span class="text-orange-400"> True</span>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700">
+                            <span class="text-gray-500">&gt;&gt;&gt; </span>
+                            <span class="text-green-400 typing-demo inline-block">¡Hola Mundo!</span>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Output -->
+                    <div class="bg-black px-6 py-4 border-t border-primary">
+                        <div class="flex items-center gap-2 text-primary">
+                            <span class="material-symbols-outlined text-sm animate-pulse">check_circle</span>
+                            <span class="font-mono text-sm">Código ejecutado exitosamente ✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 slide-in">
+                <span class="text-primary font-bold text-sm uppercase tracking-wider">Características</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2 mb-4">
+                    Todo lo que necesitas para
+                    <span class="gradient-text">dominar Python</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Aprende con un sistema diseñado para llevarte de principiante a experto
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div
+                    class="group bg-gradient-to-br from-yellow-50 to-orange-50 p-8 rounded-2xl border-2 border-transparent hover:border-primary transition-all hover:shadow-2xl slide-in">
+                    <div
+                        class="bg-primary text-black p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">code</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">IDE Integrado Real</h3>
+                    <p class="text-gray-700">
+                        Escribe y ejecuta código Python directamente desde tu navegador.
+                        Sin instalaciones, sin configuraciones.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl border-2 border-transparent hover:border-green-500 transition-all hover:shadow-2xl slide-in"
+                    style="animation-delay: 0.1s;">
+                    <div
+                        class="bg-green-500 text-white p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">menu_book</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Teoría + Práctica</h3>
+                    <p class="text-gray-700">
+                        Cada lección incluye teoría clara y actividades prácticas para
+                        aplicar lo aprendido inmediatamente.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl border-2 border-transparent hover:border-blue-500 transition-all hover:shadow-2xl slide-in"
+                    style="animation-delay: 0.2s;">
+                    <div
+                        class="bg-blue-500 text-white p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">workspace_premium</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Exámenes de Certificación</h3>
+                    <p class="text-gray-700">
+                        Completa cada nivel con un examen práctico y obtén tu certificado
+                        de habilidad en Python.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="group bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl border-2 border-transparent hover:border-purple-500 transition-all hover:shadow-2xl slide-in"
+                    style="animation-delay: 0.3s;">
+                    <div
+                        class="bg-purple-500 text-white p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">route</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Ruta de Aprendizaje Visual</h3>
+                    <p class="text-gray-700">
+                        Sigue tu progreso en un mapa interactivo gamificado. Desbloquea
+                        niveles y gana recompensas.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="group bg-gradient-to-br from-red-50 to-orange-50 p-8 rounded-2xl border-2 border-transparent hover:border-red-500 transition-all hover:shadow-2xl slide-in"
+                    style="animation-delay: 0.4s;">
+                    <div
+                        class="bg-red-500 text-white p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">psychology</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Feedback Inteligente</h3>
+                    <p class="text-gray-700">
+                        Recibe retroalimentación instantánea en tus ejercicios con
+                        sugerencias personalizadas para mejorar.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="group bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-2xl border-2 border-transparent hover:border-indigo-500 transition-all hover:shadow-2xl slide-in"
+                    style="animation-delay: 0.5s;">
+                    <div
+                        class="bg-indigo-500 text-white p-4 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-4xl">leaderboard</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Sistema de Logros</h3>
+                    <p class="text-gray-700">
+                        Gana puntos, badges y compite en el ranking global mientras
+                        aprendes Python.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-primary font-bold text-sm uppercase tracking-wider">Proceso</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">
+                    Aprende en <span class="gradient-text">3 Pasos</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div
+                        class="bg-primary text-black w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">
+                        1</div>
+                    <h3 class="text-2xl font-bold mb-3">Lee la Teoría</h3>
+                    <p class="text-gray-600">Conceptos explicados de forma clara con ejemplos reales</p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="bg-primary text-black w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">
+                        2</div>
+                    <h3 class="text-2xl font-bold mb-3">Practica con Ejercicios</h3>
+                    <p class="text-gray-600">Escribe código real en nuestro IDE y recibe feedback</p>
+                </div>
+                <div class="text-center">
+                    <div
+                        class="bg-primary text-black w-20 h-20 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6 shadow-lg">
+                        3</div>
+                    <h3 class="text-2xl font-bold mb-3">Supera el Examen</h3>
+                    <p class="text-gray-600">Demuestra tu conocimiento y avanza al siguiente nivel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-black text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-primary/10"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="text-4xl md:text-6xl font-black mb-6">
+                ¿Listo para convertirte en
+                <span class="text-primary">Pythonista</span>?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Únete a 50,000+ estudiantes que ya están aprendiendo Python de la manera más efectiva
+            </p>
+            <a href="/login"
+                class="inline-flex items-center gap-3 px-10 py-5 bg-primary text-black font-bold text-xl rounded-xl shadow-2xl hover:bg-yellow-400 transition-all transform hover:scale-105">
+                <span>Comenzar Gratis Ahora</span>
+                <span class="material-symbols-outlined text-3xl">arrow_forward</span>
+            </a>
+            <p class="mt-6 text-sm text-gray-400">No se requiere tarjeta de crédito · 100% Gratis</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="bg-primary text-black p-2 rounded-lg">
+                        <span class="material-symbols-outlined text-2xl">terminal</span>
+                    </div>
+                    <span class="font-bold text-2xl">PYLEARN</span>
+                </div>
+                <div class="text-gray-400 text-sm">
+                    © 2026 PyLearn. Todos los derechos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('slide-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>

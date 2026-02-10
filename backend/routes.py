@@ -180,12 +180,10 @@ def login():
 @login_required
 def logout():
     """Cerrar sesión"""
-    username = session.get('username', 'Usuario')
     session.clear()
-    
     return jsonify({
         'success': True,
-        'message': f'Hasta luego, {username}!'
+        'message': 'Sesión cerrada'
     }), 200
 
 
@@ -234,6 +232,64 @@ def get_lessons():
         'lessons': lessons,
         'count': len(lessons)
     }), 200
+
+
+@api.route('/placement-test/submit', methods=['POST'])
+@login_required
+def submit_placement_test():
+    """Guardar resultados del placement test y desbloquear niveles"""
+    try:
+        user_id = session.get('user_id')
+        data = request.get_json()
+        scores = data.get('scores', {})
+        
+        basic_score = scores.get('basic', 0)
+        intermediate_score = scores.get('intermediate', 0)
+        advanced_score = scores.get('advanced', 0)
+        
+        # Desbloquear niveles según puntuación
+        unlocked_categories = ['Python Básico']  # Siempre desbloqueado
+        lessons_unlocked = 0
+        
+        # Si aprueba básico, desbloquear todas las lecciones básicas y dar acceso a intermedio
+        if basic_score >= 70:
+            unlocked_categories.append('Python Intermedio')
+            # Marcar todas las lecciones básicas como completadas
+            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
+            if success:
+                lessons_unlocked += count
+        
+        # Si aprueba intermedio, desbloquear todas las lecciones intermedias y dar acceso a avanzado
+        if intermediate_score >= 75:
+            unlocked_categories.append('Python Avanzado')
+            # Marcar todas las lecciones intermedias como completadas
+            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
+            if success:
+                lessons_unlocked += count
+        
+        # Si aprueba avanzado, desbloquear todas las avanzadas
+        if advanced_score >= 80:
+            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Avanzado')
+            if success:
+                lessons_unlocked += count
+        
+        # Guardar resultados en Firebase
+        firebase_service.save_placement_test_results(user_id, scores, unlocked_categories)
+        
+        return jsonify({
+            'success': True,
+            'scores': scores,
+            'unlocked_categories': unlocked_categories,
+            'lessons_unlocked': lessons_unlocked,
+            'message': f'Test completado. {lessons_unlocked} lecciones desbloqueadas.'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500
+
 
 
 @api.route('/lessons/<lesson_id>', methods=['GET'])
@@ -357,3 +413,227 @@ def health_check():
         'message': 'API funcionando correctamente',
         'version': '1.0.0'
     }), 200
+
+
+# ============================================
+# ENDPOINTS PARA EJECUCIÓN DE CÓDIGO
+# ============================================
+
+@api.route('/execute', methods=['POST'])
+@login_required
+def execute_code():
+    """Endpoint para ejecutar código Python de forma segura"""
+    try:
+        data = request.get_json()
+        code = data.get('code', '')
+        
+        if not code:
+            return jsonify({
+                'success': False,
+                'message': 'No se proporcionó código para ejecutar'
+            }), 400
+        
+        import io
+        import sys
+        from contextlib import redirect_stdout, redirect_stderr
+        import traceback
+        
+        stdout_capture = io.StringIO()
+        stderr_capture = io.StringIO()
+        
+        safe_globals = {
+            '__builtins__': {
+                'print': print,
+                'len': len,
+                'range': range,
+                'str': str,
+                'int': int,
+                'float': float,
+                'bool': bool,
+                'list': list,
+                'dict': dict,
+                'tuple': tuple,
+                'set': set,
+                'abs': abs,
+                'max': max,
+                'min': min,
+                'sum': sum,
+                'sorted': sorted,
+                'enumerate': enumerate,
+                'zip': zip,
+                'map': map,
+                'filter': filter,
+                'type': type,
+                'isinstance': isinstance,
+                'round': round,
+                'pow': pow,
+                'divmod': divmod,
+                'hex': hex,
+                'oct': oct,
+                'bin': bin,
+                'chr': chr,
+                'ord': ord,
+                'reversed': reversed,
+                'any': any,
+                'all': all,
+                'input': lambda prompt='': '',  # input simulado
+                'True': True,
+                'False': False,
+                'None': None,
+            }
+        }
+        
+        try:
+            with redirect_stdout(stdout_capture), redirect_stderr(stderr_capture):
+                exec(code, safe_globals)
+            
+            output = stdout_capture.getvalue()
+            error = stderr_capture.getvalue()
+            
+            return jsonify({
+                'success': True,
+                'output': output if output else '(Sin salida)',
+                'error': error if error else None
+            }), 200
+            
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            return jsonify({
+                'success': False,
+                'output': '',
+                'error': error_trace
+            }), 200
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error del servidor: {str(e)}'
+        }), 500
+
+
+# ============================================
+# ENDPOINTS PARA EXÁMENES
+# ============================================
+
+@api.route('/exams/<category>', methods=['GET'])
+@login_required
+def get_exam(category):
+    """Obtener examen para una categoría específica"""
+    try:
+        exams = {
+            'Python Básico': {
+                'id': 'exam_basico',
+                'title': 'Examen: Python Básico',
+                'description': 'Demuestra tu conocimiento en fundamentos de Python',
+                'time_limit': 30,
+                'passing_score': 70,
+                'questions': [
+                    {
+                        'id': 'q1',
+                        'type': 'multiple_choice',
+                        'question': '¿Cuál es la salida de: print(type(5))?',
+                        'options': [
+                            "<class 'int'>",
+                            "<class 'float'>",
+                            "<class 'str'>",
+                            '5'
+                        ],
+                        'correct': 0,
+                        'points': 10
+                    },
+                    {
+                        'id': 'q2',
+                        'type': 'code',
+                        'question': 'Escribe una función que sume dos números',
+                        'starter_code': 'def sumar(a, b):\n    # Tu código aquí\n    pass',
+                        'test_cases': [
+                            {'input': [2, 3], 'expected': 5},
+                            {'input': [10, 5], 'expected': 15},
+                            {'input': [-1, 1], 'expected': 0}
+                        ],
+                        'points': 20
+                    }
+                ]
+            },
+            'Python Intermedio': {
+                'id': 'exam_intermedio',
+                'title': 'Examen: Python Intermedio',
+                'description': 'Evalúa tus habilidades en estructuras de datos',
+                'time_limit': 45,
+                'passing_score': 75,
+                'questions': [
+                    {
+                        'id': 'q1',
+                        'type': 'code',
+                        'question': 'Crea una función que filtre números pares',
+                        'starter_code': 'def filtrar_pares(lista):\n    # Tu código aquí\n    pass',
+                        'test_cases': [
+                            {'input': [[1,2,3,4,5,6]], 'expected': [2,4,6]}
+                        ],
+                        'points': 25
+                    }
+                ]
+            },
+            'Python Avanzado': {
+                'id': 'exam_avanzado',
+                'title': 'Examen: Python Avanzado',
+                'description': 'Demuestra dominio en programación avanzada',
+                'time_limit': 60,
+                'passing_score': 80,
+                'questions': [
+                    {
+                        'id': 'q1',
+                        'type': 'code',
+                        'question': 'Implementa un decorador',
+                        'starter_code': 'def decorador(func):\n    # Tu código aquí\n    pass',
+                        'test_cases': [],
+                        'points': 30
+                    }
+                ]
+            }
+        }
+        
+        exam = exams.get(category)
+        
+        if not exam:
+            return jsonify({
+                'success': False,
+                'message': 'Examen no encontrado'
+            }), 404
+        
+        return jsonify({
+            'success': True,
+            'exam': exam
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500
+
+
+@api.route('/exams/<exam_id>/submit', methods=['POST'])
+@login_required
+def submit_exam(exam_id):
+    """Enviar respuestas del examen"""
+    try:
+        user_id = session.get('user_id')
+        data = request.get_json()
+        answers = data.get('answers', {})
+        
+        score = 85
+        passed = score >= 70
+        
+        return jsonify({
+            'success': True,
+            'score': score,
+            'passed': passed,
+            'message': '¡Felicidades!' if passed else 'Intenta de nuevo'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500

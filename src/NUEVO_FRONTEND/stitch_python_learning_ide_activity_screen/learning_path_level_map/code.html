@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Python Learning Path</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#f4d125",
+                "background-light": "#f8f8f5",
+                "background-dark": "#221f10",
+                },
+                fontFamily: {
+                "display": ["Space Grotesk", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                keyframes: {
+                    wiggle: {
+                        '0%, 100%': { transform: 'rotate(-3deg)' },
+                        '50%': { transform: 'rotate(3deg)' },
+                    },
+                    pulseSlow: {
+                        '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                        '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+                    }
+                },
+                animation: {
+                    wiggle: 'wiggle 1s ease-in-out infinite',
+                    'pulse-slow': 'pulseSlow 3s ease-in-out infinite',
+                }
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1); 
+            border-radius: 20px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.1); 
+        }
+
+        /* SVG Path Animation Utility */
+        .path-line {
+            stroke-dasharray: 10;
+            stroke-linecap: round;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 font-display transition-colors duration-300 min-h-screen flex flex-col">
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-black">Py</div>
+<span class="font-bold text-xl tracking-tight">CodeJourney</span>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-gray-900 dark:text-white font-medium border-b-2 border-primary" href="#">Learning Path</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" href="#">Challenges</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" href="#">Leaderboard</a>
+<div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+<span class="material-icons text-primary text-sm">bolt</span>
+<span class="text-sm font-bold">12</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-gray-300 overflow-hidden border-2 border-primary">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="User profile avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwLTHhEppav03DJJpoS-VXkLpIuVmmx-ApaRDb2vfyxgLWxjZJff-IDokNVvXNoeSv8mvS5xplG2Ie9mOO68fqaH_FXCkq6tI9PGWj6POe1rmFHJz7TAJn0VOrkM4bXPMndea6Flh0FnzzGCa4y9NHzmG0irACtxHUo8XA6vpgXbZbrZixCxNXC3llAvi-ak1dMglaJfgGTzRYIG5868efLZ7F-ExMX3DLv0QTmdyGmaq9X9POBMcBkqoKLYFrGiuSH4Ii9r92Pt4"/>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Layout -->
+<main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+<!-- Left Sidebar: Level Context (Optional sticky on large screens) -->
+<aside class="hidden lg:block lg:col-span-3 sticky top-24 h-fit">
+<div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<h3 class="text-sm uppercase tracking-wider text-gray-400 font-semibold mb-4">Current Milestone</h3>
+<h2 class="text-2xl font-bold mb-2">Data Structures</h2>
+<p class="text-gray-500 dark:text-gray-400 text-sm mb-6">Master lists, dictionaries, tuples, and sets to manage complex data efficiently.</p>
+<div class="space-y-4">
+<div class="flex justify-between text-sm mb-1">
+<span>Chapter Progress</span>
+<span class="font-bold">45%</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5">
+<div class="bg-primary h-2.5 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+<div class="flex items-center space-x-3 mb-4">
+<div class="p-2 bg-primary/20 rounded-lg text-primary">
+<span class="material-icons text-lg">emoji_events</span>
+</div>
+<div>
+<div class="text-xs text-gray-400">Next Reward</div>
+<div class="font-bold text-sm">Pythonista Badge</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+<span class="material-icons text-lg">schedule</span>
+</div>
+<div>
+<div class="text-xs text-gray-400">Est. Time</div>
+<div class="font-bold text-sm">2h 15m remaining</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center: The Zigzag Path -->
+<section class="lg:col-span-6 relative flex flex-col items-center">
+<!-- Absolute SVG Path for Zigzag Connector -->
+<!-- This SVG sits behind the cards and connects them. Coordinates are approximated for the visual effect -->
+<svg class="absolute top-0 w-full h-full pointer-events-none z-0 hidden md:block" preserveaspectratio="none" style="left: 0;" viewbox="0 0 400 1200">
+<defs>
+<lineargradient id="pathGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"></stop>
+<stop offset="40%" style="stop-color:#f4d125;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#9ca3af;stop-opacity:0.3"></stop>
+</lineargradient>
+</defs>
+<!-- Zigzag path: centers around x=200. Left nodes ~x=50, Right nodes ~x=350 -->
+<path class="path-line opacity-50 dark:opacity-30" d="M 200,50 
+                         Q 200,100 200,120
+                         C 200,180 350,180 350,250
+                         C 350,320 50,320 50,450
+                         C 50,580 200,580 200,650
+                         C 200,720 350,720 350,850
+                         C 350,980 200,980 200,1100" fill="none" stroke="url(#pathGradient)" stroke-dasharray="8 8" stroke-width="4"></path>
+</svg>
+<!-- Vertical straight line for mobile -->
+<div class="absolute top-0 bottom-0 left-8 md:hidden w-1 bg-gradient-to-b from-green-500 via-primary to-gray-300 dark:to-gray-700 z-0"></div>
+<!-- Path Items Container -->
+<div class="w-full space-y-24 md:space-y-32 relative z-10 pt-10 pb-32">
+<!-- START NODE (Centered Top) -->
+<div class="flex justify-center relative group">
+<div class="absolute -top-12 text-center w-full animate-bounce">
+<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200">Start Here</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg border-4 border-white dark:border-background-dark ring-4 ring-green-100 dark:ring-green-900/30 z-10">
+<span class="material-icons">flag</span>
+</div>
+</div>
+<!-- LEVEL 1: COMPLETED (Right Side Alignment on Desktop) -->
+<div class="flex md:justify-end md:pr-12 pl-16 md:pl-0 relative w-full">
+<!-- Mobile connector dot -->
+<div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-green-500 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+<div class="w-full md:w-64 bg-white dark:bg-gray-900 p-5 rounded-xl shadow-md border-l-4 border-green-500 hover:-translate-y-1 transition-transform duration-300 relative group cursor-pointer">
+<div class="absolute -right-2 -top-2 bg-green-500 text-white rounded-full p-1 shadow-sm">
+<span class="material-icons text-sm">check</span>
+</div>
+<h4 class="font-bold text-lg mb-1 group-hover:text-green-600 transition-colors">Intro to Syntax</h4>
+<p class="text-xs text-gray-500 mb-3">Variables, printing, and comments.</p>
+<div class="flex items-center justify-between">
+<div class="flex text-yellow-400 text-xs">
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+</div>
+<span class="text-xs font-mono text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded">100 XP</span>
+</div>
+</div>
+</div>
+<!-- LEVEL 2: COMPLETED (Left Side Alignment on Desktop) -->
+<div class="flex md:justify-start md:pl-12 pl-16 relative w-full">
+<!-- Mobile connector dot -->
+<div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-green-500 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+<div class="w-full md:w-64 bg-white dark:bg-gray-900 p-5 rounded-xl shadow-md border-l-4 border-green-500 hover:-translate-y-1 transition-transform duration-300 relative group cursor-pointer">
+<div class="absolute -right-2 -top-2 bg-green-500 text-white rounded-full p-1 shadow-sm">
+<span class="material-icons text-sm">check</span>
+</div>
+<h4 class="font-bold text-lg mb-1 group-hover:text-green-600 transition-colors">Control Flow</h4>
+<p class="text-xs text-gray-500 mb-3">If statements and boolean logic.</p>
+<div class="flex items-center justify-between">
+<div class="flex text-yellow-400 text-xs">
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm">star</span>
+<span class="material-icons text-sm text-gray-300">star</span>
+</div>
+<span class="text-xs font-mono text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded">150 XP</span>
+</div>
+</div>
+</div>
+<!-- LEVEL 3: ACTIVE (Center/Zigzag specific - e.g. Middle) -->
+<!-- We place this one prominently -->
+<div class="flex justify-center relative w-full pl-10 md:pl-0">
+<!-- Mobile connector dot (Active) -->
+<div class="absolute left-6 md:hidden w-6 h-6 -ml-1 rounded-full bg-primary border-4 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10 shadow-[0_0_15px_rgba(244,209,37,0.6)]"></div>
+<div class="w-full md:w-80 relative">
+<!-- Glow Effect -->
+<div class="absolute inset-0 bg-primary/20 dark:bg-primary/10 rounded-xl blur-xl animate-pulse-slow"></div>
+<div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border-2 border-primary overflow-hidden">
+<!-- Background decoration -->
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-icons text-8xl text-primary">code</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<span class="bg-primary text-black text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Current Level</span>
+<span class="text-xs font-mono text-gray-500">2/5 Lessons</span>
+</div>
+<h3 class="text-2xl font-bold mb-2 relative z-10">Loops &amp; Iteration</h3>
+<p class="text-gray-600 dark:text-gray-300 text-sm mb-6 relative z-10">Learn how to repeat blocks of code using For and While loops to automate tasks.</p>
+<div class="flex items-center gap-3 relative z-10">
+<button class="flex-1 bg-primary hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+<span>Continue</span>
+<span class="material-icons text-sm">arrow_forward</span>
+</button>
+<button class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 p-3 rounded-lg transition-colors" title="View Details">
+<span class="material-icons">info</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION HEADER (Floating milestone marker) -->
+<div class="flex items-center md:justify-end pr-10 pl-16 md:pl-0 w-full md:-mt-12 opacity-80">
+<div class="bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase border border-gray-300 dark:border-gray-700 backdrop-blur-sm">
+                        Level 2: Intermediate
+                    </div>
+</div>
+<!-- LEVEL 4: LOCKED (Right Side Alignment on Desktop) -->
+<div class="flex md:justify-end md:pr-12 pl-16 md:pl-0 relative w-full">
+<!-- Mobile connector dot -->
+<div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-gray-300 dark:bg-gray-700 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+<div class="w-full md:w-64 bg-gray-50 dark:bg-gray-900/50 p-5 rounded-xl border border-gray-200 dark:border-gray-800 relative opacity-70 grayscale transition-all hover:grayscale-0 hover:opacity-100 cursor-not-allowed">
+<div class="absolute inset-0 flex items-center justify-center bg-gray-100/10 dark:bg-black/10 z-10 rounded-xl">
+<span class="material-icons text-gray-400 text-3xl">lock</span>
+</div>
+<h4 class="font-bold text-lg mb-1 text-gray-500">Functions</h4>
+<p class="text-xs text-gray-400 mb-3">Reusable code blocks and scope.</p>
+<div class="flex items-center justify-between opacity-50">
+<div class="flex text-gray-300 text-xs">
+<span class="material-icons text-sm">star_border</span>
+<span class="material-icons text-sm">star_border</span>
+<span class="material-icons text-sm">star_border</span>
+</div>
+<span class="text-xs font-mono text-gray-400 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded">200 XP</span>
+</div>
+</div>
+</div>
+<!-- LEVEL 5: LOCKED (Left Side Alignment on Desktop) -->
+<div class="flex md:justify-start md:pl-12 pl-16 relative w-full">
+<!-- Mobile connector dot -->
+<div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-gray-300 dark:bg-gray-700 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+<div class="w-full md:w-64 bg-gray-50 dark:bg-gray-900/50 p-5 rounded-xl border border-gray-200 dark:border-gray-800 relative opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 cursor-not-allowed">
+<div class="absolute inset-0 flex items-center justify-center bg-gray-100/10 dark:bg-black/10 z-10 rounded-xl">
+<span class="material-icons text-gray-400 text-3xl">lock</span>
+</div>
+<h4 class="font-bold text-lg mb-1 text-gray-500">Lists &amp; Dicts</h4>
+<p class="text-xs text-gray-400 mb-3">Advanced data storage types.</p>
+<div class="flex items-center justify-between opacity-50">
+<div class="flex text-gray-300 text-xs">
+<span class="material-icons text-sm">star_border</span>
+<span class="material-icons text-sm">star_border</span>
+<span class="material-icons text-sm">star_border</span>
+</div>
+<span class="text-xs font-mono text-gray-400 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded">250 XP</span>
+</div>
+</div>
+</div>
+<!-- BONUS CHEST (Branching off slightly) -->
+<div class="absolute right-0 md:right-auto md:left-1/2 md:-ml-40 top-[70%] transform rotate-6 hover:rotate-0 transition-transform cursor-pointer">
+<div class="group relative">
+<div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg border-2 border-purple-400 animate-bounce">
+<span class="material-icons text-white">card_giftcard</span>
+</div>
+<div class="absolute top-14 left-1/2 -translate-x-1/2 w-max bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                            Bonus Challenge
+                        </div>
+</div>
+</div>
+</div>
+<!-- Future Path Fading Out -->
+<div class="w-full flex justify-center mt-4">
+<div class="flex flex-col items-center gap-2 opacity-30">
+<div class="w-2 h-2 rounded-full bg-gray-400"></div>
+<div class="w-2 h-2 rounded-full bg-gray-400"></div>
+<div class="w-2 h-2 rounded-full bg-gray-400"></div>
+<span class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">To Be Continued</span>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Stats & Leaderboard -->
+<aside class="hidden lg:block lg:col-span-3 sticky top-24 h-fit space-y-6">
+<!-- User Stats Card -->
+<div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+<h3 class="font-bold text-lg mb-4 flex items-center">
+<span class="material-icons mr-2 text-primary">analytics</span> 
+                    Your Progress
+                </h3>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-background-light dark:bg-background-dark p-3 rounded-lg text-center">
+<div class="text-2xl font-bold text-primary">1,250</div>
+<div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Total XP</div>
+</div>
+<div class="bg-background-light dark:bg-background-dark p-3 rounded-lg text-center">
+<div class="text-2xl font-bold text-orange-500 flex items-center justify-center">
+                            7 <span class="material-icons text-sm ml-1">local_fire_department</span>
+</div>
+<div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Day Streak</div>
+</div>
+</div>
+<h4 class="text-sm font-semibold mb-3">Daily Goals</h4>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span>Complete 1 Lesson</span>
+<span class="text-green-500">1/1</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+<div class="bg-green-500 h-1.5 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span>Earn 50 XP</span>
+<span class="text-gray-400">30/50</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Leaderboard -->
+<div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-bold text-md">Top Learners</h3>
+<a class="text-xs text-primary hover:underline" href="#">View All</a>
+</div>
+<ul class="space-y-4">
+<li class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Small user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWvoCVgrgyitdqrdKlXpBobvnJSBmqNTJDEwecD6hMtxvm6I5dMEIrKQXZq_Oxrxhi2U6Uo5LNLq2q746GZIarLoL01XRIrVdY4GvlByPF4cVT91yX2p-ZCFY_tlK50Cn7p_Nq8AfT_CB8SuklnJRZs3mcdeZPgYb_LG4lY85CS1XpxdJZn19IR7vLgJ2ANA86paBMHhkvaKMboHd3fk86b8jhDGgyRNx1tVJt-bNZwIlNmnKelax19IVWe1Oo5yiThzWoZ1U56-8"/>
+</div>
+<div class="text-sm font-medium">Sarah J.</div>
+</div>
+<span class="text-xs font-bold text-gray-500">2,400 XP</span>
+</li>
+<li class="flex items-center justify-between opacity-70">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Small user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7T_1AbAq10HsoXHeGcSreIOJxtQ4EuVDlc7ufOvsFb4QNq4QwLr8MrnsOijC7b9KHXeXS9UQB_gzfpIT299hBLW5051Ncb2UAqnY0Ic_sl_XDdyTfmt3VSd2vGgLKu5IKnTT-uTg8n_9eoQrDPjro8boPPtKgpTXm4YMQAu5a9vy9pH5LEnm0v2mMx2p3YP6CxueXkUQQIQwVXScdfhq_NJnmLXo0DnJYdf2Luxx0vclMU7eidlXFWY1yix5gysEGSRtO52y2aTQ"/>
+</div>
+<div class="text-sm font-medium">Mike R.</div>
+</div>
+<span class="text-xs font-bold text-gray-500">2,100 XP</span>
+</li>
+<li class="flex items-center justify-between opacity-70">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Small user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Ojcg1JQB9acmkB-h7DqTNGPXA6DJw4xAzw0obDnY_-ro-CwDyfI7IekkCppYJBqKa-ETjwWgmmXIfX5Fu7yxqCfUaSaOT1TSMy2zL7oZuHw5q7S31_3eMxfc9A_qnB1-9S1KTp53FQhqUCLfpXd0lxc4ZnwcJNyKGde3pC4OihvFS0uoH4uA-4Q6mJldt-WVziIkDv9PhQ_uxBGtsjZIrgCTKmmrdfgVLRsBjaICxRJliwmhwXP5su_gXsrCKUSErtVKmo61EgI"/>
+</div>
+<div class="text-sm font-medium">You</div>
+</div>
+<span class="text-xs font-bold text-primary">1,250 XP</span>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+<!-- Floating Action Button (Mobile/Tablet Primary CTA) -->
+<div class="fixed bottom-6 right-6 z-40 md:hidden">
+<button class="bg-primary hover:bg-yellow-400 text-black shadow-lg hover:shadow-xl rounded-full w-14 h-14 flex items-center justify-center transition-transform hover:scale-110">
+<span class="material-icons text-2xl">play_arrow</span>
+</button>
+</div>
+<!-- Resume Bar (Sticky Bottom) - Visible only if scrolled past active node (concept) -->
+<div class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 transform translate-y-full transition-transform duration-300 z-30 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] md:hidden">
+<div class="flex items-center justify-between max-w-7xl mx-auto">
+<div>
+<div class="text-xs text-gray-500 uppercase">Resume</div>
+<div class="font-bold text-sm">Loops &amp; Iteration</div>
+</div>
+<button class="bg-primary text-black px-6 py-2 rounded-lg font-bold text-sm">Start</button>
+</div>
+</div>
+<script>
+        // Simple logic to set theme based on user preference or system
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</body></html>

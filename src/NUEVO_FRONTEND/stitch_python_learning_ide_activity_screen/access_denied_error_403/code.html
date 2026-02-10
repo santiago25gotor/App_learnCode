@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>403 Access Denied - Python Learning Platform</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#181711] dark:text-white transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e5e4e0] dark:border-b-[#333025] px-6 lg:px-10 py-4 bg-white dark:bg-[#1a180e]">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em] dark:text-white">Python Learn</h2>
+</div>
+<!-- Desktop Menu -->
+<div class="hidden md:flex flex-1 justify-end gap-8 items-center">
+<nav class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors dark:text-gray-200" href="#">Dashboard</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors dark:text-gray-200" href="#">Cursos</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors dark:text-gray-200" href="#">Comunidad</a>
+</nav>
+<button class="flex items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-[#e0c020] text-[#181711] text-sm font-bold leading-normal transition-colors">
+<span class="truncate">Perfil</span>
+</button>
+</div>
+<!-- Mobile Menu Icon -->
+<button class="md:hidden text-[#181711] dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex flex-1 flex-col items-center justify-center px-4 py-12 lg:py-20">
+<div class="flex flex-col items-center max-w-[600px] w-full text-center animate-fade-in-up">
+<!-- Illustration Area -->
+<div class="relative mb-8 w-full flex justify-center">
+<!-- Decorative Background Blob -->
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl transform scale-75 z-0"></div>
+<!-- 403 Status Code Tag -->
+<div class="absolute top-0 right-10 lg:right-20 rotate-12 bg-white dark:bg-[#333025] px-3 py-1 rounded border border-[#e5e4e0] dark:border-[#444030] shadow-sm z-20">
+<span class="text-xs font-bold text-gray-500 dark:text-gray-400">Error 403</span>
+</div>
+<!-- Main Illustration -->
+<div class="relative z-10 w-64 h-64 md:w-80 md:h-80 bg-contain bg-center bg-no-repeat" data-alt="Cute snake mascot wearing a security guard hat looking apologetic next to a closed gate" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_lnCTnyRptBSqNEv_nZUB5itSFj8aAIZ0JSE4mY6v2qrbjBgo3XLtXEgmHWCMiHezAC_fEAOBxETH9INjp8Pbl75ib7tnTKgSFRPMyS9Q9rkPpqcPpC2VIolZCktDhnrVqs8YmPHdOrKb9Jtk16_ASuclZuCHXt9kDxpE4gvAik12QugbRzvVBY_cXKvd-PnowfpN7MOfimpbOb7Q-mnYCIh8SDfRoEuhGzlGYK_XfGZp4lN1R2qPJbqUY8rOe2jxoRTO9ud36cg');">
+<!-- Fallback for demonstration if external image fails, usually redundant with correct alt/src -->
+<img class="w-full h-full object-contain opacity-0" data-alt="Abstract yellow and grey geometric shapes representing a blocked path" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfSSTwgjL36j6LuZ3lF6J4YG-ivJLRQTZuiL7k8BX-adJYl-8y5XpyTRLPR1VZ-FW3UgSLjkNpPYA8-GmHlEGjLRk4zA1gwoyZu7TH8RWI8dwQpO0PMjxtucEUgsj8quoCDTqoECo3C5FBK1ZdWFgw7UNJjtcoxLLMsnaAPjTdzj3CzKIwJ-47w1Eqh-O58-Me65pqBLOaKCz0KyebyG5j-aVkhIhx9MqubzU6PXQLNobdRHcxnYwNdl77J4Zg8jRIE0UGliKjj2Q"/>
+<!-- Actual styling placeholder since I cannot generate real images, using a div with gradient as placeholder in logic -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-full h-full bg-gradient-to-br from-yellow-100 to-white dark:from-yellow-900/20 dark:to-transparent rounded-full flex items-center justify-center border-4 border-white dark:border-[#333025] shadow-xl overflow-hidden">
+<!-- Simulating the mascot with an icon for the layout -->
+<span class="material-symbols-outlined text-[120px] text-primary/80 select-none">sentiment_dissatisfied</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="space-y-4 z-10">
+<h1 class="text-3xl md:text-4xl font-bold text-[#181711] dark:text-white leading-tight">
+                        No tienes acceso a este contenido
+                    </h1>
+<p class="text-gray-600 dark:text-gray-300 text-base md:text-lg max-w-[480px] mx-auto leading-relaxed">
+                        Parece que necesitas completar los temas anteriores para desbloquear esta sección. ¡Sigue aprendiendo para llegar aquí!
+                    </p>
+</div>
+<!-- Action Buttons -->
+<div class="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+<a class="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-[#eec610] text-[#181711] font-bold text-base h-12 px-8 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                        Volver al Dashboard
+                    </a>
+<a class="w-full sm:w-auto flex items-center justify-center gap-2 bg-white dark:bg-[#333025] border border-[#e5e4e0] dark:border-[#444030] hover:bg-gray-50 dark:hover:bg-[#3e3b2e] text-[#181711] dark:text-white font-medium text-base h-12 px-8 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                        Centro de Ayuda
+                    </a>
+</div>
+<!-- Suggested Next Steps (Optional Context) -->
+<div class="mt-16 w-full max-w-[480px] bg-white dark:bg-[#1a180e] rounded-xl border border-[#f0f0eb] dark:border-[#333025] p-5 text-left shadow-sm">
+<h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+                        Sugerencia
+                    </h3>
+<div class="flex items-start gap-4">
+<div class="min-w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-sm font-bold text-[#181711] dark:text-white mb-1">Completa el Módulo 3</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Te falta el examen final de "Introducción a Bucles" para avanzar.</p>
+<a class="inline-block mt-2 text-primary font-bold text-sm hover:underline" href="#">Ir al módulo →</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex flex-col gap-6 px-5 py-10 text-center border-t border-[#f5f4f0] dark:border-[#2a281e] bg-white dark:bg-[#1a180e]">
+<div class="flex flex-wrap items-center justify-center gap-6 md:gap-12">
+<a class="text-[#8a8360] hover:text-primary transition-colors text-sm font-normal" href="#">Centro de Ayuda</a>
+<a class="text-[#8a8360] hover:text-primary transition-colors text-sm font-normal" href="#">Términos</a>
+<a class="text-[#8a8360] hover:text-primary transition-colors text-sm font-normal" href="#">Privacidad</a>
+</div>
+<p class="text-[#8a8360] text-sm font-normal">© 2024 Python Learning Platform. All rights reserved.</p>
+</footer>
+</div>
+</body></html>

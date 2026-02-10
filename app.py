@@ -29,38 +29,57 @@ def create_app():
     
     @app.route('/')
     def index():
-        """Página principal"""
+        """Página principal - Landing page"""
         if 'user_id' in session:
             return redirect(url_for('course'))
-        return render_template('index.html')
+        return render_template('index_new.html')
     
     @app.route('/login')
     def login_page():
         """Página de login"""
         if 'user_id' in session:
             return redirect(url_for('course'))
-        return render_template('login.html')
+        return render_template('login_new.html')
     
     @app.route('/register')
     def register_page():
-        """Página de registro"""
-        if 'user_id' in session:
-            return redirect(url_for('course'))
-        return render_template('register.html')
+        """Página de registro - redirige a login (modo integrado)"""
+        return redirect(url_for('login_page'))
     
     @app.route('/course')
     def course():
         """Página del curso (requiere autenticación)"""
         if 'user_id' not in session:
             return redirect(url_for('login_page'))
-        return render_template('course.html', username=session.get('username'))
+        return render_template('course_new.html', username=session.get('username'))
     
     @app.route('/lesson/<lesson_id>')
     def lesson_detail(lesson_id):
         """Página de detalle de lección"""
         if 'user_id' not in session:
             return redirect(url_for('login_page'))
-        return render_template('lesson.html', lesson_id=lesson_id)
+        return render_template('lesson_new.html', lesson_id=lesson_id)
+    
+    @app.route('/exam/<category>')
+    def exam_page(category):
+        """Página de examen por categoría"""
+        if 'user_id' not in session:
+            return redirect(url_for('login_page'))
+        return render_template('exam.html', category=category)
+    
+    @app.route('/profile')
+    def profile_page():
+        """Página de perfil de usuario"""
+        if 'user_id' not in session:
+            return redirect(url_for('login_page'))
+        return render_template('profile.html')
+    
+    @app.route('/placement-test')
+    def placement_test_page():
+        """Página de test de nivel inicial"""
+        if 'user_id' not in session:
+            return redirect(url_for('login_page'))
+        return render_template('placement_test.html')
     
     # ============================================
     # MANEJADORES DE ERRORES
@@ -69,12 +88,12 @@ def create_app():
     @app.errorhandler(404)
     def not_found(error):
         """Página de error 404"""
-        return render_template('404.html'), 404
+        return render_template('404_new.html'), 404
     
     @app.errorhandler(500)
     def internal_error(error):
         """Página de error 500"""
-        return render_template('500.html'), 500
+        return render_template('500_new.html'), 500
     
     return app
 
@@ -85,10 +104,10 @@ if __name__ == '__main__':
     
     # Ejecutar servidor
     print("\n" + "="*60)
-    print("🚀 Python Learning Platform - Servidor iniciado")
+    print("Python Learning Platform - Servidor iniciado")
     print("="*60)
-    print(f"📍 URL: http://127.0.0.1:5000")
-    print(f"🔧 Modo: {'Desarrollo' if Config.DEBUG else 'Producción'}")
+    print(f"URL: http://127.0.0.1:5000")
+    print(f"Modo: {'Desarrollo' if Config.DEBUG else 'Produccion'}")
     print("="*60 + "\n")
     
     app.run(
