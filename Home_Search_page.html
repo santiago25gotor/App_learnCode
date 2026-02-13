@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PYLEARN - Tu Ruta de Aprendizaje</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        pulseSlow: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+                        }
+                    },
+                    animation: {
+                        wiggle: 'wiggle 1s ease-in-out infinite',
+                        'pulse-slow': 'pulseSlow 3s ease-in-out infinite',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .path-line {
+            stroke-dasharray: 10;
+            stroke-linecap: round;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 font-display transition-colors duration-300 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav
+        class="fixed top-0 w-full z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-black">
+                        <span class="material-symbols-outlined text-xl">terminal</span>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">PYLEARN</span>
+                </div>
+
+<div class="hidden md:flex flex-1 md:ml-[16%] lg:ml-[10%]">
+    <div class="relative w-full max-w-sm group">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors text-xl">search</span>
+        </div>
+        <input type="text" 
+               id="lessonSearch"
+               class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm" 
+               placeholder="Busca el tema que deseas">
+    </div>
+</div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a class="text-gray-900 dark:text-white font-medium border-b-2 border-primary" href="#">Ruta de
+                        Aprendizaje</a>
+
+
+                   
+
+                    </a>
+                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
+                        href="/profile">
+                        Mi Perfil
+                    </a>
+                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors flex items-center gap-1"
+                        href="/n8n">
+                       
+                    </a>
+
+                    <button onclick="toggleDarkMode()"
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <span class="material-icons dark:hidden">dark_mode</span>
+                        <span class="material-icons hidden dark:block text-primary">light_mode</span>
+                    </button>
+                    <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+                        <span class="material-icons text-primary text-sm">bolt</span>
+                        <span class="text-sm font-bold" id="headerPoints">0</span>
+                    </div>
+                    <a href="/profile"
+                        class="h-8 w-8 rounded-full bg-primary border-2 border-black dark:border-white overflow-hidden flex items-center justify-center text-black font-bold hover:scale-110 transition-transform cursor-pointer"
+                        id="headerAvatar">
+                        U
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main
+        class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+        <!-- Left Sidebar: Current Milestone -->
+        <aside class="hidden lg:block lg:col-span-3 sticky top-24 h-fit">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h3 class="text-sm uppercase tracking-wider text-gray-400 font-semibold mb-4">Milestone Actual</h3>
+                <h2 class="text-2xl font-bold mb-2" id="currentMilestone">Python Básico</h2>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-6" id="milestoneDesc">Domina los fundamentos de
+                    Python</p>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Progreso del Nivel</span>
+                        <span class="font-bold" id="milestoneProgress">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5">
+                        <div class="bg-primary h-2.5 rounded-full" style="width: 0%" id="milestoneBar"></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="p-2 bg-primary/20 rounded-lg text-black dark:text-primary">
+                            <span class="material-icons text-lg">emoji_events</span>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400">Próxima Recompensa</div>
+                            <div class="font-bold text-sm" id="nextReward">Pythonista Badge</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test de Nivel Card -->
+            <div class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 rounded-xl shadow-lg mt-6 text-white">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="material-icons text-2xl">psychology</span>
+                    <h3 class="font-bold">Test de Nivel</h3>
+                </div>
+                <p class="text-sm text-white/80 mb-4">¿Ya sabes Python? Haz el test y desbloquea niveles avanzados.</p>
+                <a href="/placement-test"
+                    class="block w-full bg-white text-purple-600 font-bold py-2 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">
+                    Hacer Test
+                </a>
+            </div>
+        </aside>
+
+        <!-- Center: Tabs System -->
+        <section class="lg:col-span-6 relative flex flex-col">
+            <!-- Tab Navigation -->
+            <div class="sticky top-20 z-30 bg-background-light dark:bg-background-dark pb-4">
+                <div
+                    class="flex gap-2 p-1 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
+                    <button onclick="switchTab('syllabus')" id="tabSyllabus"
+                        class="flex-1 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 bg-primary text-black">
+                        <span class="material-symbols-outlined">list_alt</span>
+                        Temario
+                    </button>
+                    <button onclick="switchTab('path')" id="tabPath"
+                        class="flex-1 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <span class="material-symbols-outlined">route</span>
+                        Ruta de Aprendizaje
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: Temario -->
+            <div id="contentSyllabus" class="tab-content">
+                <div class="space-y-6 mt-6">
+                    <!-- Python Básico -->
+                    <div
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl shadow-lg">
+                                <span class="text-white text-3xl">🎯</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    Python Básico
+                                    <span class="material-symbols-outlined text-blue-500 text-lg">verified</span>
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Fundamentos del lenguaje</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-gray-900 dark:text-white" id="basicProgress">0/20
+                                </div>
+                                <div class="text-xs text-gray-500">lecciones</div>
+                            </div>
+                        </div>
+                        <div id="basicLessonsList" class="space-y-2 max-h-96 overflow-y-auto">
+                            <!-- Lecciones se cargan aquí -->
+                        </div>
+                    </div>
+
+                    <!-- Python Intermedio -->
+                    <div
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl shadow-lg">
+                                <span class="text-white text-3xl">⚡</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    Python Intermedio
+                                    <span class="material-symbols-outlined text-purple-500 text-lg">psychology</span>
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Conceptos avanzados</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-gray-900 dark:text-white" id="intermediateProgress">
+                                    0/30</div>
+                                <div class="text-xs text-gray-500">lecciones</div>
+                            </div>
+                        </div>
+                        <div id="intermediateLessonsList" class="space-y-2 max-h-96 overflow-y-auto">
+                            <!-- Lecciones se cargan aquí -->
+                        </div>
+                    </div>
+
+                    <!-- Python Avanzado -->
+                    <div
+                        class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-3 bg-gradient-to-br from-red-400 to-red-600 rounded-xl shadow-lg">
+                                <span class="text-white text-3xl">🚀</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    Python Avanzado
+                                    <span class="material-symbols-outlined text-red-500 text-lg">neurology</span>
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Especialización y Machine Learning
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-bold text-gray-900 dark:text-white" id="advancedProgress">0/195
+                                </div>
+                                <div class="text-xs text-gray-500">lecciones</div>
+                            </div>
+                        </div>
+                        <div id="advancedLessonsList" class="space-y-2 max-h-96 overflow-y-auto">
+                            <!-- Lecciones se cargan aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Ruta de Aprendizaje -->
+            <div id="contentPath" class="tab-content hidden">
+                <!-- SVG Path for Zigzag Connector (Desktop) -->
+                <svg class="absolute top-0 w-full h-full pointer-events-none z-0 hidden md:block"
+                    preserveAspectRatio="none" viewBox="0 0 400 1200">
+                    <defs>
+                        <linearGradient id="pathGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"></stop>
+                            <stop offset="40%" style="stop-color:#f4d125;stop-opacity:1"></stop>
+                            <stop offset="100%" style="stop-color:#9ca3af;stop-opacity:0.3"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path class="path-line opacity-50 dark:opacity-30"
+                        d="M 200,50 Q 200,100 200,120 C 200,180 350,180 350,250 C 350,320 50,320 50,450 C 50,580 200,580 200,650 C 200,720 350,720 350,850 C 350,980 200,980 200,1100"
+                        fill="none" stroke="url(#pathGradient)" stroke-dasharray="8 8" stroke-width="4">
+                    </path>
+                </svg>
+
+                <!-- Vertical line for mobile -->
+                <div
+                    class="absolute top-0 bottom-0 left-8 md:hidden w-1 bg-gradient-to-b from-green-500 via-primary to-gray-300 dark:to-gray-700 z-0">
+                </div>
+
+                <!-- Path Items Container -->
+                <div class="w-full space-y-24 md:space-y-32 relative z-10 pt-10 pb-32" id="lessonsPath">
+                    <!-- Loading State -->
+                    <div class="flex justify-center py-20">
+                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Future Path Indicator -->
+                <div class="w-full flex justify-center mt-4">
+                    <div class="flex flex-col items-center gap-2 opacity-30">
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Más por
+                            venir</span>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Right Sidebar: Stats & Leaderboard -->
+        <aside class="hidden lg:block lg:col-span-3 sticky top-24 h-fit space-y-6">
+            <!-- User Stats Card -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+                <h3 class="font-bold text-lg mb-4 flex items-center">
+                    <span class="material-icons mr-2 text-primary">analytics</span>
+                    Tu Progreso
+                </h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-background-light dark:bg-background-dark p-3 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-primary" id="totalXP">0</div>
+                        <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Total XP</div>
+                    </div>
+                    <div class="bg-background-light dark:bg-background-dark p-3 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-orange-500 flex items-center justify-center">
+                            <span id="streakDays">0</span>
+                            <span class="material-icons text-sm ml-1">local_fire_department</span>
+                        </div>
+                        <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Racha</div>
+                    </div>
+                </div>
+
+                <h4 class="text-sm font-semibold mb-3">Objetivos Diarios</h4>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Completar 1 Lección</span>
+                            <span class="text-primary" id="dailyLesson">0/1</span>
+                        </div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+                            <div class="bg-primary h-1.5 rounded-full" style="width: 0%" id="dailyLessonBar"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Ganar 50 XP</span>
+                            <span class="text-gray-400" id="dailyXP">0/50</span>
+                        </div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+                            <div class="bg-green-500 h-1.5 rounded-full" style="width: 0%" id="dailyXPBar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Floating Action Button (Mobile) -->
+    <div class="fixed bottom-6 right-6 z-40 md:hidden">
+        <button onclick="scrollToActive()"
+            class="bg-primary hover:bg-yellow-400 text-black shadow-lg hover:shadow-xl rounded-full w-14 h-14 flex items-center justify-center transition-transform hover:scale-110">
+            <span class="material-icons text-2xl">play_arrow</span>
+        </button>
+    </div>
+
+    <!-- Modal System -->
+    <script src="/static/js/modal-system.js"></script>
+
+    <script>
+        let allLessons = [];
+        let userProgress = {};
+        let currentUsername = '{{ username }}';
+        let completedLessons = []; // Array de IDs de lecciones completadas
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            loadLessons();
+
+            // Load dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+        });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/me');
+                const data = await response.json();
+
+                if (data.success) {
+                    userProgress = data.user.progress || {};
+                    currentUsername = data.user.username;
+                    completedLessons = userProgress.completed_lessons || [];
+
+                    // Update header
+                    document.getElementById('headerAvatar').textContent = currentUsername.charAt(0).toUpperCase();
+                    document.getElementById('headerPoints').textContent = userProgress.total_points || 0;
+
+                    // Update stats sidebar
+                    document.getElementById('totalXP').textContent = userProgress.total_points || 0;
+
+                    // Calculate daily goals
+                    const completedToday = userProgress.completed_lessons?.length || 0;
+                    const xpToday = userProgress.total_points || 0;
+
+                    document.getElementById('dailyLesson').textContent = `${Math.min(completedToday, 1)}/1`;
+                    document.getElementById('dailyLessonBar').style.width = `${Math.min(completedToday * 100, 100)}%`;
+                    document.getElementById('dailyXP').textContent = `${Math.min(xpToday, 50)}/50`;
+                    document.getElementById('dailyXPBar').style.width = `${Math.min((xpToday / 50) * 100, 100)}%`;
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Load lessons
+        async function loadLessons() {
+            try {
+                const response = await fetch('/api/lessons/lessons');
+                const data = await response.json();
+
+                if (data.success) {
+                    allLessons = data.lessons;
+                    renderLearningPath();
+                    // Renderizar el temario también
+                    renderSyllabus();
+                }
+            } catch (error) {
+                console.error('Error loading lessons:', error);
+                document.getElementById('lessonsPath').innerHTML = `
+                    <div class="text-center text-red-500">
+                        <span class="material-icons text-6xl mb-4">error</span>
+                        <p>Error al cargar las lecciones</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render learning path
+        function renderLearningPath() {
+            const container = document.getElementById('lessonsPath');
+            const completed = userProgress.completed_lessons || [];
+            const categories = ['Python Básico', 'Python Intermedio', 'Python Avanzado'];
+
+            let html = '';
+            let index = 0;
+            let currentActive = null;
+
+            // START NODE
+            html += `
+                <div class="flex justify-center relative group">
+                    <div class="absolute -top-12 text-center w-full animate-bounce">
+                        <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-200 dark:border-green-800">Comienza Aquí</span>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg border-4 border-white dark:border-background-dark ring-4 ring-green-100 dark:ring-green-900/30 z-10">
+                        <span class="material-icons">flag</span>
+                    </div>
+                </div>
+            `;
+
+            categories.forEach((category, catIndex) => {
+                const categoryLessons = allLessons.filter(l => l.categoria === category);
+
+                // Category header
+                if (categoryLessons.length > 0) {
+                    html += `
+                        <div class="flex items-center md:justify-${catIndex % 2 === 0 ? 'end' : 'start'} pr-10 pl-16 md:pl-0 md:pr-${catIndex % 2 === 0 ? '10' : '0'} w-full md:-mt-12 opacity-80">
+                            <div class="bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase border border-gray-300 dark:border-gray-700 backdrop-blur-sm">
+                                Nivel ${catIndex + 1}: ${category}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                categoryLessons.forEach((lesson, lessonIndex) => {
+                    const isCompleted = completed.includes(lesson.id);
+                    const isActive = !isCompleted && !currentActive;
+
+                    if (isActive) {
+                        currentActive = lesson;
+                        html += renderActiveLesson(lesson, index);
+                    } else if (isCompleted) {
+                        html += renderCompletedLesson(lesson, index);
+                    } else {
+                        html += renderLockedLesson(lesson, index);
+                    }
+
+                    index++;
+                });
+            });
+
+            container.innerHTML = html;
+            updateMilestoneInfo();
+        }
+
+        // Render active lesson (current)
+        function renderActiveLesson(lesson, index) {
+            const alignment = index % 2 === 0 ? 'justify-center' : 'justify-center';
+            return `
+                <div class="flex ${alignment} relative w-full pl-10 md:pl-0">
+                    <div class="absolute left-6 md:hidden w-6 h-6 -ml-1 rounded-full bg-primary border-4 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10 shadow-[0_0_15px_rgba(244,209,37,0.6)]"></div>
+                    <div class="w-full md:w-80 relative">
+                        <div class="absolute inset-0 bg-primary/20 dark:bg-primary/10 rounded-xl blur-xl animate-pulse-slow"></div>
+                        <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border-2 border-primary overflow-hidden">
+                            <div class="absolute top-0 right-0 p-4 opacity-10">
+                                <span class="material-icons text-8xl text-primary">code</span>
+                            </div>
+                            <div class="flex justify-between items-start mb-4 relative z-10">
+                                <span class="bg-primary text-black text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Nivel Actual</span>
+                                <span class="text-xs font-mono text-gray-500">#${lesson.numero_leccion}</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2 relative z-10">${lesson.titulo}</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-6 relative z-10">${lesson.descripcion?.substring(0, 100) || 'Aprende Python'}...</p>
+                            <div class="flex items-center gap-3 relative z-10">
+                                <button onclick="startLesson('${lesson.id}')" class="flex-1 bg-primary hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                                    <span>Continuar</span>
+                                    <span class="material-icons text-sm">arrow_forward</span>
+                                </button>
+                                <button onclick="viewInfo('${lesson.id}')" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 p-3 rounded-lg transition-colors" title="Ver Detalles">
+                                    <span class="material-icons">info</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render completed lesson
+        function renderCompletedLesson(lesson, index) {
+            const alignment = index % 2 === 0 ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12';
+            return `
+                <div class="flex ${alignment} pl-16 md:pl-0 relative w-full">
+                    <div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-green-500 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+                    <div class="w-full md:w-64 bg-white dark:bg-gray-900 p-5 rounded-xl shadow-md border-l-4 border-green-500 hover:-translate-y-1 transition-transform duration-300 relative group cursor-pointer" onclick="startLesson('${lesson.id}')">
+                        <div class="absolute -right-2 -top-2 bg-green-500 text-white rounded-full p-1 shadow-sm">
+                            <span class="material-icons text-sm">check</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-1 group-hover:text-green-600 transition-colors">${lesson.titulo}</h4>
+                        <p class="text-xs text-gray-500 mb-3">${lesson.descripcion?.substring(0, 50) || 'Completado'}...</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex text-yellow-400 text-xs">
+                                <span class="material-icons text-sm">star</span>
+                                <span class="material-icons text-sm">star</span>
+                                <span class="material-icons text-sm">star</span>
+                            </div>
+                            <span class="text-xs font-mono text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded">10 XP</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render locked lesson
+        function renderLockedLesson(lesson, index) {
+            const alignment = index % 2 === 0 ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12';
+            return `
+                <div class="flex ${alignment} pl-16 md:pl-0 relative w-full">
+                    <div class="absolute left-6 md:hidden w-5 h-5 -ml-0.5 rounded-full bg-gray-300 dark:bg-gray-700 border-2 border-white dark:border-gray-900 top-1/2 -translate-y-1/2 z-10"></div>
+                    <div class="w-full md:w-64 bg-gray-50 dark:bg-gray-900/50 p-5 rounded-xl border border-gray-200 dark:border-gray-800 relative opacity-70 grayscale transition-all hover:grayscale-0 hover:opacity-100 cursor-not-allowed">
+                        <div class="absolute inset-0 flex items-center justify-center bg-gray-100/10 dark:bg-black/10 z-10 rounded-xl">
+                            <span class="material-icons text-gray-400 text-3xl">lock</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-1 text-gray-500">${lesson.titulo}</h4>
+                        <p class="text-xs text-gray-400 mb-3">${lesson.descripcion?.substring(0, 50) || 'Bloqueado'}...</p>
+                        <div class="flex items-center justify-between opacity-50">
+                            <div class="flex text-gray-300 text-xs">
+                                <span class="material-icons text-sm">star_border</span>
+                                <span class="material-icons text-sm">star_border</span>
+                                <span class="material-icons text-sm">star_border</span>
+                            </div>
+                            <span class="text-xs font-mono text-gray-400 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded">10 XP</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update milestone info
+        function updateMilestoneInfo() {
+            const completed = userProgress.completed_lessons || [];
+            const total = allLessons.length;
+            const percentage = total > 0 ? Math.round((completed.length / total) * 100) : 0;
+
+            document.getElementById('milestoneBar').style.width = `${percentage}%`;
+            document.getElementById('milestoneProgress').textContent = `${percentage}%`;
+        }
+
+        // Start lesson
+        function startLesson(lessonId) {
+            window.location.href = `/lesson/${lessonId}`;
+        }
+
+        // View lesson info
+        function viewInfo(lessonId) {
+            window.location.href = `/lesson/${lessonId}`;
+        }
+
+        // Scroll to active lesson
+        function scrollToActive() {
+            const activeCard = document.querySelector('.border-primary');
+            if (activeCard) {
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Switch between tabs
+        function switchTab(tabName) {
+            // Update tab buttons
+            const tabs = {
+                syllabus: document.getElementById('tabSyllabus'),
+                path: document.getElementById('tabPath')
+            };
+
+            const contents = {
+                syllabus: document.getElementById('contentSyllabus'),
+                path: document.getElementById('contentPath')
+            };
+
+            // Reset all tabs
+            Object.values(tabs).forEach(tab => {
+                tab.classList.remove('bg-primary', 'text-black');
+                tab.classList.add('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
+            });
+
+            // Hide all contents
+            Object.values(contents).forEach(content => content.classList.add('hidden'));
+
+            // Activate selected tab
+            tabs[tabName].classList.add('bg-primary', 'text-black');
+            tabs[tabName].classList.remove('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
+            contents[tabName].classList.remove('hidden');
+
+            // Load syllabus if not loaded yet
+            if (tabName === 'syllabus' && allLessons.length > 0) {
+                renderSyllabus();
+            }
+        }
+
+        // Render syllabus view
+        function renderSyllabus() {
+            if (!allLessons || allLessons.length === 0) {
+                // Show loading or no lessons message
+                ['basicLessonsList', 'intermediateLessonsList', 'advancedLessonsList'].forEach(id => {
+                    const container = document.getElementById(id);
+                    if (container) {
+                        container.innerHTML = '<div class="text-center text-gray-500 py-4">Cargando lecciones...</div>';
+                    }
+                });
+                return;
+            }
+
+            const categories = {
+                'Python Básico': { id: 'basicLessonsList', lessons: [] },
+                'Python Intermedio': { id: 'intermediateLessonsList', lessons: [] },
+                'Python Avanzado': { id: 'advancedLessonsList', lessons: [] }
+            };
+
+            // Group lessons by category
+            allLessons.forEach(lesson => {
+                const cat = lesson.categoria || 'Python Básico';
+                if (categories[cat]) {
+                    categories[cat].lessons.push(lesson);
+                }
+            });
+
+            // Render each category
+            Object.entries(categories).forEach(([catName, catData]) => {
+                const container = document.getElementById(catData.id);
+                if (!container) return;
+
+                const lessons = catData.lessons;
+                const completed = lessons.filter(l => completedLessons.includes(l.id)).length;
+
+                // Update progress
+                const progressId = catName.includes('Básico') ? 'basicProgress' :
+                    catName.includes('Intermedio') ? 'intermediateProgress' : 'advancedProgress';
+                const progressEl = document.getElementById(progressId);
+                if (progressEl) {
+                    progressEl.textContent = `${completed}/${lessons.length}`;
+                }
+
+                // Show message if no lessons
+                if (lessons.length === 0) {
+                    container.innerHTML = '<div class="text-center text-gray-500 py-4">No hay lecciones en esta categoría</div>';
+                    return;
+                }
+
+                // Render lessons
+                container.innerHTML = lessons.map((lesson, index) => {
+                    const isCompleted = completedLessons.includes(lesson.id);
+                    const isLocked = index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
+
+                    return `
+                        <div class="flex items-center gap-3 p-3 rounded-lg ${isLocked ? 'opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'} transition-colors"
+                             onclick="${isLocked ? '' : `startLesson('${lesson.id}')`}">
+                            <div class="flex-shrink-0">
+                                ${isCompleted ?
+                            '<span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>' :
+                            isLocked ?
+                                '<span class="material-symbols-outlined text-gray-400">lock</span>' :
+                                '<span class="material-symbols-outlined text-primary">play_circle</span>'
+                        }
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-gray-900 dark:text-white truncate">${lesson.titulo || 'Sin título'}</div>
+                                ${lesson.descripcion ? `<div class="text-xs text-gray-500 dark:text-gray-400 truncate">${lesson.descripcion.substring(0, 60)}...</div>` : ''}
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                                ${isCompleted ? '<span class="text-green-600 dark:text-green-400 font-bold">✓ +10 XP</span>' : '<span>10 XP</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+
+        // Logout
+        async function logout() {
+            const confirmed = await Modal.confirm({
+                title: 'Cerrar Sesión',
+                message: '¿Estás seguro de que quieres cerrar sesión?',
+                confirmText: 'Sí, Cerrar Sesión',
+                type: 'warning'
+            });
+
+            if (confirmed) {
+                try {
+                    const response = await fetch('/api/auth/logout', { method: 'POST' });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.href = '/';
+                    }
+                } catch (error) {
+                    console.error('Error logging out:', error);
+                    Modal.error('Error al cerrar sesión');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
