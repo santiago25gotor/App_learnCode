@@ -142,12 +142,12 @@
     </main>
 
     <script>
-        // ==========================================
-        // CONFIGURACION DE URLS
-        // ==========================================
-        const URL_PROD = 'https://tonicuadradomarquez.app.n8n.cloud/webhook/youtube-education';
-        const URL_TEST = 'https://tonicuadradomarquez.app.n8n.cloud/webhook-test/youtube-education';
-
+      
+      const CONFIG = {
+    URL_PROD: 'https://tonicuadradomarquez.app.n8n.cloud/webhook/youtube-education',
+    URL_TEST: 'https://tonicuadradomarquez.app.n8n.cloud/webhook-test/youtube-education',
+    AUTO_LOAD_ON_START: true
+                    };
         const videosContainer = document.getElementById('videos-container');
         const searchInput = document.getElementById('search-input');
         const searchButton = document.getElementById('search-button');
@@ -155,7 +155,7 @@
         const warningMsg = document.getElementById('test-mode-warning');
 
         function getWebhookUrl() {
-            return testModeToggle.checked ? URL_TEST : URL_PROD;
+            return testModeToggle.checked ? CONFIG.URL_TEST : CONFIG.URL_PROD;
         }
 
         testModeToggle.addEventListener('change', () => {
@@ -174,36 +174,35 @@
 
         // --- CARGAR VIDEOS ---
         async function loadVideos() {
-            const url = getWebhookUrl();
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "getVideos" })
-                });
+    if (state.isLoading) return;
 
-                if (!response.ok) throw new Error("Error en la respuesta (Esta activo el workflow?)");
+    state.isLoading = true;
+    videosContainer.innerHTML = renderLoadingState('Cargando tu biblioteca...');
 
-                const data = await response.json();
-                displayVideos(data);
+    try {
+        const response = await fetch(getWebhookUrl(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'getVideos' })
+        });
 
-            } catch (error) {
-                videosContainer.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <span class="material-symbols-outlined text-5xl text-red-400 mb-3 block">cloud_off</span>
-                        <p class="text-gray-800 dark:text-white font-bold mb-1">Error de conexion</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                            Modo: <strong>${testModeToggle.checked ? 'TEST' : 'PRODUCCION'}</strong><br>
-                            ${error.message}
-                        </p>
-                        <button onclick="loadVideos()" class="bg-primary hover:bg-yellow-400 text-black font-bold px-4 py-2 rounded-lg text-sm">
-                            Reintentar
-                        </button>
-                    </div>`;
-                console.error('Error:', error);
-            }
+        if (!response.ok) {
+            throw new Error(`Error del servidor (${response.status})`);
         }
+
+        const data = await response.json();
+        state.currentVideos = Array.isArray(data) ? data : [data];
+
+        displayVideos(state.currentVideos);
+
+    } catch (error) {
+        videosContainer.innerHTML = renderErrorState(error.message);
+    } finally {
+        state.isLoading = false;
+    }
+}
+
 
         // --- MOSTRAR VIDEOS ---
         function displayVideos(videos) {
@@ -257,64 +256,54 @@
         }
 
         // --- BUSCAR NUEVO VIDEO ---
-        async function searchNewVideo() {
-            const query = searchInput.value.trim();
-            if (!query) {
-                searchInput.focus();
-                searchInput.classList.add('ring-2', 'ring-red-400');
-                setTimeout(() => searchInput.classList.remove('ring-2', 'ring-red-400'), 2000);
-                return;
-            }
+        async function searchVideo(query) {
+    if (!query || !query.trim()) {
+        showNotification('⚠️ Escribe algo para buscar', 'warning');
+        return;
+    }
 
-            searchButton.disabled = true;
-            searchButton.innerHTML = `
-                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Procesando...`;
-            videosContainer.innerHTML = `
-                <div class="col-span-full text-center py-12">
-                    <svg class="animate-spin h-8 w-8 text-primary mx-auto mb-3" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p class="text-gray-500 dark:text-gray-400 font-medium">La IA esta analizando tu busqueda...</p>
-                </div>`;
+    if (state.isLoading) return;
 
-            try {
-                const response = await fetch(getWebhookUrl(), {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ searchQuery: query })
-                });
+    state.isLoading = true;
+    setButtonLoading(true);
+    videosContainer.innerHTML = renderLoadingState('🤖 La IA está analizando...');
 
-                if (response.ok) {
-                    setTimeout(() => {
-                        searchInput.value = '';
-                        loadVideos();
-                    }, 1000);
-                } else {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-
-            } catch (error) {
-                alert('Hubo un error: ' + error.message);
-                if (!testModeToggle.checked) loadVideos();
-            } finally {
-                searchButton.disabled = false;
-                searchButton.innerHTML = `
-                    <span class="material-symbols-outlined">search</span>
-                    Buscar`;
-            }
-        }
-
-        // --- EVENTOS ---
-        searchButton.addEventListener('click', searchNewVideo);
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') searchNewVideo();
+    try {
+        const response = await fetch(getWebhookUrl(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ searchQuery: query.trim() })
         });
 
+        if (!response.ok) {
+            throw new Error(`Error (${response.status})`);
+        }
+
+        await new Promise(r => setTimeout(r, 1500));
+        searchInput.value = '';
+        await loadVideos();
+
+        showNotification('✅ Video guardado correctamente', 'success');
+
+    } catch (error) {
+        showNotification(`❌ ${error.message}`, 'error');
+        await loadVideos();
+    } finally {
+        state.isLoading = false;
+        setButtonLoading(false);
+    }
+}
+
+
+        // --- EVENTOS ---
+        searchButton.addEventListener('click', () => {
+    searchVideo(searchInput.value);
+        });
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchVideo(searchInput.value);
+            }
+        });
         // Dark mode
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');

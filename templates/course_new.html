@@ -437,9 +437,11 @@
 
                 if (data.success) {
                     allLessons = data.lessons;
+                    isLessonCompleted = data.is_completed; 
                     renderLearningPath();
                     // Renderizar el temario también
                     renderSyllabus();
+                    updateCompleteButton();
                 }
             } catch (error) {
                 console.error('Error loading lessons:', error);
@@ -451,6 +453,18 @@
                 `;
             }
         }
+
+        function updateCompleteButton() {
+    const container = document.getElementById('completeButtonContainer');
+    if (isCompleted) {
+        container.innerHTML = `
+            <div class="w-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold py-4 px-6 rounded-xl border border-green-200 dark:border-green-800 flex items-center justify-center gap-3 text-lg cursor-default">
+                <span class="material-symbols-outlined text-2xl">check_circle</span>
+                <span>Lección Completada</span>
+            </div>
+        `;
+    }
+}
 
         // Render learning path
         function renderLearningPath() {

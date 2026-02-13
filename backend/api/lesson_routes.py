@@ -11,18 +11,25 @@ def get_lessons():
     lessons = firebase_service.get_lessons_by_category(category) if category else firebase_service.get_all_lessons()
     return jsonify({'success': True, 'lessons': lessons, 'count': len(lessons)}), 200
 
-
-@lesson_api.route('/lessons/<lesson_id>', methods=['GET'])
+    
+@lesson_api.route('/<lesson_id>', methods=['GET'])
 @login_required
 def get_lesson(lesson_id):
-    """Obtener una lección específica"""
+    user_id = session.get('user_id')
     lesson = firebase_service.get_lesson_by_id(lesson_id)
     
     if lesson:
+        # Comprobar si esta ID está en la lista de completadas del usuario
+        user_progress = firebase_service.get_user_progress(user_id)
+        # Asumiendo que user_progress tiene una lista o dict de lecciones completadas
+        is_completed = lesson_id in user_progress.get('completed_lessons', [])
+
         return jsonify({
             'success': True,
-            'lesson': lesson
+            'lesson': lesson,
+            'is_completed': is_completed 
         }), 200
+    
     else:
         return jsonify({
             'success': False,
@@ -80,7 +87,7 @@ def search():
     }), 200
 
 
-@lesson_api.route('/progress/complete/<lesson_id>', methods=['POST'])
+@lesson_api.route('/complete/<lesson_id>', methods=['POST'])
 @login_required
 def complete_lesson(lesson_id):
     """Marcar una lección como completada"""
