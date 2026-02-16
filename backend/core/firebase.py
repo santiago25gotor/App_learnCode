@@ -382,37 +382,57 @@ class FirebaseService:
             return None
         
     def search_lessons(self, query):
-        """Buscar lecciones por texto"""
+        """
+        Buscar lecciones por texto (búsqueda parcial, múltiples palabras)
+        Busca en: titulo, descripcion, ejemplos_codigo, categoria
+        """
         if self.offline_mode:
             query = query.lower().strip()
             if not query:
                 return []
+            
+            # Dividir query en palabras
+            query_words = query.split()
+            
             results = []
             for lid, lesson in self.mock_db['lessons'].items():
+                # Construir texto buscable
                 searchable = ' '.join([
                     str(lesson.get('titulo', '')),
                     str(lesson.get('descripcion', '')),
                     str(lesson.get('ejemplos_codigo', '')),
                     str(lesson.get('categoria', ''))
                 ]).lower()
-                if query in searchable:
+                
+                # Verificar que TODAS las palabras estén presentes
+                if all(word in searchable for word in query_words):
                     results.append({**lesson, 'id': lid})
+            
+            # Ordenar por relevancia
             results.sort(key=lambda x: (
-                query not in str(x.get('titulo', '')).lower(),
+                not all(word in str(x.get('titulo', '')).lower() for word in query_words),
+                not all(word in str(x.get('descripcion', '')).lower() for word in query_words),
                 x.get('numero_leccion', 0)
             ))
+            
             return results
         
+        # Modo online (Firebase)
         try:
             query = query.lower().strip()
             if not query:
                 return []
+            
+            # Dividir query en palabras
+            query_words = query.split()
 
             lessons = self.db.collection(Config.LESSONS_COLLECTION).get()
             results = []
 
             for lesson in lessons:
                 data = lesson.to_dict()
+                
+                # Construir texto buscable
                 searchable_text = " ".join([
                     str(data.get("titulo", "")),
                     str(data.get("descripcion", "")),
@@ -420,20 +440,23 @@ class FirebaseService:
                     str(data.get("categoria", ""))
                 ]).lower()
 
-                if query in searchable_text:
+                # Verificar que TODAS las palabras estén presentes
+                if all(word in searchable_text for word in query_words):
                     results.append({**data, "id": lesson.id})
 
+            # Ordenar por relevancia
             results.sort(key=lambda x: (
-                query not in str(x.get("titulo", "")).lower(),
+                not all(word in str(x.get("titulo", "")).lower() for word in query_words),
+                not all(word in str(x.get("descripcion", "")).lower() for word in query_words),
                 x.get("numero_leccion", 0)
             ))
 
             return results
 
         except Exception as e:
-            print(f"[ERROR] Error en busqueda: {str(e)}")
+            print(f"[ERROR] Error en búsqueda: {str(e)}")
             return []
-    
+        
     def search_lessons_advanced(self, query, category=None, difficulty=None):
         """Busqueda avanzada de lecciones con filtros"""
         results = self.search_lessons(query)
