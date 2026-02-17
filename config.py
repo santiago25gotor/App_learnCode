@@ -13,9 +13,9 @@ class Config:
     
     # Firebase
     FIREBASE_CREDENTIALS = os.getenv('FIREBASE_CREDENTIALS_PATH', 'firebase-credentials.json')
+    FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY', 'AIzaSyBdz1cyFzEcg1MHYp0FT6WXiVEZKbtg2Ds')
     
-    # Configuración de la base de datos
-    # Nombres de las colecciones en Firestore
+    # Colecciones Firestore
     USERS_COLLECTION = 'users'
     LESSONS_COLLECTION = 'lessons'
     PROGRESS_COLLECTION = 'user_progress'
@@ -23,6 +23,5 @@ class Config:
     # Configuración del curso
     LESSON_CATEGORIES = ['Python Básico', 'Python Intermedio', 'Python Avanzado']
     
-    # CORS (permitir peticiones desde el frontend)
+    # CORS
     CORS_ORIGINS = ['http://localhost:5000', 'http://127.0.0.1:5000']
-    FIREBASE_WEB_API_KEY = "TU_API_KEY_WEB_DE_FIREBASE"
