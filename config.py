@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    """Configuración general de la aplicación"""
-    
+
     # Flask
     SECRET_KEY = os.getenv('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
     DEBUG = os.getenv('FLASK_ENV', 'development') == 'development'
