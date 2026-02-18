@@ -11,7 +11,7 @@ def get_lessons():
     lessons = firebase_service.get_lessons_by_category(category) if category else firebase_service.get_all_lessons()
     return jsonify({'success': True, 'lessons': lessons, 'count': len(lessons)}), 200
 
-    
+'''
 @lesson_api.route('/<lesson_id>', methods=['GET'])
 @login_required
 def get_lesson(lesson_id):
@@ -28,6 +28,46 @@ def get_lesson(lesson_id):
             'success': True,
             'lesson': lesson,
             'is_completed': is_completed 
+        }), 200
+    
+    else:
+        return jsonify({
+            'success': False,
+            'message': 'Lección no encontrada'
+        }), 404
+'''
+@lesson_api.route('/<lesson_id>', methods=['GET'])
+@login_required
+def get_lesson(lesson_id):
+    user_id = session.get('user_id')
+    lesson = firebase_service.get_lesson_by_id(lesson_id)
+    
+    if lesson:
+        user_progress = firebase_service.get_user_progress(user_id)
+        completed_lessons = user_progress.get('completed_lessons', [])
+        
+        # Comprobar si está completada
+        is_completed = lesson_id in completed_lessons
+        
+        # 🆕 NUEVO: Verificar si está bloqueada (no es la siguiente en secuencia)
+        all_lessons = firebase_service.get_all_lessons()
+        all_lessons.sort(key=lambda x: x.get('numero_leccion', 0))
+        
+        is_locked = False
+        lesson_index = next((i for i, l in enumerate(all_lessons) if l.get('id') == lesson_id), None)
+        
+        if lesson_index is not None and lesson_index > 0:
+            # Verificar si la lección anterior está completada
+            previous_lesson = all_lessons[lesson_index - 1]
+            if previous_lesson.get('id') not in completed_lessons:
+                is_locked = True
+
+        return jsonify({
+            'success': True,
+            'lesson': lesson,
+            'is_completed': is_completed,
+            'is_locked': is_locked,  # 🆕 NUEVO
+            'is_preview': is_locked  # 🆕 NUEVO: Modo preview si está bloqueada
         }), 200
     
     else:
