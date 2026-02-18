@@ -113,12 +113,13 @@ function createVideoCard(video, index) {
             </div>
             
             <div class="video-footer">
-                <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="watch-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                <button class="watch-btn" onclick="openCourseModal(${index})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                     </svg>
-                    Ver en YouTube
-                </a>
+                    Acceder al curso
+                </button>
             </div>
         </article>
     `;
@@ -372,6 +373,330 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
+}
+
+// ============================================
+// COURSE MODAL
+// ============================================
+
+function openCourseModal(index) {
+    const video = state.currentVideos[index];
+    if (!video) return;
+
+    const videoId = video.video_id || '';
+    const title = video.video_title || 'Video sin título';
+    const teoria = video.teoria || 'Sin contenido disponible.';
+
+    // Parse questions safely
+    let preguntas_test = [];
+    let preguntas_examen = [];
+    try { preguntas_test = typeof video.preguntas_test === 'string' ? JSON.parse(video.preguntas_test) : (video.preguntas_test || []); } catch(e) {}
+    try { preguntas_examen = typeof video.preguntas_examen === 'string' ? JSON.parse(video.preguntas_examen) : (video.preguntas_examen || []); } catch(e) {}
+
+    const modal = document.createElement('div');
+    modal.id = 'course-modal';
+    modal.className = 'course-modal-overlay';
+    modal.innerHTML = `
+        <div class="course-modal">
+            <div class="course-modal-header">
+                <h2 class="course-modal-title">${escapeHtml(title)}</h2>
+                <button class="course-modal-close" onclick="closeCourseModal()" title="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="course-modal-body">
+                <!-- Left: Video -->
+                <div class="course-video-panel">
+                    <div class="course-video-wrapper">
+                        <iframe
+                            src="https://www.youtube.com/embed/${escapeHtml(videoId)}?rel=0&modestbranding=1"
+                            title="${escapeHtml(title)}"
+                            frameborder="0"
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                        </iframe>
+                    </div>
+                    <div class="course-video-label">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Video del curso
+                    </div>
+                </div>
+
+                <!-- Right: Theory -->
+                <div class="course-theory-panel">
+                    <div class="course-theory-header">
+                        <span class="ai-badge">🤖 Resumen IA</span>
+                        <h3>Teoría del curso</h3>
+                    </div>
+                    <div class="course-theory-content">
+                        <p>${escapeHtml(teoria)}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom action buttons -->
+            <div class="course-modal-footer">
+                <button class="course-action-btn btn-exercises" onclick='openExercises(${JSON.stringify(preguntas_test).replace(/'/g, "&#39;")})'>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    Realizar Ejercicios
+                </button>
+                <button class="course-action-btn btn-exam" onclick='openExam(${JSON.stringify(preguntas_examen).replace(/'/g, "&#39;")})'>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Realizar Examen
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    // Close on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeCourseModal();
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', handleModalEsc);
+
+    requestAnimationFrame(() => modal.classList.add('visible'));
+}
+
+function closeCourseModal() {
+    const modal = document.getElementById('course-modal');
+    if (!modal) return;
+    modal.classList.remove('visible');
+    document.removeEventListener('keydown', handleModalEsc);
+    setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+    }, 350);
+}
+
+function handleModalEsc(e) {
+    if (e.key === 'Escape') closeCourseModal();
+}
+
+// ============================================
+// EXERCISES (Multiple Choice)
+// ============================================
+
+function openExercises(questions) {
+    if (!questions || questions.length === 0) {
+        showNotification('⚠️ No hay ejercicios disponibles para este video', 'warning');
+        return;
+    }
+
+    let currentQ = 0;
+    let score = 0;
+    let answered = false;
+
+    function renderQuestion() {
+        const q = questions[currentQ];
+        const letters = ['A', 'B', 'C', 'D'];
+        const optionsHTML = (q.opciones || []).map((opt, i) => `
+            <button class="quiz-option" data-letter="${letters[i]}" onclick="selectOption(this, '${letters[i]}', '${q.respuesta_correcta}')">
+                <span class="quiz-option-letter">${letters[i]}</span>
+                <span class="quiz-option-text">${escapeHtml(opt)}</span>
+            </button>
+        `).join('');
+
+        return `
+            <div class="quiz-progress">
+                <span>Pregunta ${currentQ + 1} de ${questions.length}</span>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" style="width: ${((currentQ) / questions.length) * 100}%"></div>
+                </div>
+                <span>Puntuación: ${score}/${currentQ}</span>
+            </div>
+            <div class="quiz-question">
+                <p>${escapeHtml(q.pregunta)}</p>
+            </div>
+            <div class="quiz-options" id="quiz-options">
+                ${optionsHTML}
+            </div>
+            <div class="quiz-nav">
+                <button class="quiz-next-btn" id="quiz-next" style="display:none" onclick="nextQuestion()">
+                    ${currentQ < questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultado'}
+                </button>
+            </div>
+        `;
+    }
+
+    function renderResult() {
+        const pct = Math.round((score / questions.length) * 100);
+        const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '📚';
+        return `
+            <div class="quiz-result">
+                <div class="quiz-result-emoji">${emoji}</div>
+                <h3>¡Ejercicios completados!</h3>
+                <div class="quiz-result-score">${score} / ${questions.length}</div>
+                <p class="quiz-result-pct">${pct}% de aciertos</p>
+                <p class="quiz-result-msg">${pct >= 80 ? 'Excelente trabajo. ¡Dominas el tema!' : pct >= 50 ? 'Buen trabajo. ¡Sigue practicando!' : 'Repasa el material y vuelve a intentarlo.'}</p>
+                <button class="course-action-btn btn-exercises" onclick="closeActivityModal()" style="margin-top:1.5rem; display:inline-flex;">
+                    Volver al curso
+                </button>
+            </div>
+        `;
+    }
+
+    openActivityModal('📝 Ejercicios de práctica', renderQuestion());
+
+    // Expose helpers to window for onclick handlers
+    window.selectOption = function(btn, letter, correct) {
+        if (answered) return;
+        answered = true;
+        const allBtns = document.querySelectorAll('.quiz-option');
+        allBtns.forEach(b => {
+            b.disabled = true;
+            if (b.dataset.letter === correct) b.classList.add('correct');
+        });
+        if (letter === correct) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+        }
+        document.getElementById('quiz-next').style.display = 'inline-flex';
+    };
+
+    window.nextQuestion = function() {
+        currentQ++;
+        answered = false;
+        const body = document.getElementById('activity-body');
+        if (currentQ >= questions.length) {
+            body.innerHTML = renderResult();
+        } else {
+            body.innerHTML = renderQuestion();
+        }
+    };
+}
+
+// ============================================
+// EXAM (Open-ended)
+// ============================================
+
+function openExam(questions) {
+    if (!questions || questions.length === 0) {
+        showNotification('⚠️ No hay preguntas de examen disponibles', 'warning');
+        return;
+    }
+
+    const questionsHTML = questions.map((q, i) => `
+        <div class="exam-question">
+            <label class="exam-question-label">
+                <span class="exam-q-num">${i + 1}</span>
+                ${escapeHtml(q.pregunta)}
+            </label>
+            <textarea class="exam-textarea" id="exam-answer-${i}" placeholder="Escribe tu respuesta aquí..."></textarea>
+        </div>
+    `).join('');
+
+    const html = `
+        <p class="exam-intro">Responde las siguientes preguntas con tus propias palabras. Después podrás comparar con los puntos clave.</p>
+        <div class="exam-questions">${questionsHTML}</div>
+        <button class="course-action-btn btn-exam" onclick="submitExam()" style="margin-top:1.5rem; width:100%; justify-content:center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Entregar examen
+        </button>
+    `;
+
+    openActivityModal('📄 Examen del curso', html);
+
+    window.submitExam = function() {
+        const resultsHTML = questions.map((q, i) => {
+            const answer = (document.getElementById(`exam-answer-${i}`)?.value || '').trim();
+            const keyPoints = (q.puntos_clave || []).map(pk => `<li>${escapeHtml(pk)}</li>`).join('');
+            return `
+                <div class="exam-result-item">
+                    <div class="exam-result-question">
+                        <span class="exam-q-num">${i + 1}</span>
+                        ${escapeHtml(q.pregunta)}
+                    </div>
+                    <div class="exam-result-answer">
+                        <strong>Tu respuesta:</strong>
+                        <p>${answer ? escapeHtml(answer) : '<em>Sin respuesta</em>'}</p>
+                    </div>
+                    <div class="exam-result-keys">
+                        <strong>✅ Puntos clave esperados:</strong>
+                        <ul>${keyPoints}</ul>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const body = document.getElementById('activity-body');
+        body.innerHTML = `
+            <div class="exam-results">
+                <div class="exam-results-header">
+                    <span style="font-size:2.5rem">📋</span>
+                    <h3>Resultados del examen</h3>
+                    <p>Compara tus respuestas con los puntos clave</p>
+                </div>
+                ${resultsHTML}
+                <button class="course-action-btn btn-exercises" onclick="closeActivityModal()" style="margin-top:1.5rem; width:100%; justify-content:center;">
+                    Volver al curso
+                </button>
+            </div>
+        `;
+    };
+}
+
+// ============================================
+// ACTIVITY MODAL (shared for exercises & exam)
+// ============================================
+
+function openActivityModal(title, bodyHTML) {
+    // Close existing activity modal if any
+    closeActivityModal();
+
+    const modal = document.createElement('div');
+    modal.id = 'activity-modal';
+    modal.className = 'course-modal-overlay activity-overlay';
+    modal.innerHTML = `
+        <div class="course-modal activity-modal">
+            <div class="course-modal-header">
+                <h2 class="course-modal-title">${title}</h2>
+                <button class="course-modal-close" onclick="closeActivityModal()" title="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="activity-modal-body" id="activity-body">
+                ${bodyHTML}
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeActivityModal(); });
+    requestAnimationFrame(() => modal.classList.add('visible'));
+}
+
+function closeActivityModal() {
+    const modal = document.getElementById('activity-modal');
+    if (!modal) return;
+    modal.classList.remove('visible');
+    setTimeout(() => modal.remove(), 350);
 }
 
 // Export for debugging
