@@ -1,0 +1,1761 @@
+﻿numero_leccion,titulo,url,descripcion,ejemplos_codigo,categoria
+51,Join Lists,https://www.w3schools.com/python/python_lists_join.asp,"Python -Join Lists
+Join Two Lists
+There are several ways to join, or concatenate, two or more lists in Python.
+One of the easiest ways are by using the+operator.
+Example","list1 = [""a"", ""b"", ""c""]list2 = [1, 2, 3]list3 = list1 + list2print(list3)
+---
+list1 = [""a"", ""b"" , ""c""]list2 = [1, 2, 3]for x in list2:list1.append(x)print(list1)
+---
+list1 = [""a"", ""b"" , ""c""]list2 = [1, 2, 3]list1.extend(list2)print(list1)",Python Avanzado
+52,List Methods,https://www.w3schools.com/python/python_lists_methods.asp,"Python -List Methods
+List Methods
+Python has a set of built-in methods that you can use on lists.",,Python Avanzado
+53,List Exercises,https://www.w3schools.com/python/python_lists_exercises.asp,"PythonList Exercises
+Test Yourself With Exercises
+Now you have learned a lot about lists, and how to use them in Python.
+Are you ready for a test?
+Test your Python List skills with exercises from all categories:",,Python Avanzado
+54,Python Tuples,https://www.w3schools.com/python/python_tuples.asp,"PythonTuples
+Tuple
+Tuples are used to store multiple items in a single variable.
+Tuple is one of 4 built-in data types in Python used to store collections of 
+data, the other 3 areList,Set, andDictionary, all with different qualities and usage.
+A tuple is a collection which is ordered andunchangeable.","thistuple = (""apple"", ""banana"", ""cherry"")print(thistuple)
+---
+thistuple = (""apple"", ""banana"", ""cherry"", ""apple"", ""cherry"")print(thistuple)
+---
+thistuple = (""apple"", ""banana"", ""cherry"")print(len(thistuple))",Python Avanzado
+55,Python Tuples,https://www.w3schools.com/python/python_tuples.asp,"PythonTuples
+Tuple
+Tuples are used to store multiple items in a single variable.
+Tuple is one of 4 built-in data types in Python used to store collections of 
+data, the other 3 areList,Set, andDictionary, all with different qualities and usage.
+A tuple is a collection which is ordered andunchangeable.","thistuple = (""apple"", ""banana"", ""cherry"")print(thistuple)
+---
+thistuple = (""apple"", ""banana"", ""cherry"", ""apple"", ""cherry"")print(thistuple)
+---
+thistuple = (""apple"", ""banana"", ""cherry"")print(len(thistuple))",Python Avanzado
+56,Access Tuples,https://www.w3schools.com/python/python_tuples_access.asp,"Python -Access Tuple Items
+Access Tuple Items
+You can access tuple items by referring to the index number, inside square 
+brackets:
+Example
+Print the second item in the tuple:","thistuple = (""apple"", ""banana"", ""cherry"")print(thistuple[1])
+---
+thistuple = (""apple"", ""banana"", ""cherry"")print(thistuple[-1])
+---
+thistuple = (""apple"", ""banana"", ""cherry"", ""orange"", ""kiwi"", ""melon"", ""mango"")print(thistuple[2:5])",Python Avanzado
+57,Update Tuples,https://www.w3schools.com/python/python_tuples_update.asp,"Python -Update Tuples
+Tuples are unchangeable, meaning that you cannot change, add, or remove items once the tuple is created.
+But there are some workarounds.
+Change Tuple Values
+Once a tuple is created, you cannot change its values. Tuples areunchangeable, 
+orimmutableas it also is called.","x = (""apple"", ""banana"", ""cherry"")y = list(x)y[1] = ""kiwi""x = 
+  tuple(y)print(x)
+---
+thistuple = (""apple"", ""banana"", ""cherry"")y = list(thistuple)y.append(""orange"")thistuple = 
+  tuple(y)
+---
+thistuple = (""apple"", ""banana"", ""cherry"")y = (""orange"",)thistuple += yprint(thistuple)",Python Avanzado
+58,Unpack Tuples,https://www.w3schools.com/python/python_tuples_unpack.asp,"Python -Unpack Tuples
+Unpacking a Tuple
+When we create a tuple, we normally assign values to it. This is called ""packing"" a tuple:
+Example
+Packing a tuple:","fruits = (""apple"", ""banana"", ""cherry"")
+---
+fruits = (""apple"", ""banana"", ""cherry"")(green, yellow, red) = fruitsprint(green)print(yellow)print(red)
+---
+fruits = (""apple"", ""banana"", ""cherry"", ""strawberry"", ""raspberry"")(green, yellow, *red) = fruitsprint(green)print(yellow)print(red)",Python Avanzado
+59,Loop Tuples,https://www.w3schools.com/python/python_tuples_loop.asp,"Python -Loop Tuples
+Loop Through a Tuple
+You can loop through the tuple items by using aforloop.
+Example
+Iterate through the items and print the values:","thistuple = (""apple"", ""banana"", ""cherry"")for x in thistuple:print(x)
+---
+thistuple = (""apple"", ""banana"", ""cherry"")for i in range(len(thistuple)):print(thistuple[i])
+---
+thistuple = (""apple"", ""banana"", ""cherry"")i = 0while i < len(thistuple):print(thistuple[i])i = i + 1",Python Avanzado
+60,Join Tuples,https://www.w3schools.com/python/python_tuples_join.asp,"Python -Join Tuples
+Join Two Tuples
+To join two or more tuples you can use the+operator:
+Example
+Join two tuples:","tuple1 = (""a"", ""b"" , ""c"")tuple2 = (1, 2, 3)tuple3 = tuple1 + tuple2print(tuple3)
+---
+fruits = (""apple"", ""banana"", ""cherry"")mytuple = fruits * 2print(mytuple)",Python Avanzado
+61,Tuple Methods,https://www.w3schools.com/python/python_tuples_methods.asp,"Python -Tuple Methods
+Tuple Methods
+Python has two built-in methods that you can use on tuples.",,Python Avanzado
+62,Tuple Exercises,https://www.w3schools.com/python/python_tuples_exercises.asp,"Python -Tuple Exercises
+Test Yourself With Exercises
+Now you have learned a lot about tuples, and how to use them in Python.
+Are you ready for a test?
+Test your Python Tuple skills with exercises from all categories:",,Python Avanzado
+63,Python Sets,https://www.w3schools.com/python/python_sets.asp,"PythonSets
+Set
+Sets are used to store multiple items in a single variable.
+Set is one of 4 built-in data types in Python used to store collections of 
+data, the other 3 areList,Tuple, andDictionary, all with different qualities and usage.
+A set is a collection which isunordered,unchangeable*, andunindexed.","thisset = {""apple"", ""banana"", ""cherry""}print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry"", ""apple""}print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry"", True, 1, 2}print(thisset)",Python Avanzado
+64,Python Sets,https://www.w3schools.com/python/python_sets.asp,"PythonSets
+Set
+Sets are used to store multiple items in a single variable.
+Set is one of 4 built-in data types in Python used to store collections of 
+data, the other 3 areList,Tuple, andDictionary, all with different qualities and usage.
+A set is a collection which isunordered,unchangeable*, andunindexed.","thisset = {""apple"", ""banana"", ""cherry""}print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry"", ""apple""}print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry"", True, 1, 2}print(thisset)",Python Avanzado
+65,Access Set Items,https://www.w3schools.com/python/python_sets_access.asp,"Python -Access Set Items
+Access Items
+You cannot access items in a set by referring to an index or a key.
+But you can loop through the set items using aforloop, or ask if a specified value is present in a set, by using theinkeyword.
+Example","thisset = {""apple"", ""banana"", ""cherry""}for x in thisset:print(x)
+---
+thisset = {""apple"", ""banana"", ""cherry""}print(""banana"" 
+  in thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry""}print(""banana"" 
+  not in thisset)",Python Avanzado
+66,Add Set Items,https://www.w3schools.com/python/python_sets_add.asp,"Python -Add Set Items
+Add Items
+Once a set is created, you cannot change its items, but you can add new items.
+To add one item to a set use theadd()method.
+Example","thisset = {""apple"", ""banana"", ""cherry""}thisset.add(""orange"")print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry""}tropical = {""pineapple"", ""mango"", ""papaya""}thisset.update(tropical)print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry""}mylist = [""kiwi"", ""orange""]thisset.update(mylist)print(thisset)",Python Avanzado
+67,Remove Set Items,https://www.w3schools.com/python/python_sets_remove.asp,"Python -Remove Set Items
+Remove Item
+To remove an item in a set, use theremove(), or thediscard()method.
+Example
+Remove ""banana"" by using theremove()method:","thisset = {""apple"", ""banana"", ""cherry""}thisset.remove(""banana"")print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry""}thisset.discard(""banana"")print(thisset)
+---
+thisset = {""apple"", ""banana"", ""cherry""}x =
+  thisset.pop()print(x)print(thisset)",Python Avanzado
+68,Loop Sets,https://www.w3schools.com/python/python_sets_loop.asp,"Python -Loop Sets
+Loop Items
+You can loop through the set items by using aforloop:
+Example
+Loop through the set, and print the values:","thisset = {""apple"", ""banana"", ""cherry""}for x in thisset:print(x)",Python Avanzado
+69,Join Sets,https://www.w3schools.com/python/python_sets_join.asp,"Python -Join Sets
+Join Sets
+There are several ways to join two or more sets in Python.
+Theunion()andupdate()methods joins all items from both sets.
+Theintersection()method keeps ONLY the duplicates.","set1 = {""a"", ""b"", ""c""}set2 = {1, 2, 3}set3 = set1.union(set2)print(set3)
+---
+set1 = {""a"", ""b"", ""c""}set2 = {1, 2, 3}set3 = set1 | set2print(set3)
+---
+set1 = {""a"", ""b"", ""c""}set2 = {1, 2, 3}set3 = {""John"", ""Elena""}set4 = {""apple"", 
+  ""bananas"", ""cherry""}myset = set1.union(set2, set3, set4)print(myset)",Python Avanzado
+70,Frozenset,https://www.w3schools.com/python/python_frozenset.asp,"Pythonfrozenset
+Python frozenset
+frozensetis an immutable version of a set.
+Like sets, it contains unique, unordered, unchangeable elements.
+Unlike sets, elements cannot be added or removed from a frozenset.","x = frozenset({""apple"", ""banana"", ""cherry""})print(x)print(type(x))",Python Avanzado
+71,Set Methods,https://www.w3schools.com/python/python_sets_methods.asp,"Python -Set Methods
+Set Methods
+Python has a set of built-in methods that you can use on sets.",,Python Avanzado
+72,Set Exercises,https://www.w3schools.com/python/python_sets_exercises.asp,"Python -Set Exercises
+Test Yourself With Exercises
+Now you have learned a lot about sets, and how to use them in Python.
+Are you ready for a test?
+Test your Python Set skills with exercises from all categories:",,Python Avanzado
+73,Python Dictionaries,https://www.w3schools.com/python/python_dictionaries.asp,"PythonDictionaries
+Dictionary
+Dictionaries are used to store data values in key:value pairs.
+A dictionary is a collection which is ordered*, changeable and do not 
+allow duplicates.
+As of Python version 3.7, dictionaries areordered. 
+  In Python 3.6 and earlier, dictionaries areunordered.","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}print(thisdict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}print(thisdict[""brand""])
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964,""year"": 2020}print(thisdict)",Python Avanzado
+74,Python Dictionaries,https://www.w3schools.com/python/python_dictionaries.asp,"PythonDictionaries
+Dictionary
+Dictionaries are used to store data values in key:value pairs.
+A dictionary is a collection which is ordered*, changeable and do not 
+allow duplicates.
+As of Python version 3.7, dictionaries areordered. 
+  In Python 3.6 and earlier, dictionaries areunordered.","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}print(thisdict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}print(thisdict[""brand""])
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964,""year"": 2020}print(thisdict)",Python Avanzado
+75,Access Items,https://www.w3schools.com/python/python_dictionaries_access.asp,"Python -Access Dictionary Items
+Accessing Items
+You can access the items of a dictionary by referring to its key name, inside 
+square brackets:
+Example
+Get the value of the ""model"" key:","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}x = thisdict[""model""]
+---
+x = thisdict.get(""model"")
+---
+x = thisdict.keys()",Python Avanzado
+76,Change Items,https://www.w3schools.com/python/python_dictionaries_change.asp,"Python -Change Dictionary Items
+Change Values
+You can change the value of a specific item by referring to its key name:
+Example
+Change the ""year"" to 2018:","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict[""year""] = 2018
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict.update({""year"": 2020})",Python Avanzado
+77,Add Items,https://www.w3schools.com/python/python_dictionaries_add.asp,"Python -Add Dictionary Items
+Adding Items
+Adding an item to the dictionary is done by using a new index key and assigning a value to it:
+Example
+Update Dictionary","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict[""color""] = ""red""print(thisdict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict.update({""color"": 
+  ""red""})",Python Avanzado
+78,Remove Items,https://www.w3schools.com/python/python_dictionaries_remove.asp,"Python -Remove Dictionary Items
+Removing Items
+There are several methods to remove items from a dictionary:
+Example
+Thepop()method removes the item with the specified key name:","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict.pop(""model"")print(thisdict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}thisdict.popitem()print(thisdict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}del thisdict[""model""]print(thisdict)",Python Avanzado
+79,Loop Dictionaries,https://www.w3schools.com/python/python_dictionaries_loop.asp,"Python -Loop Dictionaries
+Loop Through a Dictionary
+You can loop through a dictionary by using aforloop.
+When looping through a dictionary, the return value are thekeysof 
+the dictionary, but there are methods to return thevaluesas well.
+Example","for x in thisdict:print(x)
+---
+for x in thisdict:print(thisdict[x])
+---
+for x in thisdict.values():print(x)",Python Avanzado
+80,Copy Dictionaries,https://www.w3schools.com/python/python_dictionaries_copy.asp,"Python -Copy Dictionaries
+Copy a Dictionary
+You cannot copy a dictionary simply by typingdict2 = 
+dict1, because:dict2will only be areferencetodict1, and changes made indict1will automatically also be made indict2.
+There are ways to make a copy, one way is to use the built-in Dictionary 
+methodcopy().
+Example","thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}mydict 
+  = thisdict.copy()print(mydict)
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}mydict 
+  = dict(thisdict)print(mydict)",Python Avanzado
+81,Nested Dictionaries,https://www.w3schools.com/python/python_dictionaries_nested.asp,"Python -Nested Dictionaries
+Nested Dictionaries
+A dictionary can contain dictionaries, this is called nested 
+dictionaries.
+Example
+Create a dictionary that contain three dictionaries:","myfamily = {""child1"" : {""name"" : ""Emil"",""year"" : 2004},""child2"" : {""name"" : ""Tobias"",""year"" : 2007},""child3"" : {""name"" : ""Linus"",""year"" : 2011}}
+---
+child1 = {""name"" : ""Emil"",""year"" : 2004}child2 = {""name"" : ""Tobias"",""year"" : 2007}child3 = {""name"" : ""Linus"",""year"" : 2011}myfamily = {""child1"" : child1,""child2"" : child2,""child3"" : child3}
+---
+print(myfamily[""child2""][""name""])",Python Avanzado
+82,Dictionary Methods,https://www.w3schools.com/python/python_dictionaries_methods.asp,"PythonDictionary Methods
+Dictionary Methods
+Python has a set of built-in methods that you can use on dictionaries.",,Python Avanzado
+83,Dictionary Exercises,https://www.w3schools.com/python/python_dictionaries_exercises.asp,"PythonDictionary Exercises
+Test Yourself With Exercises
+Now you have learned a lot about dictionaries, and how to use them in Python.
+Are you ready for a test?
+Test your Python Dictionary skills with exercises from all categories:",,Python Avanzado
+84,Python If...Else,https://www.w3schools.com/python/python_conditions.asp,"PythonIf Statement
+Python Conditions and If statements
+Python supports the usual logical conditions from mathematics:
+These conditions can be used in several ways, most commonly in ""if statements"" and loops.
+An ""if statement"" is written by using theifkeyword.","a = 33b = 200if b > a:print(""b is greater than a"")
+---
+number = 15if number > 0:print(""The number is positive"")
+---
+a = 33b = 200if b > a:print(""b is greater than a"")
+# you will get an error",Python Avanzado
+85,Python If,https://www.w3schools.com/python/python_conditions.asp,"PythonIf Statement
+Python Conditions and If statements
+Python supports the usual logical conditions from mathematics:
+These conditions can be used in several ways, most commonly in ""if statements"" and loops.
+An ""if statement"" is written by using theifkeyword.","a = 33b = 200if b > a:print(""b is greater than a"")
+---
+number = 15if number > 0:print(""The number is positive"")
+---
+a = 33b = 200if b > a:print(""b is greater than a"")
+# you will get an error",Python Avanzado
+86,Python Elif,https://www.w3schools.com/python/python_if_elif.asp,"PythonElif Statement
+The Elif Keyword
+Theelifkeyword is Python's way of saying ""if the previous conditions were not true, then 
+try this condition"".
+Theelifkeyword allows you to check multiple expressions forTrueand execute a block of code as soon as one of the conditions evaluates toTrue.
+Example","a = 33b = 33if b > a:print(""b is greater than a"")elif a == b:print(""a and b are equal"")
+---
+score = 75if score >= 90:print(""Grade: A"")elif score >= 80:print(""Grade: B"")elif score >= 70:print(""Grade: C"")elif score >= 60:print(""Grade: D"")
+---
+age = 25if age < 13:print(""You are a child"")elif age < 20:print(""You are a teenager"")elif age < 65:print(""You are an adult"")elif age >= 65:print(""You are a senior"")",Python Avanzado
+87,Python Else,https://www.w3schools.com/python/python_if_else.asp,"PythonElse Statement
+The Else Keyword
+Theelsekeyword catches anything which isn't caught by the preceding conditions.
+Theelsestatement is executed when theifcondition (and anyelifconditions) evaluate toFalse.
+Example","a = 200b = 33if b > a:print(""b is greater than a"")elif a == b:print(""a and b are equal"")else:print(""a is greater than b"")
+---
+a = 200b = 33if b > a:print(""b is greater than a"")else:print(""b is not greater than a"")
+---
+number = 7if number % 2 == 0:print(""The number is even"")else:print(""The number is odd"")",Python Avanzado
+88,Shorthand If,https://www.w3schools.com/python/python_if_shorthand.asp,"PythonShorthand If
+Short Hand If
+If you have only one statement to execute, you can put it on the same line as theifstatement.
+Example
+One-lineifstatement:","a = 5b = 2if a > b: print(""a is greater than b"")
+---
+a = 2b = 330print(""A"") if a > b else print(""B"")
+---
+a = 10b = 20bigger = a if a > b else bprint(""Bigger is"", bigger)",Python Avanzado
+89,Logical Operators,https://www.w3schools.com/python/python_if_logical.asp,"PythonLogical Operators
+Python Logical Operators
+Logical operators are used to combine conditional statements. Python has three logical operators:
+The and Operator
+Theandkeyword is a logical operator, and 
+is used to combine conditional statements. Both conditions must be true for the entire expression to be true.","a = 200b = 33c = 500if a > b and c > a:print(""Both conditions are True"")
+---
+a = 200b = 33c = 500if a > b or a > c:print(""At least one of the conditions is True"")
+---
+a = 33b = 200if not a > b:print(""a is NOT greater than b"")",Python Avanzado
+90,Nested If,https://www.w3schools.com/python/python_if_nested_if.asp,"PythonNested If
+Nested If Statements
+You can haveifstatements insideifstatements. This is callednestedifstatements.
+Example
+In this example, the innerifstatement only runs if the outer condition (x > 10) is true.","x = 41if x > 10:print(""Above ten,"")if x > 20:print(""and also above 20!"")else:print(""but not above 20."")
+---
+age = 25has_license = Trueif age >= 18:if has_license:print(""You can drive"")else:print(""You need a license"")else:print(""You are too young to drive"")
+---
+score = 85attendance = 90submitted = Trueif score >= 60:if attendance >= 80:if submitted:print(""Pass with good standing"")else:print(""Pass but missing assignment"")else:print(""Pass but low attendance"")else:print(""Fail"")",Python Avanzado
+91,Pass Statement,https://www.w3schools.com/python/python_if_pass.asp,"PythonPass Statement
+The pass Statement
+ifstatements cannot be empty, but if you 
+for some reason have anifstatement with no content, put in thepassstatement to avoid getting an error.
+Example
+Thepassstatement is a null operation - nothing happens when it executes. It serves as a placeholder.","a = 33b = 200if b > a:pass
+---
+age = 16if age < 18:pass  # TODO: Add underage logic laterelse:print(""Access granted"")
+---
+score = 85if score > 90:# This is excellent# This will raise an IndentationError",Python Avanzado
+92,Python Match,https://www.w3schools.com/python/python_match.asp,"PythonMatch
+Thematchstatement is used to perform different actions based on different conditions.
+The Python Match Statement
+Instead of writingmanyif..elsestatements, you can use thematchstatement.
+Thematchstatement selects one of many code blocks to be executed.","matchexpression:case x:code blockcase y:code blockcase z:code block
+---
+day = 4match day:case 1:print(""Monday"")case 2:print(""Tuesday"")case 3:print(""Wednesday"")case 4:print(""Thursday"")case 5:print(""Friday"")case 6:print(""Saturday"")case 7:print(""Sunday"")
+---
+day = 4match day:case 6:print(""Today is Saturday"")case 7:print(""Today is Sunday"")case _:print(""Looking forward to the Weekend"")",Python Avanzado
+93,Python While Loops,https://www.w3schools.com/python/python_while_loops.asp,"PythonWhile Loops
+Python Loops
+Python has two primitive loop commands:
+The while Loop
+With thewhileloop we can execute a set of statements as long as a condition is true.","i = 1while i < 6:print(i)i += 1
+---
+i = 1while i < 6:print(i)if i == 3:breaki += 1
+---
+i = 0while i < 6:i += 1if i == 3:continueprint(i)",Python Avanzado
+94,Python For Loops,https://www.w3schools.com/python/python_for_loops.asp,"PythonFor Loops
+Python For Loops
+Aforloop is used for iterating over a sequence (that is either a list, a tuple, 
+a dictionary, a set, or a string).
+This is less like theforkeyword in other programming languages, and works more like an iterator method as found in other object-orientated programming languages.
+With theforloop we can execute a set of statements, once for each item in a list, tuple, set etc.","fruits = [""apple"", ""banana"", ""cherry""]for 
+  x in fruits:print(x)
+---
+for x in ""banana"":print(x)
+---
+fruits = [""apple"", ""banana"", ""cherry""]for x in fruits:print(x)if x == 
+  ""banana"":break",Python Avanzado
+95,Python Functions,https://www.w3schools.com/python/python_functions.asp,"PythonFunctions
+Python Functions
+A function is a block of code which only runs when it is called.
+A function can return data as a result.
+A function helps avoiding code repetition.","def my_function():print(""Hello from a function"")
+---
+def my_function():print(""Hello from a function"")my_function()
+---
+def my_function():print(""Hello from a function"")my_function()my_function()my_function()",Python Avanzado
+96,Python Functions,https://www.w3schools.com/python/python_functions.asp,"PythonFunctions
+Python Functions
+A function is a block of code which only runs when it is called.
+A function can return data as a result.
+A function helps avoiding code repetition.","def my_function():print(""Hello from a function"")
+---
+def my_function():print(""Hello from a function"")my_function()
+---
+def my_function():print(""Hello from a function"")my_function()my_function()my_function()",Python Avanzado
+97,Python Arguments,https://www.w3schools.com/python/python_arguments.asp,"PythonFunction Arguments
+Arguments
+Information can be passed into functions as arguments.
+Arguments are specified after the function name, inside the parentheses.
+You can add as many arguments as you want, just separate them with a comma.
+The following example has a function with one argument (fname).
+When the function is called, we pass along a first name,
+which is used inside the function to print the full name:","def my_function(fname):print(fname+ "" Refsnes"")my_function(""Emil"")my_function(""Tobias"")my_function(""Linus"")
+---
+def my_function(name): # name is aparameterprint(""Hello"", name)my_function(""Emil"") # ""Emil"" is anargument
+---
+def my_function(fname, lname):print(fname + "" "" + lname)my_function(""Emil"", ""Refsnes"")",Python Avanzado
+98,Python *args / **kwargs,https://www.w3schools.com/python/python_args_kwargs.asp,"Python*args and **kwargs
+*args and **kwargs
+By default, a function must be called with the correct number of arguments.
+However, sometimes you may not know how many arguments that will be passed into your function.
+*args and **kwargs allow functions to accept a unknown number of arguments.","def my_function(*kids):print(""The youngest child is "" + kids[2])my_function(""Emil"", ""Tobias"", ""Linus"")
+---
+def my_function(*args):print(""Type:"", type(args))print(""First argument:"", args[0])print(""Second argument:"", args[1])print(""All arguments:"", args)my_function(""Emil"", ""Tobias"", ""Linus"")
+---
+def my_function(greeting, *names):for name in names:print(greeting, name)my_function(""Hello"", ""Emil"", ""Tobias"", ""Linus"")",Python Avanzado
+99,Python Scope,https://www.w3schools.com/python/python_scope.asp,"PythonScope
+Scope
+A variable is only available from inside the region it is 
+created. This is calledscope.
+Local Scope
+A variable created inside a function belongs to thelocal scopeof 
+that function, and can only be used inside that function.","def myfunc():x = 300print(x)myfunc()
+---
+def myfunc():x = 300def myinnerfunc():print(x)myinnerfunc()myfunc()
+---
+x = 300def myfunc():print(x)myfunc()print(x)",Python Avanzado
+100,Python Decorators,https://www.w3schools.com/python/python_decorators.asp,"PythonDecorators
+Decorators let you add extra behavior to a function, without changing the function's code.
+A decorator is a function that takes another function as input and returns a new function.
+Basic Decorator
+Define the decorator first, then apply it with@decorator_nameabove the function.","def changecase(func):def myinner():return func().upper()return myinner@changecasedef myfunction():return ""Hello Sally""print(myfunction())
+---
+def changecase(func):def myinner():return func().upper()return myinner@changecasedef myfunction():return ""Hello Sally""@changecasedef otherfunction():return ""I am speed!""print(myfunction())print(otherfunction())
+---
+def changecase(func):def myinner(x):return func(x).upper()return myinner@changecasedef myfunction(nam):return ""Hello "" + namprint(myfunction(""John""))",Python Avanzado
+101,Python Lambda,https://www.w3schools.com/python/python_lambda.asp,"PythonLambda
+Lambda Functions
+A lambda function is a small anonymous function.
+A lambda function can take any number of arguments, but can only have one expression.
+Syntax","lambdaarguments:expression
+---
+x = lambda a : a + 10print(x(5))
+---
+x = lambda a, b : a * bprint(x(5, 6))",Python Avanzado
+102,Python Recursion,https://www.w3schools.com/python/python_recursion.asp,"PythonRecursion
+Recursion
+Recursion is when a function calls itself.
+Recursion is a common mathematical and programming concept.
+  It means that a function calls itself.
+  This has the benefit of meaning that you can loop through data to reach a result.
+The developer should be very careful with recursion as it can be quite easy to slip into writing a function which never terminates,
+  or one that uses excess amounts of memory or processor power.
+  However, when written correctly recursion can be","def countdown(n):if n <= 0:print(""Done!"")else:print(n)countdown(n - 1)countdown(5)
+---
+def factorial(n):# Base caseif n == 0 or n == 1:return 1# Recursive caseelse:return n * factorial(n - 1)print(factorial(5))
+---
+def fibonacci(n):if n <= 1:return nelse:return fibonacci(n - 1) + fibonacci(n - 2)print(fibonacci(7))",Python Avanzado
+103,Python Generators,https://www.w3schools.com/python/python_generators.asp,"PythonGenerators
+Generators
+Generators are functions that can pause and resume their execution.
+When a generator function is called, it returns agenerator object, which is an iterator.
+The code inside the function is not executed yet, it is only compiled. The function only executes when you iterate over the generator.","def my_generator():yield 1yield 2yield 3for value in my_generator():print(value)
+---
+def count_up_to(n):count = 1while count <= n:yield countcount += 1for num in count_up_to(5):print(num)
+---
+def large_sequence(n):for i in range(n):yield i# This doesn't create a million numbers in memorygen = large_sequence(1000000)print(next(gen))print(next(gen))print(next(gen))",Python Avanzado
+104,Python Range,https://www.w3schools.com/python/python_range.asp,"Pythonrange
+Python range
+The built-inrange()function returns an immutable sequence of numbers, commonly used for looping a specific number of times.
+This set of numbers has its own data type calledrange.
+Creating ranges","x = range(10)
+---
+x = range(3, 10)
+---
+x = range(3, 10, 2)",Python Avanzado
+105,Python Arrays,https://www.w3schools.com/python/python_arrays.asp,"PythonArrays
+Note:Python does not have built-in support for Arrays, 
+  butPython Listscan be used instead.
+Arrays
+Note:This page shows you how to use LISTS as ARRAYS, however, to work with arrays in Python you will have to import
+  a library, like theNumPy library.
+Arrays are used to store multiple values in one single variable:","cars = [""Ford"", ""Volvo"", ""BMW""]
+---
+car1 = ""Ford""car2 = ""Volvo""car3 = ""BMW""
+---
+x = cars[0]",Python Avanzado
+106,Python Iterators,https://www.w3schools.com/python/python_iterators.asp,"PythonIterators
+Python Iterators
+An iterator is an object that contains a countable number of values.
+An iterator is an object that can be iterated upon, meaning that you can 
+traverse through all the values.
+Technically, in Python, an iterator is an object which implements the 
+iterator protocol, which consist of the methods__iter__()and__next__().","mytuple = (""apple"", ""banana"", ""cherry"")myit = iter(mytuple)print(next(myit))print(next(myit))print(next(myit))
+---
+mystr = ""banana""myit = iter(mystr)print(next(myit))print(next(myit))print(next(myit))print(next(myit))print(next(myit))print(next(myit))
+---
+mytuple = (""apple"", ""banana"", ""cherry"")for x in mytuple:print(x)",Python Avanzado
+107,Python Modules,https://www.w3schools.com/python/python_modules.asp,"PythonModules
+What is a Module?
+Consider a module to be the same as a code library.
+A file containing a set of functions you want to include in your application.
+Create a Module","def greeting(name):print(""Hello, "" + name)
+---
+import mymodulemymodule.greeting(""Jonathan"")
+---
+person1 = {""name"": ""John"",""age"": 36,""country"": ""Norway""}",Python Avanzado
+108,Python Dates,https://www.w3schools.com/python/python_datetime.asp,"PythonDatetime
+Python Dates
+A date in Python is not a data type of its own, but we can import a module 
+nameddatetimeto work with dates as date 
+objects.
+Example
+Import the datetime module and display the current date:","import datetimex = datetime.datetime.now()print(x)
+---
+import datetimex = datetime.datetime.now()print(x.year)print(x.strftime(""%A""))
+---
+import datetimex = datetime.datetime(2020, 5, 17)print(x)",Python Avanzado
+109,Python Math,https://www.w3schools.com/python/python_math.asp,"PythonMath
+Python has a set of built-in math functions, including an extensive math module, that allows you to perform mathematical tasks on numbers.
+Built-in Math Functions
+Themin()andmax()functions can be used to find the lowest or highest value in an iterable:
+Example","x = min(5, 10, 25)y = max(5, 10, 25)print(x)print(y)
+---
+x = abs(-7.25)print(x)
+---
+x = pow(4, 3)print(x)",Python Avanzado
+110,Python JSON,https://www.w3schools.com/python/python_json.asp,"PythonJSON
+JSON is a syntax for storing and exchanging data.
+JSON is text, written with JavaScript object notation.
+JSON in Python
+Python has a built-in package calledjson, which can be used to work with JSON data.","import json
+---
+import json# some JSON:x =  '{ ""name"":""John"", ""age"":30, ""city"":""New 
+  York""}'# parse x:y = json.loads(x)# the result is a 
+  Python dictionary:print(y[""age""])
+---
+import json# a Python object (dict):x = {""name"": 
+  ""John"",""age"": 30,""city"": ""New York""}# 
+  convert into JSON:y = json.dumps(x)# the result is a JSON string:print(y)",Python Avanzado
+111,Python RegEx,https://www.w3schools.com/python/python_regex.asp,"PythonRegEx
+A RegEx, or Regular Expression, is a sequence of characters that forms a search pattern.
+RegEx can be used to check if a string contains the specified search pattern.
+RegEx Module
+Python has a built-in package calledre, which can be used to work with 
+Regular Expressions.","import re
+---
+import 
+    retxt = ""The rain in Spain""x = re.search(""^The.*Spain$"", txt)
+---
+import retxt = ""The rain in Spain""x = re.findall(""ai"", 
+  txt)print(x)",Python Avanzado
+112,Python PIP,https://www.w3schools.com/python/python_pip.asp,"PythonPIP
+What is PIP?
+PIP is a package manager for Python packages, or modules if you like.
+Note:If you have Python version 3.4 or later, PIP is included by default.
+What is a Package?","C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>pip --version
+---
+C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>pip 
+  install camelcase
+---
+import camelcasec = camelcase.CamelCase()txt = ""hello world""print(c.hump(txt))",Python Avanzado
+113,Python Try...Except,https://www.w3schools.com/python/python_try_except.asp,"PythonTry Except
+Thetryblock lets you test a 
+block of code for errors.
+Theexceptblock lets you 
+handle the error.
+Theelseblock lets you 
+execute code when there is no error.
+Thefinallyblock lets you 
+execute code, regardless of the result of the try- and except blocks.","try:print(x)except:print(""An exception occurred"")
+---
+print(x)
+---
+try:print(x)except NameError:print(""Variable x 
+  is not defined"")except:print(""Something else went 
+  wrong"")",Python Avanzado
+114,Python String Formatting,https://www.w3schools.com/python/python_string_formatting.asp,"PythonString Formatting
+F-String was introduced in Python 3.6,
+and is now the preferred way of formatting strings.
+Before Python 3.6 we had to use theformat()method.
+F-Strings
+F-string allows you to format selected parts of a string.","txt = f""The price is 49 dollars""print(txt)
+---
+price = 59txt = f""The price is {price} dollars""print(txt)
+---
+price = 59txt = f""The price is {price:.2f} dollars""print(txt)",Python Avanzado
+115,Python None,https://www.w3schools.com/python/python_none.asp,"PythonNone
+Python None
+Noneis a special constant in Python that represents the absence of a value.
+Its data type isNoneType, andNoneis the only instance of aNoneTypeobject.
+NoneType","x = Noneprint(x)
+---
+x = Noneprint(type(x))
+---
+result = Noneif result is None:print(""No result yet"")else:print(""Result is ready"")",Python Avanzado
+116,Python User Input,https://www.w3schools.com/python/python_user_input.asp,"PythonUser Input
+User Input
+Python allows for user input.
+That means we are able to ask the user for input.
+The following example asks for your name, and when you enter a name, it gets printed on the screen:","print(""Enter your name:"")name = input()print(f""Hello {name}"")
+---
+name = input(""Enter your name:"")print(f""Hello {name}"")
+---
+name = input(""Enter your name:"")print(f""Hello {name}"")fav1 = input(""What is your favorite animal:"")fav2 = input(""What is your favorite color:"")fav3 = input(""What is your favorite number:"")print(f""Do you want a {fav2} {fav1} with {fav3} legs?"")",Python Avanzado
+117,Python VirtualEnv,https://www.w3schools.com/python/python_virtualenv.asp,"PythonVirtual Environment
+What is a Virtual Environment?
+Avirtual environmentin Python is an isolated environment on your computer, where you can run and test your Python projects.
+It allows you to manage project-specific dependencies without interfering with other projects or the original Python installation.
+Think of a virtual environment as a separate container for each Python project. Each container:","C:\Users\Your Name>python -m venv myfirstproject
+---
+$python -m venv myfirstproject
+---
+myfirstprojectIncludeLibScripts.gitignorepyvenv.cfg",Python Avanzado
+118,Python OOP,https://www.w3schools.com/python/python_oop.asp,"PythonOOP
+What is OOP?
+OOPstands forObject-Oriented Programming.
+Python is an object-oriented language, allowing you to structure your code using classes and objects for better organization and reusability.
+Advantages of OOP",,Python Avanzado
+119,Python Classes/Objects,https://www.w3schools.com/python/python_classes.asp,"PythonClasses and Objects
+Python Classes/Objects
+Python is an object oriented programming language.
+Almost everything in Python is an object, with its properties and methods.
+A Class is like an object constructor, or a ""blueprint"" for creating objects.","class MyClass:x = 5
+---
+p1 = MyClass()print(p1.x)
+---
+del p1",Python Avanzado
+120,Python __init__ Method,https://www.w3schools.com/python/python_class_init.asp,"Python__init__() Method
+The __init__() Method
+All classes have a built-in method called__init__(), which is always executed when the class is being initiated.
+The__init__()method is used to assign values to object properties, or to perform operations that are necessary when the object is being created.
+Example","class Person:def __init__(self, name, age):self.name = nameself.age = agep1 = Person(""Emil"", 36)print(p1.name)print(p1.age)
+---
+class Person:passp1 = Person()p1.name = ""Tobias""p1.age = 25print(p1.name)print(p1.age)
+---
+class Person:def __init__(self, name, age):self.name = nameself.age = agep1 = Person(""Linus"", 28)print(p1.name)print(p1.age)",Python Avanzado
+121,Python self Parameter,https://www.w3schools.com/python/python_class_self.asp,"Pythonself Parameter
+The self Parameter
+Theselfparameter is a reference to the current instance of the class.
+It is used to access properties and methods that belong to the class.
+Example","class Person:def __init__(self, name, age):self.name = nameself.age = agedef greet(self):print(""Hello, my name is "" + self.name)p1 = Person(""Emil"", 25)p1.greet()
+---
+class Person:def __init__(self, name):self.name = namedef printname(self):print(self.name)p1 = Person(""Tobias"")p2 = Person(""Linus"")p1.printname()p2.printname()
+---
+class Person:def __init__(myobject, name, age):myobject.name = namemyobject.age = agedef greet(abc):print(""Hello, my name is "" + abc.name)p1 = Person(""Emil"", 36)p1.greet()",Python Avanzado
+122,Python Class Properties,https://www.w3schools.com/python/python_class_properties.asp,"PythonClass Properties
+Class Properties
+Properties are variables that belong to a class. They store data for each object created from the class.
+Example
+Create a class with properties:","class Person:def __init__(self, name, age):self.name = nameself.age = agep1 = Person(""Emil"", 36)print(p1.name)print(p1.age)
+---
+class Car:def __init__(self, brand, model):self.brand = brandself.model = modelcar1 = Car(""Toyota"", ""Corolla"")print(car1.brand)print(car1.model)
+---
+class Person:def __init__(self, name, age):self.name = nameself.age = agep1 = Person(""Tobias"", 25)print(p1.age)p1.age = 26print(p1.age)",Python Avanzado
+123,Python Class Methods,https://www.w3schools.com/python/python_class_methods.asp,"PythonClass Methods
+Class Methods
+Methods are functions that belong to a class. They define the behavior of objects created from the class.
+Example
+Create a method in a class:","class Person:def __init__(self, name):self.name = namedef greet(self):print(""Hello, my name is "" + self.name)p1 = Person(""Emil"")p1.greet()
+---
+class Calculator:def add(self, a, b):return a + bdef multiply(self, a, b):return a * bcalc = Calculator()print(calc.add(5, 3))print(calc.multiply(4, 7))
+---
+class Person:def __init__(self, name, age):self.name = nameself.age = agedef get_info(self):return f""{self.name} is {self.age} years old""p1 = Person(""Tobias"", 28)print(p1.get_info())",Python Avanzado
+124,Python Inheritance,https://www.w3schools.com/python/python_inheritance.asp,"PythonInheritance
+Python Inheritance
+Inheritance allows us to define a class that inherits all the methods and properties from another class.
+Parent classis the class being inherited from, also called 
+base class.
+Child classis the class that inherits from another class, 
+also called derived class.","class Person:def __init__(self, fname, lname):self.firstname = fnameself.lastname = lnamedef printname(self):print(self.firstname, 
+  self.lastname)#Use the Person class to create an object, and then 
+  execute the printname method:x = Person(""John"", ""Doe"")x.printname()
+---
+class Student(Person):pass
+---
+x = Student(""Mike"", ""Olsen"")x.printname()",Python Avanzado
+125,Python Polymorphism,https://www.w3schools.com/python/python_polymorphism.asp,"PythonPolymorphism
+The word ""polymorphism"" means ""many forms"", and in programming it refers to
+methods/functions/operators with the same name that can be executed on many 
+objects or classes.
+Function Polymorphism
+An example of a Python function that can be used on different objects is thelen()function.
+String","x = ""Hello World!""print(len(x))
+---
+mytuple = (""apple"", ""banana"", ""cherry"")print(len(mytuple))
+---
+thisdict =	{""brand"": ""Ford"",""model"": ""Mustang"",""year"": 1964}print(len(thisdict))",Python Avanzado
+126,Python Encapsulation,https://www.w3schools.com/python/python_encapsulation.asp,"PythonEncapsulation
+Python Encapsulation
+Encapsulation is about protecting data inside a class.
+It means keeping data (properties) and methods together in a class, while controlling how the data can be accessed from outside the class.
+This prevents accidental changes to your data and hides the internal details of how your class works.","class Person:def __init__(self, name, age):self.name = nameself.__age = age  # Private propertyp1 = Person(""Emil"", 25)print(p1.name)print(p1.__age)  # This will cause an error
+---
+class Person:def __init__(self, name, age):self.name = nameself.__age = agedef get_age(self):return self.__agep1 = Person(""Tobias"", 25)print(p1.get_age())
+---
+class Person:def __init__(self, name, age):self.name = nameself.__age = agedef get_age(self):return self.__agedef set_age(self, age):if age > 0:self.__age = ageelse:print(""Age must be positive"")p1 = Person(""Tobias"", 25)print(p1.get_age())p1.set_age(26)print(p1.get_age())",Python Avanzado
+127,Python Inner Classes,https://www.w3schools.com/python/python_class_inner.asp,"PythonInner Classes
+Python Inner Classes
+An inner class is a class defined inside another class. The inner class can access the properties and methods of the outer class.
+Inner classes are useful for grouping classes that are only used in one place, making your code more organized.
+Example","class Outer:def __init__(self):self.name = ""Outer Class""class Inner:def __init__(self):self.name = ""Inner Class""def display(self):print(""This is the inner class"")outer = Outer()print(outer.name)
+---
+class Outer:def __init__(self):self.name = ""Outer""class Inner:def __init__(self):self.name = ""Inner""def display(self):print(""Hello from inner class"")outer = Outer()inner = outer.Inner()inner.display()
+---
+class Outer:def __init__(self):self.name = ""Emil""class Inner:def __init__(self, outer):self.outer = outerdef display(self):print(f""Outer class name: {self.outer.name}"")outer = Outer()inner = outer.Inner(outer)inner.display()",Python Avanzado
+128,Python File Handling,https://www.w3schools.com/python/python_file_handling.asp,"PythonFile Open
+File handling is an important part of any web application.
+Python has several functions for creating, reading, updating, and 
+deleting files.
+File Handling
+The key function for working with files in Python is theopen()function.","f = open(""demofile.txt"")
+---
+f = open(""demofile.txt"", ""rt"")",Python Avanzado
+129,Python Read Files,https://www.w3schools.com/python/python_file_open.asp,"PythonFile Open
+Open a File on the Server
+Assume we have the following file, located in the same folder as Python:
+demofile.txt
+To open the file, use the built-inopen()function.","Hello! Welcome to demofile.txtThis file is for testing purposes.Good 
+  Luck!
+---
+f = open(""demofile.txt"")print(f.read())
+---
+f = open(""D:\\myfiles\welcome.txt"")print(f.read())",Python Avanzado
+130,Python Write/Create Files,https://www.w3schools.com/python/python_file_write.asp,"PythonFile Write
+Write to an Existing File
+To write to an existing file, you must add a parameter to theopen()function:
+""a""- Append - will append to the end of the file
+""w""- Write - will overwrite any existing content","with open(""demofile.txt"", ""a"") as f:f.write(""Now the file has more content!"")#open and read the file after the appending:with open(""demofile.txt"") 
+  as f:print(f.read())
+---
+with open(""demofile.txt"", ""w"") as f:f.write(""Woops! I have deleted the content!"")#open and read the file after the overwriting:with open(""demofile.txt"") 
+  as f:print(f.read())
+---
+f = open(""myfile.txt"", ""x"")",Python Avanzado
+131,Python Delete Files,https://www.w3schools.com/python/python_file_remove.asp,"PythonDelete File
+Delete a File
+To delete a file, you must import the OS module, and run itsos.remove()function:
+Example
+Remove the file ""demofile.txt"":","import osos.remove(""demofile.txt"")
+---
+import osif os.path.exists(""demofile.txt""):os.remove(""demofile.txt"")else:print(""The file does not exist"")
+---
+import osos.rmdir(""myfolder"")",Python Avanzado
+132,NumPy Tutorial,https://www.w3schools.com/python/numpy/default.asp,"NumPyTutorial
+Learn NumPy
+NumPy is a Python library.
+NumPy is used for working with arrays.
+NumPy is short for ""Numerical Python"".","import numpy as nparr = np.array([1, 2, 3, 4, 5])print(arr)print(type(arr))",Python Avanzado
+133,Pandas Tutorial,https://www.w3schools.com/python/pandas/default.asp,"PandasTutorial
+Learn Pandas
+Pandas is a Python library.
+Pandas is used to analyze data.
+Learning by Reading",import pandas as pddf = pd.read_csv('data.csv')print(df.to_string()),Python Avanzado
+134,SciPy Tutorial,https://www.w3schools.com/python/scipy/index.php,"SciPyTutorial
+Learn SciPy
+SciPy is a scientific computation library that usesNumPyunderneath.
+SciPy stands for Scientific Python.
+Learning by Reading",from scipy import constantsprint(constants.liter),Python Avanzado
+135,Django Tutorial,https://www.w3schools.com/django/index.php,"Django Tutorial
+Learn Django
+Django is a back-end server side web framework.
+Django is free, open source and written in Python.
+Django makes it easier to build web pages using Python.",,Python Avanzado
+136,Matplotlib Intro,https://www.w3schools.com/python/matplotlib_intro.asp,"MatplotlibTutorial
+What is Matplotlib?
+Matplotlib is a low level graph plotting library in python that serves as a visualization utility.
+Matplotlib was created by John D. Hunter.
+Matplotlib is open source and we can use it freely.",,Python Avanzado
+137,Matplotlib Get Started,https://www.w3schools.com/python/matplotlib_getting_started.asp,"MatplotlibGetting Started
+Installation of Matplotlib
+If you havePythonandPIPalready installed on a system, then installation of 
+Matplotlib is very easy.
+Install it using this command:
+If this command fails, then use a python distribution that already has Matplotlib installed,  like Anaconda, Spyder etc.","C:\Users\Your Name>pip install matplotlib
+---
+import matplotlib
+---
+import matplotlibprint(matplotlib.__version__)",Python Avanzado
+138,Matplotlib Pyplot,https://www.w3schools.com/python/matplotlib_pyplot.asp,"MatplotlibPyplot
+Pyplot
+Most of the Matplotlib utilities lies under thepyplotsubmodule,
+and are usually imported under thepltalias:
+Now the Pyplot package can be referred to asplt.
+Example","import matplotlib.pyplot as plt
+---
+import matplotlib.pyplot as pltimport numpy as npxpoints = np.array([0, 6])ypoints = np.array([0, 250])plt.plot(xpoints, 
+  ypoints)plt.show()",Python Avanzado
+139,Matplotlib Plotting,https://www.w3schools.com/python/matplotlib_plotting.asp,"MatplotlibPlotting
+Plotting x and y points
+Theplot()function is used to draw points (markers) in a diagram.
+By default, theplot()function draws a line from point to point.
+The function takes parameters for specifying points in the diagram.","import matplotlib.pyplot as pltimport numpy as npxpoints = np.array([1, 8])ypoints = np.array([3, 10])plt.plot(xpoints, ypoints)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npxpoints = np.array([1, 8])ypoints = np.array([3, 10])plt.plot(xpoints, ypoints, 'o')plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npxpoints = np.array([1, 2, 6, 8])ypoints = np.array([3, 8, 1, 10])plt.plot(xpoints, ypoints)plt.show()",Python Avanzado
+140,Matplotlib Markers,https://www.w3schools.com/python/matplotlib_markers.asp,"MatplotlibMarkers
+Markers
+You can use the keyword argumentmarkerto 
+emphasize each point with a specified marker:
+Example
+Mark each point with a circle:","import matplotlib.pyplot as pltimport numpy as npypoints = np.array([3, 8, 1, 10])plt.plot(ypoints, marker = 'o')plt.show()
+---
+...plt.plot(ypoints, marker = '*')...
+---
+import matplotlib.pyplot as pltimport numpy as npypoints = np.array([3, 8, 1, 10])plt.plot(ypoints, 'o:r')plt.show()",Python Avanzado
+141,Matplotlib Line,https://www.w3schools.com/python/matplotlib_line.asp,"MatplotlibLine
+Linestyle
+You can use the keyword argumentlinestyle, or shorterls, to 
+change the style of the plotted line:
+Example
+Use a dotted line:","import matplotlib.pyplot as pltimport numpy as npypoints = np.array([3, 8, 1, 10])plt.plot(ypoints, linestyle = 'dotted')plt.show()
+---
+plt.plot(ypoints, linestyle = 'dashed')
+---
+plt.plot(ypoints, ls = ':')",Python Avanzado
+142,Matplotlib Labels,https://www.w3schools.com/python/matplotlib_labels.asp,"MatplotlibLabels and Title
+Create Labels for a Plot
+With Pyplot, you can use thexlabel()andylabel()functions to set a label for the x- and y-axis.
+Example
+Add labels to the x- and y-axis:","import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])plt.plot(x, y)plt.xlabel(""Average 
+  Pulse"")plt.ylabel(""Calorie Burnage"")plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])plt.plot(x, y)plt.title(""Sports Watch Data"")plt.xlabel(""Average 
+  Pulse"")plt.ylabel(""Calorie Burnage"")plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])font1 = {'family':'serif','color':'blue','size':20}font2 = {'family':'serif','color':'darkred','size':15}plt.title(""Sports 
+  Watch Data"", fontdict = font1)plt.xlabel(""Average Pulse"", fontdict = 
+  font2)plt.ylabel(""Calorie Burnage"", fontdict = font2)plt.pl",Python Avanzado
+143,Matplotlib Grid,https://www.w3schools.com/python/matplotlib_grid.asp,"MatplotlibAdding Grid Lines
+Add Grid Lines to a Plot
+With Pyplot, you can use thegrid()function to add grid lines to the plot.
+Example
+Add grid lines to the plot:","import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])plt.title(""Sports Watch Data"")plt.xlabel(""Average Pulse"")plt.ylabel(""Calorie Burnage"")plt.plot(x, 
+  y)plt.grid()plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])plt.title(""Sports Watch Data"")plt.xlabel(""Average Pulse"")plt.ylabel(""Calorie Burnage"")plt.plot(x, 
+  y)plt.grid(axis = 'x')plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltx = np.array([80, 
+  85, 90, 95, 100, 105, 110, 115, 120, 125])y = np.array([240, 250, 260, 
+  270, 280, 290, 300, 310, 320, 330])plt.title(""Sports Watch Data"")plt.xlabel(""Average Pulse"")plt.ylabel(""Calorie Burnage"")plt.plot(x, 
+  y)plt.grid(axis = 'y')plt.show()",Python Avanzado
+144,Matplotlib Subplot,https://www.w3schools.com/python/matplotlib_subplot.asp,"MatplotlibSubplot
+Display Multiple Plots
+With thesubplot()function you can draw multiple plots in one figure:
+Example
+Draw 2 plots:","import matplotlib.pyplot as pltimport numpy as np#plot 1:x = 
+  np.array([0, 1, 2, 3])y = np.array([3, 8, 1, 10])plt.subplot(1, 2, 1)plt.plot(x,y)#plot 2:x = np.array([0, 1, 2, 3])y = np.array([10, 20, 30, 
+  40])plt.subplot(1, 2, 2)plt.plot(x,y)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as np#plot 1:x = 
+  np.array([0, 1, 2, 3])y = np.array([3, 8, 1, 10])plt.subplot(2, 1, 1)plt.plot(x,y)#plot 2:x = np.array([0, 1, 2, 3])y = np.array([10, 20, 30, 
+  40])plt.subplot(2, 1, 2)plt.plot(x,y)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npx = np.array([0, 
+  1, 2, 3])y = np.array([3, 8, 1, 10])plt.subplot(2, 3, 1)plt.plot(x,y)x = np.array([0, 1, 2, 3])y = np.array([10, 20, 30, 
+  40])plt.subplot(2, 3, 2)plt.plot(x,y)x = np.array([0, 1, 
+  2, 3])y = np.array([3, 8, 1, 10])plt.subplot(2, 3, 3)plt.plot(x,y)x = np.array([0, 1, 2, 3])y = np.array([10, 20, 30, 40])plt.subplot(2, 3, 4)plt.plot(x,y)x = np.array([0, 1, 2, 3])y = 
+  np.array([3, 8, 1, 10])plt.subplot(2,",Python Avanzado
+145,Matplotlib Scatter,https://www.w3schools.com/python/matplotlib_scatter.asp,"MatplotlibScatter
+Creating Scatter Plots
+With Pyplot, you can use thescatter()function 
+to draw a scatter plot.
+Thescatter()function plots one dot for 
+each observation. It needs two arrays of the same length, one for the values of 
+the x-axis, and one for values on the y-axis:
+Example","import matplotlib.pyplot as pltimport numpy as npx = np.array([5,7,8,7,2,17,2,9,4,11,12,9,6])y = np.array([99,86,87,88,111,86,103,87,94,78,77,85,86])plt.scatter(x, y)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as np#day one, the age 
+  and speed of 13 cars:x = np.array([5,7,8,7,2,17,2,9,4,11,12,9,6])y = np.array([99,86,87,88,111,86,103,87,94,78,77,85,86])plt.scatter(x, 
+  y)#day two, the age and speed of 15 cars:x = np.array([2,2,8,1,15,8,12,9,7,3,11,4,7,14,12])y = np.array([100,105,84,105,90,99,90,95,94,100,79,112,91,80,85])plt.scatter(x, y)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npx = np.array([5,7,8,7,2,17,2,9,4,11,12,9,6])y = np.array([99,86,87,88,111,86,103,87,94,78,77,85,86])plt.scatter(x, 
+  y, color = 'hotpink')x = np.array([2,2,8,1,15,8,12,9,7,3,11,4,7,14,12])y = np.array([100,105,84,105,90,99,90,95,94,100,79,112,91,80,85])plt.scatter(x, y, color = '#88c999')plt.show()",Python Avanzado
+146,Matplotlib Bars,https://www.w3schools.com/python/matplotlib_bars.asp,"MatplotlibBars
+Creating Bars
+With Pyplot, you can use thebar()function 
+to draw bar graphs:
+Example
+Draw 4 bars:","import matplotlib.pyplot as pltimport numpy as npx = np.array([""A"", 
+  ""B"", ""C"", ""D""])y = np.array([3, 8, 1, 10])plt.bar(x,y)plt.show()
+---
+x = [""APPLES"", ""BANANAS""]y = [400, 350]plt.bar(x, y)
+---
+import matplotlib.pyplot as pltimport numpy as npx = np.array([""A"", 
+  ""B"", ""C"", ""D""])y = np.array([3, 8, 1, 10])plt.barh(x, y)plt.show()",Python Avanzado
+147,Matplotlib Histograms,https://www.w3schools.com/python/matplotlib_histograms.asp,"MatplotlibHistograms
+Histogram
+A histogram is a graph showingfrequencydistributions.
+It is a graph showing the number of observations within each given interval.
+Example: Say you ask for the height of 250 people, you 
+might end up with a histogram like this:","import numpy as npx = 
+  np.random.normal(170, 10, 250)print(x)
+---
+import matplotlib.pyplot as pltimport numpy as npx = 
+  np.random.normal(170, 10, 250)plt.hist(x)plt.show()",Python Avanzado
+148,Matplotlib Pie Charts,https://www.w3schools.com/python/matplotlib_pie_charts.asp,"MatplotlibPie Charts
+Creating Pie Charts
+With Pyplot, you can use thepie()function 
+to draw pie charts:
+Example
+A simple pie chart:","import matplotlib.pyplot as pltimport numpy as npy = np.array([35, 
+  25, 25, 15])plt.pie(y)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npy = np.array([35, 
+  25, 25, 15])mylabels = [""Apples"", ""Bananas"", ""Cherries"", ""Dates""]plt.pie(y, 
+  labels = mylabels)plt.show()
+---
+import matplotlib.pyplot as pltimport numpy as npy = np.array([35, 
+  25, 25, 15])mylabels = [""Apples"", ""Bananas"", ""Cherries"", ""Dates""]plt.pie(y, 
+  labels = mylabels, startangle = 90)plt.show()",Python Avanzado
+149,Getting Started,https://www.w3schools.com/python/python_ml_getting_started.asp,"Machine Learning
+Machine Learning is making the computer learn from studying data and statistics.
+Machine Learning is a step into the direction of artificial intelligence (AI).
+Machine Learning is a program that analyses data and learns to predict the 
+outcome.
+Where To Start?",,Python Avanzado
+150,Mean Median Mode,https://www.w3schools.com/python/python_ml_mean_median_mode.asp,"Machine Learning - Mean Median Mode
+Mean, Median, and Mode
+What can we learn from looking at a group of numbers?
+In Machine Learning (and in mathematics) there are often three values that 
+interests us:
+Example: We have registered the speed of 13 cars:","import numpyspeed = [99,86,87,88,111,86,103,87,94,78,77,85,86]x = numpy.mean(speed)print(x)
+---
+import numpyspeed = [99,86,87,88,111,86,103,87,94,78,77,85,86]x = numpy.median(speed)print(x)
+---
+import numpyspeed = [99,86,87,88,86,103,87,94,78,77,85,86]x = numpy.median(speed)print(x)",Python Avanzado
+151,Standard Deviation,https://www.w3schools.com/python/python_ml_standard_deviation.asp,"Machine Learning - Standard Deviation
+What is Standard Deviation?
+Standard deviation is a number that describes how spread out the values are.
+A low standard deviation means that most of the numbers are close to the mean (average) value.
+A high standard deviation means that the values are spread out over a wider range.","import numpyspeed = [86,87,88,86,87,85,86]x = numpy.std(speed)print(x)
+---
+import numpyspeed = [32,111,138,28,59,77,97]x = numpy.std(speed)print(x)
+---
+import numpyspeed = [32,111,138,28,59,77,97]x = numpy.var(speed)print(x)",Python Avanzado
+152,Percentile,https://www.w3schools.com/python/python_ml_percentile.asp,"Machine Learning - Percentiles
+What are Percentiles?
+Percentiles are used in statistics to give you a number that describes the 
+value that a given percent of the values are lower than.
+Example: Let's say we have an array that contains the ages of every person 
+living on a street.
+ages = [5,31,43,48,50,41,7,11,15,39,80,82,32,2,8,6,25,36,27,61,31]","import numpyages = 
+  [5,31,43,48,50,41,7,11,15,39,80,82,32,2,8,6,25,36,27,61,31]x = numpy.percentile(ages, 75)print(x)
+---
+import numpyages = 
+  [5,31,43,48,50,41,7,11,15,39,80,82,32,2,8,6,25,36,27,61,31]x = numpy.percentile(ages, 90)print(x)",Python Avanzado
+153,Data Distribution,https://www.w3schools.com/python/python_ml_data_distribution.asp,"Machine Learning - Data Distribution
+Data Distribution
+Earlier in this tutorial we have worked with very small amounts of data in our examples, just to 
+understand the different concepts.
+In the real world, the data sets are much bigger, but it can be difficult to 
+gather real world data, at least at an early stage of a project.
+How Can we Get Big Data Sets?","import numpyx = numpy.random.uniform(0.0, 5.0, 250)print(x)
+---
+import numpyimport matplotlib.pyplot as pltx = 
+  numpy.random.uniform(0.0, 5.0, 250)plt.hist(x, 5)plt.show()
+---
+import numpyimport matplotlib.pyplot as pltx = 
+  numpy.random.uniform(0.0, 5.0, 100000)plt.hist(x, 100)plt.show()",Python Avanzado
+154,Normal Data Distribution,https://www.w3schools.com/python/python_ml_normal_data_distribution.asp,"Machine Learning - Normal Data Distribution
+Normal Data Distribution
+In the previous chapter we learned how to create a completely random array, of a given size, and between two given values.
+In this chapter we will learn how to create an array where the values are concentrated around a given value.
+In probability theory this kind of data distribution is known as thenormal 
+data distribution, or theGaussian data distribution, after the mathematician 
+Carl Friedrich Gauss who came up with the for","import numpyimport matplotlib.pyplot as pltx = 
+  numpy.random.normal(5.0, 1.0, 100000)plt.hist(x, 100)plt.show()",Python Avanzado
+155,Scatter Plot,https://www.w3schools.com/python/python_ml_scatterplot.asp,"Machine Learning - Scatter Plot
+Scatter Plot
+A scatter plot is a diagram where each value in the data set is represented by a dot.
+The Matplotlib module has a method for drawing scatter plots, it needs two arrays of 
+the same length, one for the values of the x-axis, and one for the values of the 
+y-axis:
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]","import matplotlib.pyplot as pltx = 
+  [5,7,8,7,2,17,2,9,4,11,12,9,6]y = 
+  [99,86,87,88,111,86,103,87,94,78,77,85,86]plt.scatter(x, y)plt.show()
+---
+import numpyimport matplotlib.pyplot as pltx = numpy.random.normal(5.0, 
+  1.0, 1000)y = numpy.random.normal(10.0, 2.0, 1000)plt.scatter(x, y)plt.show()",Python Avanzado
+156,Linear Regression,https://www.w3schools.com/python/python_ml_linear_regression.asp,"Machine Learning - Linear Regression
+Regression
+The term regression is used when you try to find the relationship between variables.
+In Machine Learning, and in statistical modeling, that relationship is used to predict the outcome of future events.
+Linear Regression","import matplotlib.pyplot as pltx = [5,7,8,7,2,17,2,9,4,11,12,9,6]y = 
+  [99,86,87,88,111,86,103,87,94,78,77,85,86]plt.scatter(x, y)plt.show()
+---
+import matplotlib.pyplot as pltfrom scipy import statsx = [5,7,8,7,2,17,2,9,4,11,12,9,6]y = 
+  [99,86,87,88,111,86,103,87,94,78,77,85,86]slope, intercept, r, 
+  p, std_err = stats.linregress(x, y)def myfunc(x):return slope * x + interceptmymodel = list(map(myfunc, x))plt.scatter(x, y)plt.plot(x, mymodel)plt.show()
+---
+from scipy import statsx = 
+  [5,7,8,7,2,17,2,9,4,11,12,9,6]y = 
+  [99,86,87,88,111,86,103,87,94,78,77,85,86]slope, intercept, r, 
+  p, std_err = stats.linregress(x, y)print(r)",Python Avanzado
+157,Polynomial Regression,https://www.w3schools.com/python/python_ml_polynomial_regression.asp,"Machine Learning - Polynomial Regression
+Polynomial Regression
+If your data points clearly will not fit a linear regression (a straight line 
+through all data points), it might be ideal for polynomial regression.
+Polynomial regression, like linear regression, uses the relationship between the 
+variables x and y to find the best way to draw a line through the data points.
+How Does it Work?","import matplotlib.pyplot as pltx = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]plt.scatter(x, y)plt.show()
+---
+import numpyimport matplotlib.pyplot as pltx = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]y = 
+  [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]mymodel = 
+  numpy.poly1d(numpy.polyfit(x, y, 3))myline = numpy.linspace(1, 22, 100)plt.scatter(x, y)plt.plot(myline, mymodel(myline))plt.show()
+---
+import numpyfrom sklearn.metrics import r2_scorex = 
+  [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]y = 
+  [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]mymodel = 
+  numpy.poly1d(numpy.polyfit(x, y, 3))print(r2_score(y, mymodel(x)))",Python Avanzado
+158,Multiple Regression,https://www.w3schools.com/python/python_ml_multiple_regression.asp,"Machine Learning - Multiple Regression
+Multiple Regression
+Multiple regression is likelinear regression, but with more than one 
+independent value, meaning that we try to predict a value based ontwo 
+or morevariables.
+Take a look at the data set below, it contains some information about cars.
+We can predict the CO2 emission of a car based on 
+the size of the engine, but with multiple regression we can throw in more 
+variables, like the weight of the car, to make the prediction more accurate.","import pandasfrom sklearn import linear_modeldf = pandas.read_csv(""data.csv"")X = df[['Weight', 'Volume']]y = df['CO2']regr = 
+  linear_model.LinearRegression()regr.fit(X, y)#predict the CO2 
+  emission of a car where the weight is 2300kg, and the volume is 1300cm3:predictedCO2 = regr.predict([[2300, 1300]])print(predictedCO2)
+---
+import pandasfrom sklearn import linear_modeldf = pandas.read_csv(""data.csv"")X = df[['Weight', 'Volume']]y = df['CO2']regr = 
+  linear_model.LinearRegression()regr.fit(X, y)print(regr.coef_)
+---
+import pandasfrom sklearn import linear_modeldf = pandas.read_csv(""data.csv"")X = df[['Weight', 'Volume']]y = df['CO2']regr = 
+  linear_model.LinearRegression()regr.fit(X, y)predictedCO2 = regr.predict([[3300, 1300]])print(predictedCO2)",Python Avanzado
+159,Scale,https://www.w3schools.com/python/python_ml_scale.asp,"Machine Learning - Scale
+Scale Features
+When your data has different values, and even different measurement units, it can be difficult to 
+compare them. What is kilograms compared to meters? Or altitude compared to time?
+The answer to this problem is scaling. We can scale data into new values that are easier to 
+compare.
+Take a look at the table below, it is the same data set that we used in themultiple regression chapter, but this time thevolumecolumn 
+contains values inlitersinstead ofcm3(1.0 ","import pandasfrom sklearn import linear_modelfrom 
+  sklearn.preprocessing import StandardScalerscale = StandardScaler()df = pandas.read_csv(""data.csv"")X = df[['Weight', 'Volume']]scaledX = scale.fit_transform(X)print(scaledX)
+---
+import pandasfrom sklearn import linear_modelfrom 
+  sklearn.preprocessing import StandardScalerscale = StandardScaler()df = pandas.read_csv(""data.csv"")X = df[['Weight', 'Volume']]y = df['CO2']scaledX = scale.fit_transform(X)regr = linear_model.LinearRegression()regr.fit(scaledX, y)scaled = 
+  scale.transform([[2300, 1.3]])predictedCO2 = regr.predict([scaled[0]])print(predictedCO2)",Python Avanzado
+160,Train/Test,https://www.w3schools.com/python/python_ml_train_test.asp,"Machine Learning - Train/Test
+Evaluate Your Model
+In Machine Learning we create models to predict the outcome of certain events,
+like in the previous chapter where we predicted the CO2 emission of a car when we knew
+the weight and engine size.
+To measure if the model is good enough, we can use a method called Train/Test.
+What is Train/Test","import numpyimport matplotlib.pyplot as pltnumpy.random.seed(2)x = numpy.random.normal(3, 1, 100)y = numpy.random.normal(150, 40, 
+  100) / xplt.scatter(x, y)plt.show()
+---
+plt.scatter(train_x, 
+  train_y)plt.show()
+---
+plt.scatter(test_x, 
+  test_y)plt.show()",Python Avanzado
+161,Decision Tree,https://www.w3schools.com/python/python_ml_decision_tree.asp,"Machine Learning - Decision Tree
+
+Decision Tree
+In this chapter we will show you how to make a ""Decision Tree"". A Decision 
+Tree is a Flow Chart, and can help you make decisions based on previous experience.
+In the example, a person will try to decide if he/she should go to a comedy show or 
+not.","import pandasdf = pandas.read_csv(""data.csv"")print(df)
+---
+d = {'UK': 0, 
+  'USA': 1, 'N': 2}df['Nationality'] = df['Nationality'].map(d)d = 
+  {'YES': 1, 'NO': 0}df['Go'] = df['Go'].map(d)print(df)
+---
+features = ['Age', 'Experience', 'Rank', 'Nationality']X = df[features]y = df['Go']print(X)print(y)",Python Avanzado
+162,Confusion Matrix,https://www.w3schools.com/python/python_ml_confusion_matrix.asp,"Machine Learning - Confusion Matrix
+What is a confusion matrix?
+It is a table that is used in classification problems to assess where errors in the model were made.
+The rows represent the actual classes the outcomes should have been.
+While the columns represent the predictions we have made.
+Using this table it is easy to see which predictions are wrong.
+Creating a Confusion Matrix","import matplotlib.pyplot as pltimport numpyfrom sklearn import metricsactual = numpy.random.binomial(1,.9,size = 1000)predicted = 
+  numpy.random.binomial(1,.9,size = 1000)confusion_matrix = 
+  metrics.confusion_matrix(actual, predicted)cm_display = 
+  metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, 
+  display_labels = [0, 1])cm_display.plot()plt.show()
+---
+Accuracy = metrics.accuracy_score(actual, predicted)
+---
+Precision = metrics.precision_score(actual, predicted)",Python Avanzado
+163,Hierarchical Clustering,https://www.w3schools.com/python/python_ml_hierarchial_clustering.asp,"Machine Learning - Hierarchical Clustering
+Hierarchical Clustering
+Hierarchical clustering is an unsupervised learning method for clustering data points. The algorithm builds clusters by measuring the dissimilarities between data. Unsupervised learning means that a model does not have to be trained, and we do not need a ""target"" variable. This method can be used on any data to visualize and interpret the relationship between individual data points.
+Here we will use hierarchical clustering to gro","import numpy as npimport matplotlib.pyplot as pltx = [4, 5, 10, 4, 
+  3, 11, 14 , 6, 10, 12]y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]plt.scatter(x, y)plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltfrom 
+  scipy.cluster.hierarchy import dendrogram, linkagex = [4, 5, 10, 4, 3, 
+  11, 14 , 6, 10, 12]y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]data = list(zip(x, y))linkage_data = linkage(data, method='ward', 
+  metric='euclidean')dendrogram(linkage_data)plt.show()
+---
+import numpy as npimport matplotlib.pyplot as pltfrom sklearn.cluster 
+  import AgglomerativeClusteringx = [4, 5, 10, 4, 3, 11, 14 , 6, 10, 12]y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]data = list(zip(x, y))hierarchical_cluster = AgglomerativeClustering(n_clusters=2,  
+  linkage='ward')labels = hierarchical_cluster.fit_predict(data)plt.scatter(x, y, c=labels)plt.show()",Python Avanzado
+164,Logistic Regression,https://www.w3schools.com/python/python_ml_logistic_regression.asp,"Machine Learning - Logistic Regression
+Logistic Regression
+Logistic regression aims to solve classification problems. It does this by predicting categorical outcomes, unlike linear regression that predicts a continuous outcome.
+In the simplest case there are two outcomes, which is called binomial, an example of which is predicting if a tumor is malignant or benign. Other cases have more than two outcomes to classify, in this case it is called multinomial. A common example for multinomial logisti","import numpyfrom sklearn import linear_model#Reshaped for Logistic function.X = numpy.array([3.78, 2.44, 2.09, 0.14, 1.72, 1.65, 4.92, 4.37, 4.96, 4.52, 3.69, 5.88]).reshape(-1,1)y = numpy.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1])logr = linear_model.LogisticRegression()logr.fit(X,y)#predict if tumor is cancerous where the size is 3.46mm:predicted = logr.predict(numpy.array([3.46]).reshape(-1,1))print(predicted)
+---
+import numpyfrom sklearn import linear_model#Reshaped for Logistic function.X = numpy.array([3.78, 2.44, 2.09, 0.14, 1.72, 1.65, 4.92, 4.37, 4.96, 4.52, 3.69, 5.88]).reshape(-1,1)y = numpy.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1])logr = linear_model.LogisticRegression()logr.fit(X,y)log_odds = logr.coef_odds = numpy.exp(log_odds)print(odds)
+---
+import numpyfrom sklearn import linear_modelX = numpy.array([3.78, 2.44, 2.09, 0.14, 1.72, 1.65, 4.92, 4.37, 4.96, 4.52, 3.69, 5.88]).reshape(-1,1)y = numpy.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1])logr = linear_model.LogisticReg",Python Avanzado
+165,Grid Search,https://www.w3schools.com/python/python_ml_grid_search.asp,"Machine Learning - Grid Search
+Grid Search
+The majority of machine learning models contain parameters that can be adjusted to vary how the model learns.
+For example, the logistic regression model, fromsklearn,
+has a parameterCthat controls regularization,which affects the complexity of the model.
+How do we pick the best value forC?
+The best value is dependent on the data used to train the model.
+How does it work?","from sklearn import datasetsfrom sklearn.linear_model import 
+  LogisticRegressioniris = datasets.load_iris()X = iris['data']y = iris['target']logit = LogisticRegression(max_iter = 10000)print(logit.fit(X,y))print(logit.score(X,y))
+---
+from sklearn import datasetsfrom sklearn.linear_model import 
+  LogisticRegressioniris = datasets.load_iris()X = iris['data']y = iris['target']logit = LogisticRegression(max_iter = 10000)C = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]scores = []for choice in C:logit.set_params(C=choice)logit.fit(X, y)scores.append(logit.score(X, y))print(scores)",Python Avanzado
+166,Categorical Data,https://www.w3schools.com/python/python_ml_preprocessing.asp,"Preprocessing - Categorical Data
+Categorical Data
+When your data has categories represented by strings, it will be difficult to use them to train machine learning models which often only accepts numeric data.
+Instead of ignoring the categorical data and excluding the information from our model, you can tranform the data so it can be used in your models.
+Take a look at the table below, it is the same data set that we used in themultiple regressionchapter.","import pandas as pdcars = pd.read_csv('data.csv')print(cars.to_string())
+---
+import pandas as pdcars = pd.read_csv('data.csv')ohe_cars = 
+  pd.get_dummies(cars[['Car']])print(ohe_cars.to_string())
+---
+import pandasfrom sklearn import linear_modelcars = pandas.read_csv(""data.csv"")ohe_cars = pandas.get_dummies(cars[['Car']])X = pandas.concat([cars[['Volume', 'Weight']], ohe_cars], axis=1)y = cars['CO2']regr = linear_model.LinearRegression()regr.fit(X,y)##predict the CO2 emission of a VW where the weight is 2300kg, and the volume is 1300cm3:predictedCO2 = regr.predict([[2300, 1300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]])print(predictedCO2)",Python Avanzado
+167,K-means,https://www.w3schools.com/python/python_ml_k-means.asp,"Machine Learning - K-means
+K-means
+K-means is an unsupervised learning method for clustering data points. The algorithm iteratively divides data points into K clusters by minimizing the variance in each cluster.
+Here, we will show you how to estimate the best value for K using the elbow method, then use K-means clustering to group the data points into clusters.
+How does it work?","import matplotlib.pyplot as pltx = [4, 5, 10, 4, 
+  3, 11, 14 , 6, 10, 12]y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]plt.scatter(x, y)plt.show()
+---
+from sklearn.cluster import KMeansdata = list(zip(x, y))inertias = []for i in range(1,11):kmeans = KMeans(n_clusters=i)kmeans.fit(data)inertias.append(kmeans.inertia_)plt.plot(range(1,11), inertias, marker='o')plt.title('Elbow method')plt.xlabel('Number of clusters')plt.ylabel('Inertia')plt.show()
+---
+kmeans = KMeans(n_clusters=2)kmeans.fit(data)plt.scatter(x, y, c=kmeans.labels_)plt.show()",Python Avanzado
+168,Bootstrap Aggregation,https://www.w3schools.com/python/python_ml_bagging.asp,"Machine Learning - Bootstrap Aggregation (Bagging)
+Bagging
+Methods such as Decision Trees, can be prone to overfitting on the training set which can lead to wrong predictions on new data.
+Bootstrap Aggregation (bagging) is a ensembling method that attempts to resolve overfitting for classification or regression problems. Bagging aims to improve the accuracy and performance of machine learning algorithms. It does this by taking random subsets of an original dataset, with replacement, and fits eit","from sklearn import datasetsfrom sklearn.model_selection import train_test_splitfrom sklearn.metrics import accuracy_scorefrom sklearn.tree import DecisionTreeClassifierdata = datasets.load_wine(as_frame = True)X = data.datay = data.targetX_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 22)dtree = DecisionTreeClassifier(random_state = 22)dtree.fit(X_train,y_train)y_pred = dtree.predict(X_test)print(""Train data accuracy:"",accuracy_score(y_true = y_train, y_pred = dtree.predict(X_train)))print(""Test data accuracy:"",accuracy_score(y_true = y_test, y_pred = y_pred))
+---
+import matplotlib.pyplot as pltfrom sklearn import datasetsfrom sklearn.model_selection import train_test_splitfrom sklearn.metrics import accuracy_scorefrom sklearn.ensemble import BaggingClassifierdata = datasets.load_wine(as_frame = True)X = data.datay = data.targetX_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 22)estimator_range = [2,4",Python Avanzado
+169,Cross Validation,https://www.w3schools.com/python/python_ml_cross_validation.asp,"Machine Learning - Cross Validation
+Cross Validation
+When adjusting models we are aiming to increase overall model performance on unseen data. Hyperparameter tuning can lead to much better performance on test sets. However, optimizing parameters to the test set can lead information leakage causing the model to preform worse on unseen data. To correct for this we can perform cross validation.
+To better understand CV, we will be performing different methods on the iris dataset. Let us first load i","from sklearn import datasetsfrom sklearn.tree import DecisionTreeClassifierfrom sklearn.model_selection import KFold, cross_val_scoreX, y = datasets.load_iris(return_X_y=True)clf = DecisionTreeClassifier(random_state=42)k_folds = KFold(n_splits = 5)scores = cross_val_score(clf, X, y, cv = k_folds)print(""Cross Validation Scores: "", scores)print(""Average CV Score: "", scores.mean())print(""Number of CV Scores used in Average: "", len(scores))
+---
+from sklearn import datasetsfrom sklearn.tree import DecisionTreeClassifierfrom sklearn.model_selection import StratifiedKFold, cross_val_scoreX, y = datasets.load_iris(return_X_y=True)clf = DecisionTreeClassifier(random_state=42)sk_folds = StratifiedKFold(n_splits = 5)scores = cross_val_score(clf, X, y, cv = sk_folds)print(""Cross Validation Scores: "", scores)print(""Average CV Score: "", scores.mean())print(""Number of CV Scores used in Average: "", len(scores))
+---
+from sklearn import datasetsfrom sklearn.tree import DecisionTreeClassifierfrom sklear",Python Avanzado
+170,AUC - ROC Curve,https://www.w3schools.com/python/python_ml_auc_roc.asp,"Machine Learning - AUC - ROC Curve
+AUC - ROC Curve
+In classification, there are many different evaluation metrics. The most popular isaccuracy, which measures how often the model is correct. This is a great metric because it is easy to understand and getting the most correct guesses is often desired. There are some cases where you might consider using another evaluation metric.
+Another common metric isAUC, area under the receiver operating characteristic (ROC) curve.
+The Reciever operating chara","import numpy as npfrom sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score, roc_curven = 10000ratio = .95n_0 = int((1-ratio) * n)n_1 = int(ratio * n)y = np.array([0] * n_0 + [1] * n_1)# below are the probabilities obtained from a hypothetical model that always predicts the majority class# probability of predicting class 1 is going to be 100%y_proba = np.array([1]*n)y_pred = y_proba > .5print(f'accuracy score: {accuracy_score(y, y_pred)}')cf_mat = confusion_matrix(y, y_pred)print('Confusion matrix')print(cf_mat)print(f'class 0 accuracy: {cf_mat[0][0]/n_0}')print(f'class 1 accuracy: {cf_mat[1][1]/n_1}')
+---
+# below are the probabilities obtained from a hypothetical model that doesn't always predict the modey_proba_2 = np.array(np.random.uniform(0, .7, n_0).tolist() +np.random.uniform(.3, 1,  n_1).tolist())y_pred_2 = y_proba_2 > .5print(f'accuracy score: {accuracy_score(y, y_pred_2)}')cf_mat = confusion_matrix(y, y_pred_2)print('Confusion matrix')print(cf_mat)print(f'cl",Python Avanzado
+171,K-nearest neighbors,https://www.w3schools.com/python/python_ml_knn.asp,"Machine Learning - K-nearest neighbors (KNN)
+KNN
+KNN is a simple, supervised machine learning (ML) algorithm that can be used for classification or regression tasks - and is also frequently used in missing value imputation. It is based on the idea that the observations closest to a given data point are the most ""similar"" observations in a data set, and we can therefore classify unforeseen points based on the values of the closest existing points. By choosingK, the user can select the number of n","import matplotlib.pyplot as pltx = [4, 5, 10, 4, 3, 11, 14 , 8, 10, 12]y = [21, 19, 24, 17, 16, 25, 24, 22, 21, 21]classes = [0, 0, 1, 0, 0, 1, 1, 0, 1, 1]plt.scatter(x, y, c=classes)plt.show()
+---
+new_x = 8new_y = 21new_point = [(new_x, new_y)]prediction = knn.predict(new_point)plt.scatter(x + [new_x], y + [new_y], c=classes + [prediction[0]])plt.text(x=new_x-1.7, y=new_y-0.7, s=f""new point, class: {prediction[0]}"")plt.show()
+---
+knn = KNeighborsClassifier(n_neighbors=5)knn.fit(data, classes)prediction = knn.predict(new_point)plt.scatter(x + [new_x], y + [new_y], c=classes + [prediction[0]])plt.text(x=new_x-1.7, y=new_y-0.7, s=f""new point, class: {prediction[0]}"")plt.show()",Python Avanzado
+172,Python DSA,https://www.w3schools.com/python/python_dsa.asp,"DSA with Python
+Data Structuresis about how data can be stored in different structures.
+Algorithmsis about how to solve different problems, often by searching through and manipulating data structures.
+UnderstandingDSAhelps you to find the best combination ofData StructuresandAlgorithmsto create more efficient code.
+Data Structures",,Python Avanzado
+173,Lists and Arrays,https://www.w3schools.com/python/python_dsa_lists.asp,"PythonLists and Arrays
+In Python, lists are the built-in data structure that serves as a dynamic array.
+Lists are ordered, mutable, and can contain elements of different types.
+Lists
+A list is a built-in data structure in Python, used to store multiple elements.","# Empty listx = []# List with initial valuesy = [1, 2, 3, 4, 5]# List with mixed typesz = [1, ""hello"", 3.14, True]
+---
+x = [9, 12, 7, 4, 11]# Add element:x.append(8)# Sort list ascending:x.sort()
+---
+my_array = [7, 12, 9, 4, 11, 8]minVal = my_array[0]for i in my_array:if i < minVal:minVal = iprint('Lowest value:', minVal)",Python Avanzado
+174,Stacks,https://www.w3schools.com/python/python_dsa_stacks.asp,"Stacks with Python
+A stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle.
+Think of it like a stack of pancakes - you can only add or remove pancakes from the top.
+Stacks
+A stack is a data structure that can hold many elements, and the last element added is the first one to be removed.","stack = []# Pushstack.append('A')stack.append('B')stack.append('C')print(""Stack: "", stack)# PeektopElement = stack[-1]print(""Peek: "", topElement)# PoppoppedElement = stack.pop()print(""Pop: "", poppedElement)# Stack after Popprint(""Stack after Pop: "", stack)# isEmptyisEmpty = not bool(stack)print(""isEmpty: "", isEmpty)# Sizeprint(""Size: "",len(stack))
+---
+class Stack:def __init__(self):self.stack = []def push(self, element):self.stack.append(element)def pop(self):if self.isEmpty():return ""Stack is empty""return self.stack.pop()def peek(self):if self.isEmpty():return ""Stack is empty""return self.stack[-1]def isEmpty(self):return len(self.stack) == 0def size(self):return len(self.stack)# Create a stackmyStack = Stack()myStack.push('A')myStack.push('B')myStack.push('C')print(""Stack: "", myStack.stack)print(""Pop: "", myStack.pop())print(""Stack after Pop: "", myStack.stack)print(""Peek: "", myStack.peek())print(""isEmpty: "", myStack.isEmpty())print(""Size: "", myStack.size())
+---
+class Node:def __init__(",Python Avanzado
+175,Queues,https://www.w3schools.com/python/python_dsa_queues.asp,"Queues with Python
+A queue is a linear data structure that follows the First-In-First-Out (FIFO) principle.
+Queues
+Think of a queue as people standing in line in a supermarket.
+The first person to stand in line is also the first who can pay and leave the supermarket.","queue = []# Enqueuequeue.append('A')queue.append('B')queue.append('C')print(""Queue: "", queue)# PeekfrontElement = queue[0]print(""Peek: "", frontElement)# DequeuepoppedElement = queue.pop(0)print(""Dequeue: "", poppedElement)print(""Queue after Dequeue: "", queue)# isEmptyisEmpty = not bool(queue)print(""isEmpty: "", isEmpty)# Sizeprint(""Size: "", len(queue))
+---
+class Queue:def __init__(self):self.queue = []def enqueue(self, element):self.queue.append(element)def dequeue(self):if self.isEmpty():return ""Queue is empty""return self.queue.pop(0)def peek(self):if self.isEmpty():return ""Queue is empty""return self.queue[0]def isEmpty(self):return len(self.queue) == 0def size(self):return len(self.queue)# Create a queuemyQueue = Queue()myQueue.enqueue('A')myQueue.enqueue('B')myQueue.enqueue('C')print(""Queue: "", myQueue.queue)print(""Peek: "", myQueue.peek())print(""Dequeue: "", myQueue.dequeue())print(""Queue after Dequeue: "", myQueue.queue)print(""isEmpty: "", myQueue.isEmpty())print(""Size: "", myQueue.size(",Python Avanzado
+176,Linked Lists,https://www.w3schools.com/python/python_dsa_linkedlists.asp,"Linked Lists with Python
+ALinked Listis, as the word implies, a list where the nodes are linked together. Each node contains data and a pointer. The way they are linked together is that each node points to where in the memory the next node is placed.
+Linked Lists
+A linked list consists of nodes with some sort of data, and a pointer, or link, to the next node.
+Linked Lists vs Arrays","class Node:def __init__(self, data):self.data = dataself.next = Nonedef traverseAndPrint(head):currentNode = headwhile currentNode:print(currentNode.data, end="" -> "")currentNode = currentNode.nextprint(""null"")node1 = Node(7)node2 = Node(11)node3 = Node(3)node4 = Node(2)node5 = Node(9)node1.next = node2node2.next = node3node3.next = node4node4.next = node5traverseAndPrint(node1)
+---
+class Node:def __init__(self, data):self.data = dataself.next = Nonedef findLowestValue(head):minValue = head.datacurrentNode = head.nextwhile currentNode:if currentNode.data < minValue:minValue = currentNode.datacurrentNode = currentNode.nextreturn minValuenode1 = Node(7)node2 = Node(11)node3 = Node(3)node4 = Node(2)node5 = Node(9)node1.next = node2node2.next = node3node3.next = node4node4.next = node5print(""The lowest value in the linked list is:"", findLowestValue(node1))
+---
+class Node:def __init__(self, data):self.data = dataself.next = Nonedef traverseAndPrint(head):currentNode = headwhile currentNode:p",Python Avanzado
+177,Hash Tables,https://www.w3schools.com/python/python_dsa_hashtables.asp,"Hash Tables with Python
+Hash Table
+A Hash Table is a data structure designed to be fast to work with.
+The reason Hash Tables are sometimes preferred instead of arrays or linked lists is because searching for, adding, and deleting data can be done really quickly, even for large amounts of data.
+In aLinked List, finding a person ""Bob"" takes time because we would have to go from one node to the next, checking each node, until the node with ""Bob"" is found.","my_list = [None, None, None, None, None, None, None, None, None, None]
+---
+def hash_function(value):sum_of_chars = 0for char in value:sum_of_chars += ord(char)return sum_of_chars % 10print(""'Bob' has hash code:"", hash_function('Bob'))
+---
+def add(name):index = hash_function(name)my_list[index] = nameadd('Bob')print(my_list)",Python Avanzado
+178,Trees,https://www.w3schools.com/python/python_dsa_trees.asp,"PythonTrees
+A tree is a hierarchical data structure consisting of nodes connected by edges.
+Each node contains a value and references to its child nodes.
+Trees
+The Tree data structure is similar toLinked Listsin that each node contains data and can be linked to other nodes.",,Python Avanzado
+179,Binary Trees,https://www.w3schools.com/python/python_dsa_binarytrees.asp,"PythonBinary Trees
+A tree is a hierarchical data structure consisting of nodes connected by edges.
+Each node contains a value and references to its child nodes.
+Binary Trees
+A Binary Tree is a type of tree data structure where each node can have a maximum of two child nodes, a left child node and a right child node.","class TreeNode:def __init__(self, data):self.data = dataself.left = Noneself.right = Noneroot = TreeNode('R')nodeA = TreeNode('A')nodeB = TreeNode('B')nodeC = TreeNode('C')nodeD = TreeNode('D')nodeE = TreeNode('E')nodeF = TreeNode('F')nodeG = TreeNode('G')root.left = nodeAroot.right = nodeBnodeA.left = nodeCnodeA.right = nodeDnodeB.left = nodeEnodeB.right = nodeFnodeF.left = nodeG# Testprint(""root.right.left.data:"", root.right.left.data)
+---
+def preOrderTraversal(node):if node is None:returnprint(node.data, end="", "")preOrderTraversal(node.left)preOrderTraversal(node.right)
+---
+def inOrderTraversal(node):if node is None:returninOrderTraversal(node.left)print(node.data, end="", "")inOrderTraversal(node.right)",Python Avanzado
+180,Binary Search Trees,https://www.w3schools.com/python/python_dsa_binarysearchtrees.asp,"PythonBinary Search Trees
+ABinary Search Treeis a Binary Tree where every node's left child has a lower value, and every node's right child has a higher value.
+A clear advantage with Binary Search Trees is that operations like search, delete, and insert are fast and done without having to shift values in memory.
+Binary Search Trees
+A Binary Search Tree (BST) is a type ofBinary Tree data structure, where the following properties must be true for any node ""X"" in the tree:","class TreeNode:def __init__(self, data):self.data = dataself.left = Noneself.right = Nonedef inOrderTraversal(node):if node is None:returninOrderTraversal(node.left)print(node.data, end="", "")inOrderTraversal(node.right)root = TreeNode(13)node7 = TreeNode(7)node15 = TreeNode(15)node3 = TreeNode(3)node8 = TreeNode(8)node14 = TreeNode(14)node19 = TreeNode(19)node18 = TreeNode(18)root.left = node7root.right = node15node7.left = node3node7.right = node8node15.left = node14node15.right = node19node19.left = node18# TraverseinOrderTraversal(root)
+---
+def search(node, target):if node is None:return Noneelif node.data == target:return nodeelif target < node.data:return search(node.left, target)else:return search(node.right, target)# Search for a valueresult = search(root, 13)if result:print(f""Found the node with value: {result.data}"")else:print(""Value not found in the BST."")
+---
+def insert(node, data):if node is None:return TreeNode(data)else:if data < node.data:node.left = insert(node.left, da",Python Avanzado
+181,AVL Trees,https://www.w3schools.com/python/python_dsa_avltrees.asp,"PythonAVL Trees
+TheAVLTree is a type of Binary Search Tree named after two Soviet inventors GeorgyAdelson-Velsky and EvgeniiLandis who invented the AVL Tree in 1962.
+AVL trees are self-balancing, which means that the tree height is kept to a minimum so that a very fast runtime is guaranteed for searching, inserting and deleting nodes, with time complexity \(O( \log n)\).
+AVL Trees
+The only difference between a regularBinary Search Treeand an AVL Tree is that AVL Trees do rotation operations in a","class TreeNode:def __init__(self, data):self.data = dataself.left = Noneself.right = Noneself.height = 1def getHeight(node):if not node:return 0return node.heightdef getBalance(node):if not node:return 0return getHeight(node.left) - getHeight(node.right)def rightRotate(y):print('Rotate right on node',y.data)x = y.leftT2 = x.rightx.right = yy.left = T2y.height = 1 + max(getHeight(y.left), getHeight(y.right))x.height = 1 + max(getHeight(x.left), getHeight(x.right))return xdef leftRotate(x):print('Rotate left on node',x.data)y = x.rightT2 = y.lefty.left = xx.right = T2x.height = 1 + max(getHeight(x.left), getHeight(x.right))y.height = 1 + max(getHeight(y.left), getHeight(y.right))return ydef insert(node, data):if not node:return TreeNode(data)if data < node.data:node.left = insert(node.left, data)elif data > node.data:node.right = insert(node.right, data)# Update the balance factor and balance the treenode.height = 1 + max(getHeight(node.left), getHeight(node.right))balance = getBalance(n",Python Avanzado
+182,Graphs,https://www.w3schools.com/python/python_dsa_graphs.asp,"PythonGraphs
+Graphs
+A Graph is a non-linear data structure that consists of vertices (nodes) and edges.
+A vertex, also called a node, is a point or an object in the Graph, and an edge is used to connect two vertices with each other.
+Graphs are non-linear because the data structure allows us to have different paths to get from one vertex to another, unlike with linear data structures like Arrays or Linked Lists.",,Python Avanzado
+183,Linear Search,https://www.w3schools.com/python/python_dsa_linearsearch.asp,"Linear Search with Python
+Linear Search
+Linear search (or sequential search) is the simplest search algorithm. It checks each element one by one.
+
+{{ msgDone }}","mylist = [3, 7, 2, 9, 5, 1, 8, 4, 6]if 4 in mylist:print(""Found!"")else:print(""Not found!"")
+---
+def linearSearch(arr, targetVal):for i in range(len(arr)):if arr[i] == targetVal:return ireturn -1mylist = [3, 7, 2, 9, 5, 1, 8, 4, 6]x = 4result = linearSearch(mylist, x)if result != -1:print(""Found at index"", result)else:print(""Not found"")",Python Avanzado
+184,Binary Search,https://www.w3schools.com/python/python_dsa_binarysearch.asp,"Binary Search with Python
+Binary Search
+The Binary Search algorithm searches through asortedarray and returns the index of the value it searches for.
+{{ msgDone }}
+Run the simulation to see how the Binary Search algorithm works.","[ 2, 3, 7, 7, 11, 15, 25]
+---
+[ 2, 3, 7,7, 11, 15, 25]
+---
+[ 2, 3, 7, 7, 11,15, 25]",Python Avanzado
+185,Bubble Sort,https://www.w3schools.com/python/python_dsa_bubblesort.asp,"Bubble Sort with Python
+Bubble Sort
+Bubble Sort is an algorithm that sorts an array from the lowest value to the highest value.
+Run the simulation to see how it looks like when the Bubble Sort algorithm sorts an array of values. Each value in the array is represented by a column.
+The word 'Bubble' comes from how this algorithm works, it makes the highest values 'bubble up'.","[7, 12, 9, 11, 3]
+---
+[7, 12,9, 11, 3]
+---
+[7,12, 9,11, 3]",Python Avanzado
+186,Selection Sort,https://www.w3schools.com/python/python_dsa_selectionsort.asp,"Selection Sort with Python
+Selection Sort
+The Selection Sort algorithm finds the lowest value in an array and moves it to the front of the array.
+The algorithm looks through the array again and again, moving the next lowest values to the front, until the array is sorted.
+How it works:","[ 7, 12, 9, 11, 3]
+---
+[ 7, 12, 9, 11,3]
+---
+[3, 7, 12, 9, 11]",Python Avanzado
+187,Insertion Sort,https://www.w3schools.com/python/python_dsa_insertionsort.asp,"Insertion Sort with Python
+Insertion Sort
+The Insertion Sort algorithm uses one part of the array to hold the sorted values,
+  and the other part of the array to hold values that are not sorted yet.
+The algorithm takes one value at a time from the unsorted part of the array and puts it into the right place in the sorted part of the array, until the array is sorted.
+How it works:","[ 7, 12, 9, 11, 3]
+---
+[7, 12, 9, 11, 3]
+---
+[ 7,12, 9, 11, 3]",Python Avanzado
+188,Quick Sort,https://www.w3schools.com/python/python_dsa_quicksort.asp,"DSAQuicksortwith Python
+Quicksort
+As the name suggests, Quicksort is one of the fastest sorting algorithms.
+The Quicksort algorithm takes an array of values, chooses one of the values as the 'pivot' element, and moves the other values so that lower values are on the left of the pivot element, and higher values are on the right of it.
+In this tutorial the last element of the array is chosen to be the pivot element, but we could also have chosen the first element of the array, or any element in th","[ 11, 9, 12, 7, 3]
+---
+[ 11, 9, 12, 7,3]
+---
+[3, 9, 12, 7,11]",Python Avanzado
+189,Counting Sort,https://www.w3schools.com/python/python_dsa_countingsort.asp,"DSACounting Sortwith Python
+Counting Sort
+The Counting Sort algorithm sorts an array by counting the number of times each value occurs.
+Run the simulation to see how 17 integer values from 1 till 5 are sorted using Counting Sort.
+Counting Sort does not compare values like the previous sorting algorithms we have looked at, and only works on non negative integers.","myArray = [ 2, 3, 0, 2, 3, 2]
+---
+myArray = [ 2, 3, 0, 2, 3, 2]countArray = [ 0, 0, 0, 0]
+---
+myArray = [2, 3, 0, 2, 3, 2]countArray = [ 0, 0,1, 0]",Python Avanzado
+190,Radix Sort,https://www.w3schools.com/python/python_dsa_radixsort.asp,"DSARadix Sortwith Python
+Radix Sort
+The Radix Sort algorithm sorts an array by individual digits, starting with the least significant digit (the rightmost one).
+Click the button to do Radix Sort, one step (digit) at a time.
+The radix (or base) is the number of unique digits in a number system. In the decimal system we normally use, there are 10 different digits from 0 till 9.","myArray = [ 33, 45, 40, 25, 17, 24]radixArray = [ [], [], [], [], [], [], [], [], [], [] ]
+---
+myArray = [ 33, 45, 40, 25, 17, 24]radixArray = [ [], [], [], [], [], [], [], [], [], [] ]
+---
+myArray = [ ]radixArray = [ [40], [], [], [33], [24], [45, 25], [], [17], [], [] ]",Python Avanzado
+191,Merge Sort,https://www.w3schools.com/python/python_dsa_mergesort.asp,"DSAMerge Sortwith Python
+Merge Sort
+The Merge Sort algorithm is a divide-and-conquer algorithm that sorts an array by first breaking it down into smaller arrays, and then building the array back together the correct way so that it is sorted.
+Divide:The algorithm starts with breaking up the array into smaller and smaller pieces until one such sub-array only consists of one element.
+Conquer:The algorithm merges the small pieces of the array back together by putting the lowest values first, resulti","[ 12, 8, 9, 3, 11, 5, 4][ 12, 8, 9] [ 3, 11, 5, 4][ 12] [ 8, 9] [ 3, 11, 5, 4][ 12] [ 8] [ 9] [ 3, 11, 5, 4]
+---
+[ 12] [8,9] [ 3, 11, 5, 4]
+---
+[8,9,12] [ 3, 11, 5, 4]",Python Avanzado
+192,MySQL Get Started,https://www.w3schools.com/python/python_mysql_getstarted.asp,"PythonMySQL
+Python can be used in database applications.
+One of the most popular databases is MySQL.
+MySQL Database
+To be able to experiment with the code examples in this tutorial, you should 
+have MySQL installed on your computer.","C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>python -m pip install 
+  mysql-connector-python
+---
+import mysql.connector
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"")print(mydb)",Python Avanzado
+193,MySQL Create Database,https://www.w3schools.com/python/python_mysql_create_db.asp,"Python MySQLCreate Database
+Creating a Database
+To create a database in MySQL, use the ""CREATE DATABASE"" statement:
+Example
+create a database named ""mydatabase"":","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"")mycursor = mydb.cursor()mycursor.execute(""CREATE DATABASE 
+  mydatabase"")
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"")mycursor = mydb.cursor()mycursor.execute(""SHOW DATABASES"")for x in mycursor:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")",Python Avanzado
+194,MySQL Create Table,https://www.w3schools.com/python/python_mysql_create_table.asp,"Python MySQLCreate Table
+Creating a Table
+To create a table in MySQL, use the ""CREATE TABLE"" statement.
+Make sure you define the name of the database when you create the connection
+Example","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()mycursor.execute(""CREATE TABLE customers (name VARCHAR(255), 
+  address VARCHAR(255))"")
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()mycursor.execute(""SHOW TABLES"")for x in mycursor:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()mycursor.execute(""CREATE TABLE customers (id INT AUTO_INCREMENT 
+  PRIMARY KEY, name VARCHAR(255), 
+  address VARCHAR(255))"")",Python Avanzado
+195,MySQL Insert,https://www.w3schools.com/python/python_mysql_insert.asp,"Python MySQLInsert Into Table
+Insert Into Table
+To fill a table in MySQL, use the ""INSERT INTO"" statement.
+Example
+Insert a record in the ""customers"" table:","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""INSERT INTO customers (name, 
+  address) VALUES (%s, %s)""val = (""John"", ""Highway 21"")mycursor.execute(sql, 
+  val)mydb.commit()print(mycursor.rowcount, ""record inserted."")
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""INSERT INTO customers (name, 
+  address) VALUES (%s, %s)""val = [('Peter', 'Lowstreet 4'),('Amy', 'Apple st 652'),('Hannah', 'Mountain 21'),('Michael', 'Valley 345'),('Sandy', 'Ocean blvd 2'),('Betty', 'Green Grass 1'),('Richard', 'Sky st 331'),('Susan', 'One way 98'),('Vicky', 'Yellow Garden 2'),('Ben', 'Park Lane 38'),('William', 'Central st 954'),('Chuck', 'Main Road 989'),('Viola', 'Sideway 1633')]mycursor.executemany(sql, val)mydb.commit()print(mycursor.rowcount, ""was inserted."")
+-",Python Avanzado
+196,MySQL Select,https://www.w3schools.com/python/python_mysql_select.asp,"Python MySQLSelect From
+Select From a Table
+To select from a table in MySQL, use the ""SELECT"" statement:
+Example
+Select all records from the ""customers"" table, and display the 
+  result:","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()mycursor.execute(""SELECT * FROM customers"")myresult = mycursor.fetchall()for x in myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()mycursor.execute(""SELECT name, 
+  address FROM 
+  customers"")myresult = mycursor.fetchall()for x in myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()mycursor.execute(""SELECT * FROM customers"")myresult = mycursor.fetchone()print(myresult)",Python Avanzado
+197,MySQL Where,https://www.w3schools.com/python/python_mysql_where.asp,"Python MySQLWhere
+Select With a Filter
+When selecting records from a table, you can filter the selection by using 
+the ""WHERE"" statement:
+Example
+Select record(s) where the address is ""Park Lane 38"":
+  result:","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""SELECT * FROM customers WHERE address ='Park Lane 
+  38'""mycursor.execute(sql)myresult = mycursor.fetchall()for x in myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""SELECT * FROM customers WHERE address 
+  LIKE '%way%'""mycursor.execute(sql)myresult = mycursor.fetchall()for x in myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""SELECT * FROM customers WHERE 
+  address = %s""adr = (""Yellow Garden 2"", )mycursor.execute(sql, adr)myresult = mycursor.fetchall()for x in myresult:print(x)",Python Avanzado
+198,MySQL Order By,https://www.w3schools.com/python/python_mysql_orderby.asp,"Python MySQLOrder By
+Sort the Result
+Use the ORDER BY statement to sort the result in ascending or descending 
+order.
+The ORDER BY keyword sorts the result ascending by default. To sort the 
+result in descending order, use the DESC keyword.
+Example","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""SELECT * FROM customers ORDER BY name""mycursor.execute(sql)myresult = mycursor.fetchall()for x in myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""SELECT * FROM customers ORDER BY 
+  name DESC""mycursor.execute(sql)myresult = mycursor.fetchall()for x in myresult:print(x)",Python Avanzado
+199,MySQL Delete,https://www.w3schools.com/python/python_mysql_delete.asp,"Python MySQLDelete From By
+Delete Record
+You can delete records from an existing table by using the ""DELETE FROM"" statement:
+Example
+Delete any record where the address is ""Mountain 21"":","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""DELETE FROM customers WHERE address = 
+  'Mountain 21'""mycursor.execute(sql)mydb.commit()print(mycursor.rowcount, ""record(s) deleted"")
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""DELETE FROM customers WHERE address = 
+  %s""adr = (""Yellow Garden 2"", )mycursor.execute(sql, adr)mydb.commit()print(mycursor.rowcount, ""record(s) deleted"")",Python Avanzado
+200,MySQL Drop Table,https://www.w3schools.com/python/python_mysql_drop_table.asp,"Python MySQLDrop Table
+Delete a Table
+You can delete an existing table by using 
+the ""DROP TABLE"" statement:
+Example
+Delete the table ""customers"":","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""DROP TABLE customers""mycursor.execute(sql)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""DROP TABLE IF EXISTS customers""mycursor.execute(sql)",Python Avanzado
+201,MySQL Update,https://www.w3schools.com/python/python_mysql_update.asp,"Python MySQLUpdate Table
+Update Table
+You can update existing records in a table by using 
+the ""UPDATE"" statement:
+Example
+Overwrite the address column from ""Valley 345"" to ""Canyon 123"":","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()sql = ""UPDATE customers SET address = 'Canyon 123' 
+  WHERE address = 'Valley 345'""mycursor.execute(sql)mydb.commit()print(mycursor.rowcount, ""record(s) affected"")
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""UPDATE customers SET address = %s 
+  WHERE address = %s""val = (""Valley 345"", ""Canyon 123"")mycursor.execute(sql, 
+  val)mydb.commit()print(mycursor.rowcount, ""record(s) 
+  affected"")",Python Avanzado
+202,MySQL Limit,https://www.w3schools.com/python/python_mysql_limit.asp,"Python MySQLLimit
+Limit the Result
+You can limit the number of records returned from the query, by using the ""LIMIT"" statement:
+Example
+Select the 5 first records in the ""customers"" table:","import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()mycursor.execute(""SELECT * FROM customers LIMIT 5"")myresult = mycursor.fetchall()for x in 
+  myresult:print(x)
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = 
+  mydb.cursor()mycursor.execute(""SELECT * FROM customers LIMIT 5 
+  OFFSET 2"")myresult = mycursor.fetchall()for x in 
+  myresult:print(x)",Python Avanzado
+203,MySQL Join,https://www.w3schools.com/python/python_mysql_join.asp,"Python MySQLJoin
+Join Two or More Tables
+You can combine rows from two or more tables, based on a related column 
+between them, by using a JOIN statement.
+Consider you have a ""users"" table and a ""products"" table:
+users","{ id: 1, name: 'John', fav: 154},{ id: 
+  2, name: 'Peter', fav: 154},{ id: 3, name: 'Amy', fav: 155},{ id: 4, name: 'Hannah', fav:},{ id: 5, name: 'Michael', fav:}
+---
+{ id: 154, name: 
+  'Chocolate Heaven' },{ id: 155, name: 'Tasty Lemons' },{ 
+  id: 156, name: 'Vanilla Dreams' }
+---
+import mysql.connectormydb = mysql.connector.connect(host=""localhost"",user=""yourusername"",password=""yourpassword"",database=""mydatabase"")mycursor = mydb.cursor()sql = ""SELECT \users.name AS user, 
+  \products.name AS favorite \FROM users \INNER JOIN 
+  products ON users.fav = products.id""mycursor.execute(sql)myresult = mycursor.fetchall()for x in myresult:print(x)",Python Avanzado
+204,MongoDB Get Started,https://www.w3schools.com/python/python_mongodb_getstarted.asp,"PythonMongoDB
+Python can be used in database applications.
+One of the most popular NoSQL database is MongoDB.
+MongoDB
+MongoDB stores data in JSON-like documents, which makes the database very 
+flexible and scalable.","C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>python -m pip install pymongo
+---
+import pymongo",Python Avanzado
+205,MongoDB Create DB,https://www.w3schools.com/python/python_mongodb_create_db.asp,"Python MongoDBCreate Database
+Creating a Database
+To create a database in MongoDB, start by creating a MongoClient object, then specify a connection URL with the 
+correct ip address and the name of the database you want to create.
+MongoDB will create the database if it does not exist, and make a connection 
+to it.
+Example","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]
+---
+print(myclient.list_database_names())
+---
+dblist = myclient.list_database_names()if ""mydatabase"" in dblist:print(""The database exists."")",Python Avanzado
+206,MongoDB Collection,https://www.w3schools.com/python/python_mongodb_create_collection.asp,"Python MongoDBCreate Collection
+Acollectionin MongoDB is the same as atablein SQL databases.
+Creating a Collection
+To create a collection in MongoDB, use database object and specify the name 
+of the collection you want to create.
+MongoDB will create the collection if it does not exist.","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]
+---
+print(mydb.list_collection_names())
+---
+collist = mydb.list_collection_names()if ""customers"" in collist:print(""The collection exists."")",Python Avanzado
+207,MongoDB Insert,https://www.w3schools.com/python/python_mongodb_insert.asp,"Python MongoDBInsert Document
+Adocumentin MongoDB is the same as arecordin SQL databases.
+Insert Into Collection
+To insert a record, ordocumentas it is called in MongoDB, into a collection, we use theinsert_one()method.
+The first parameter of theinsert_one()method is a 
+dictionary containing the 
+name(s) and value(s) of each field in the document you want to insert.","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]mydict = { ""name"": ""John"", ""address"": ""Highway 37"" }x =
+  mycol.insert_one(mydict)
+---
+mydict = { ""name"": ""Peter"", ""address"": ""Lowstreet 27"" }x = mycol.insert_one(mydict)print(x.inserted_id)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]mylist = [{ ""name"": ""Amy"", ""address"": ""Apple st 652""},{ ""name"": ""Hannah"", ""address"": ""Mountain 21""},{ ""name"": 
+    ""Michael"", ""address"": ""Valley 345""},{ ""name"": ""Sandy"", ""address"": 
+    ""Ocean blvd 2""},{ ""name"": ""Betty"", ""address"": ""Green Grass 1""},{ ""name"": ""Richard"", ""address"": ""Sky st 331""},{ ""name"": ""Susan"", 
+    ""address"": ""One way 98""},{ ""name"": ""Vicky"", ""address"": ""Yellow 
+    Garden 2""},{ ""name"": ""Ben"", ""address"": ""Park Lane 38""},{ ""name"": ""William"", ""address"": ""Central st 954""},{ ""name"": 
+    ""Chuck"", ""address"": ""Main Road 989""},{ ""na",Python Avanzado
+208,MongoDB Find,https://www.w3schools.com/python/python_mongodb_find.asp,"Python MongoDBFind
+In MongoDB we use thefind()andfind_one()methods to find data in a collection.
+Just like theSELECTstatement is used to find data in a 
+  table in a MySQL database.
+Find One
+To select data from a collection in MongoDB, we can use thefind_one()method.","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]x = mycol.find_one()print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]for x in mycol.find():print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]for x in mycol.find({},{ ""_id"": 0, ""name"": 1, ""address"": 1 }):print(x)",Python Avanzado
+209,MongoDB Query,https://www.w3schools.com/python/python_mongodb_query.asp,"Python MongoDBQuery
+Filter the Result
+When finding documents in a collection, you can filter the result by using a 
+query object.
+The first argument of thefind()method 
+is a query object, and is used to limit the search.
+Example","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": ""Park Lane 38"" }mydoc = mycol.find(myquery)for x in mydoc:print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": { ""$gt"": ""S"" } }mydoc = mycol.find(myquery)for x in mydoc:print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": { ""$regex"": ""^S"" } }mydoc = mycol.find(myquery)for x in mydoc:print(x)",Python Avanzado
+210,MongoDB Sort,https://www.w3schools.com/python/python_mongodb_sort.asp,"Python MongoDBSort
+Sort the Result
+Use thesort()method to sort the result in 
+ascending or descending order.
+Thesort()method takes one parameter for 
+""fieldname"" and one parameter for ""direction"" (ascending is the default 
+direction).
+Example","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]mydoc = mycol.find().sort(""name"")for x in mydoc:print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]mydoc = mycol.find().sort(""name"", -1)for x in mydoc:print(x)",Python Avanzado
+211,MongoDB Delete,https://www.w3schools.com/python/python_mongodb_delete.asp,"Python MongoDBDelete Document
+Delete Document
+To delete one document, we use thedelete_one()method.
+The first parameter of thedelete_one()method 
+is a query object defining which document to delete.
+Note:If the query finds more than one document, only the first 
+occurrence is deleted.","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": ""Mountain 21"" }mycol.delete_one(myquery)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": {""$regex"": ""^S""} }x = mycol.delete_many(myquery)print(x.deleted_count, "" documents 
+  deleted."")
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]x = mycol.delete_many({})print(x.deleted_count, "" documents 
+  deleted."")",Python Avanzado
+212,MongoDB Drop Collection,https://www.w3schools.com/python/python_mongodb_drop_collection.asp,"Python MongoDBDrop Collection
+Delete Collection
+You can delete a table, or collection as it is called in MongoDB, by using 
+thedrop()method.
+Example
+Delete the ""customers"" collection:","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]mycol.drop()",Python Avanzado
+213,MongoDB Update,https://www.w3schools.com/python/python_mongodb_update.asp,"Python MongoDBUpdate
+Update Collection
+You can update a record, or document as it is called in MongoDB, by using 
+theupdate_one()method.
+The first parameter of theupdate_one()method 
+is a query object defining which document to update.
+Note:If the query finds more than one record, only the first 
+occurrence is updated.","import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": ""Valley 345"" }newvalues = { ""$set"": { 
+  ""address"": ""Canyon 123"" } }mycol.update_one(myquery, newvalues)#print ""customers"" after the update:for x in mycol.find():print(x)
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myquery = { ""address"": { ""$regex"": ""^S"" } }newvalues = { ""$set"": { 
+  ""name"": ""Minnie"" } }x = mycol.update_many(myquery, newvalues)print(x.modified_count, ""documents updated."")",Python Avanzado
+214,MongoDB Limit,https://www.w3schools.com/python/python_mongodb_limit.asp,"Python MongoDBLimit
+Limit the Result
+To limit the result in MongoDB, we use thelimit()method.
+Thelimit()method takes one parameter, a number defining how many documents 
+to return.
+Consider you have a ""customers"" collection:","{'_id': 1, 'name': 'John', 'address': 'Highway37'}{'_id': 2, 'name': 'Peter', 'address': 'Lowstreet 27'}{'_id': 3, 'name': 'Amy', 'address': 'Apple st 652'}{'_id': 4, 'name': 'Hannah', 'address': 'Mountain 21'}{'_id': 5, 'name': 'Michael', 'address': 'Valley 345'}{'_id': 6, 'name': 'Sandy', 'address': 'Ocean blvd 2'}{'_id': 7, 'name': 'Betty', 'address': 'Green Grass 1'}{'_id': 8, 'name': 'Richard', 'address': 'Sky st 331'}{'_id': 9, 'name': 'Susan', 'address': 'One way 98'}{'_id': 10, 'name': 'Vicky', 'address': 'Yellow Garden 2'}{'_id': 11, 'name': 'Ben', 'address': 'Park Lane 38'}{'_id': 12, 'name': 'William', 'address': 'Central st 954'}{'_id': 13, 'name': 'Chuck', 'address': 'Main Road 989'}{'_id': 14, 'name': 'Viola', 'address': 'Sideway 1633'}
+---
+import pymongomyclient = pymongo.MongoClient(""mongodb://localhost:27017/"")mydb = myclient[""mydatabase""]mycol = mydb[""customers""]myresult = mycol.find().limit(5)#print the result:for x in myresult:print(x)",Python Avanzado
+215,Python Overview,https://www.w3schools.com/python/python_reference.asp,"PythonReference
+This section contains a Python reference documentation.
+Python Reference
+Module Reference",,Python Avanzado
+216,Python Built-in Functions,https://www.w3schools.com/python/python_ref_functions.asp,"PythonBuilt in Functions
+Python has a set of built-in functions.",,Python Avanzado
+217,Python String Methods,https://www.w3schools.com/python/python_ref_string.asp,"PythonString Methods
+Python has a set of built-in methods that you can use on strings.
+Note:All string methods returns new values. They do not change the original string.
+Note:All string methods returns new values. They do not change the original string.
+Learn more about strings in ourPython Strings Tutorial.",,Python Avanzado
+218,Python List Methods,https://www.w3schools.com/python/python_ref_list.asp,"PythonList/Array Methods
+Python has a set of built-in methods that you can use on lists/arrays.
+Note:Python does not have built-in support for Arrays, 
+  but Python Lists can be used instead.
+Learn more about lists in ourPython Lists Tutorial.
+Learn more about arrays in ourPython Arrays Tutorial.",,Python Avanzado
+219,Python Dictionary Methods,https://www.w3schools.com/python/python_ref_dictionary.asp,"PythonDictionary Methods
+Python has a set of built-in methods that you can use on dictionaries.
+Learn more about dictionaries in ourPython Dictionaries Tutorial.",,Python Avanzado
+220,Python Tuple Methods,https://www.w3schools.com/python/python_ref_tuple.asp,"PythonTuple Methods
+Python has two built-in methods that you can use on tuples.
+Learn more about tuples in ourPython Tuples Tutorial.",,Python Avanzado
+221,Python Set Methods,https://www.w3schools.com/python/python_ref_set.asp,"PythonSet Methods
+Python has a set of built-in methods that you can use on sets.
+Learn more about sets in ourPython Sets Tutorial.",,Python Avanzado
+222,Python File Methods,https://www.w3schools.com/python/python_ref_file.asp,"PythonFile Methods
+Python has a set of methods available for the file object.
+Learn more about the file object in ourPython File Handling Tutorial.",,Python Avanzado
+223,Python Keywords,https://www.w3schools.com/python/python_ref_keywords.asp,"PythonKeywords
+Python has a set of keywords that are reserved words that cannot be used as 
+variable names, function names, or any other identifiers:",,Python Avanzado
+224,Python Exceptions,https://www.w3schools.com/python/python_ref_exceptions.asp,"PythonBuilt-in Exceptions
+Built-in Exceptions
+The table below shows built-in exceptions that are usually raised in Python:",,Python Avanzado
+225,Python Glossary,https://www.w3schools.com/python/python_ref_glossary.asp,"PythonGlossary
+This is a list of all the features explained in the Python Tutorial.",,Python Avanzado
+226,Built-in Modules,https://www.w3schools.com/python/python_ref_modules.asp,"PythonPython Built-in Modules
+This page lists the built-in modules that ship with the Python 3.13 Standard Library.
+These modules are available without extra installation (some are platform-dependent).
+A
+B",,Python Avanzado
+227,Random Module,https://www.w3schools.com/python/module_random.asp,"PythonRandom Module
+Python has a built-in module that you can use to make random numbers.
+Therandommodule has a set of methods:",,Python Avanzado
+228,Requests Module,https://www.w3schools.com/python/module_requests.asp,"PythonRequestsModule
+Example
+Make a request to a web page, and print the response text:
+Definition and Usage
+Therequestsmodule allows you to send HTTP 
+requests using Python.","import requestsx = requests.get('https://w3schools.com/python/demopage.htm')print(x.text)
+---
+C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>pip install requests
+---
+requests.methodname(params)",Python Avanzado
+229,Statistics Module,https://www.w3schools.com/python/module_statistics.asp,"Pythonstatistics Module
+Python statistics Module
+Python has a built-in module that you can use to calculate mathematical 
+statistics of numeric data.
+Thestatisticsmodule was new in Python 3.4.
+Statistics Methods",,Python Avanzado
+230,Math Module,https://www.w3schools.com/python/module_math.asp,"Pythonmath Module
+Python math Module
+Python has a built-in module that you can use for mathematical tasks.
+Themathmodule has a set of methods and constants.
+Math Methods",,Python Avanzado
+231,cMath Module,https://www.w3schools.com/python/module_cmath.asp,"Pythoncmath Module
+Python cmath Module
+Python has a built-in module that you can use for mathematical tasks for 
+complex numbers.
+The methods in this module acceptsint,float,  andcomplexnumbers. It even accepts Python objects that has a__complex__()or__float__()method.
+The methods in this module almost always return a complex number. If the return 
+value can be expressed as a real number, the return value has an imaginary part 
+of 0.",,Python Avanzado
+232,Remove List Duplicates,https://www.w3schools.com/python/python_howto_remove_duplicates.asp,"How to Remove Duplicates From a Python List
+Learn how to remove duplicates from a List in Python.
+Example
+Remove any duplicates from a List:
+Example Explained","mylist = [""a"", ""b"", ""a"", ""c"", ""c""]mylist = list(dict.fromkeys(mylist))print(mylist)
+---
+mylist = [""a"", ""b"", ""a"", ""c"", ""c""]mylist = list(dict.fromkeys(mylist))print(mylist)
+---
+mylist = [""a"", ""b"", ""a"", ""c"", ""c""]mylist = list(dict.fromkeys(mylist))print(mylist)",Python Avanzado
+233,Reverse a String,https://www.w3schools.com/python/python_howto_reverse_string.asp,"How to Reverse a String in Python
+Learn how to reverse a String in Python.
+There is no built-in function to reverse a String in Python.
+The fastest (and easiest?) way is to use a slice that steps backwards,-1.
+Example","txt = ""Hello World""[::-1]print(txt)
+---
+txt =""Hello World""[::-1]print(txt)
+---
+txt = ""Hello World""[::-1]print(txt)",Python Avanzado
+234,Add Two Numbers,https://www.w3schools.com/python/python_howto_add_two_numbers.asp,"How to Add Two Numbers in Python
+Learn how to add two numbers in Python.
+Use the+operator to add two numbers:
+Example
+Add Two Numbers with User Input","x = 5y = 10print(x + y)
+---
+x = input(""Type a number: "")y = input(""Type another number: "")sum 
+  = int(x) + int(y)print(""The sum is: "", sum)",Python Avanzado
+235,Python Examples,https://www.w3schools.com/python/python_examples.asp,"PythonExamples
+Python Syntax
+Syntax Explained
+Python Variables
+Variables Explained",,Python Avanzado
+236,Python Compiler,https://www.w3schools.com/python/python_compiler.asp,"PythonOnline Compiler
+Python Compiler (Editor)
+With our online Python compiler, you can edit Python code, and view the result in your browser.
+Example
+Click on the ""Try it Yourself"" button to see how it works.","print(""Hello, World!"")x=""Python""y=""is""z=""awesome""print(x, y, z)",Python Avanzado
+237,Python Exercises,https://www.w3schools.com/python/python_exercises.asp,"PythonExercises
+Test your Python skills with exercises from all categories:
+Exercises
+Tip:Sign into track your progress.
+Get Started3 exercises",,Python Avanzado
+238,Python Quiz,https://www.w3schools.com/python/python_quiz.asp,"PythonQuiz
+You can test your Python skills with W3Schools' Quiz.
+The Test
+The test contains 25 questions and there is no time limit.
+The test is not official, it's just a nice way to see how much you know, or don't know, about 
+Python.",,Python Avanzado
+239,Python Server,https://www.w3schools.com/python/python_server.asp,"PythonServer
+Create a Python Server
+Coding Skills
+AI Tutor
+Projects",,Python Avanzado
+240,Python Syllabus,https://www.w3schools.com/python/python_syllabus.asp,"PythonSyllabus
+Introduction
+TheW3Schools Python Tutorialis comprehensive and beginner-friendly.
+It will give you a fundamental knowledge of Python.
+It is designed for beginners and requires no prior experience with programming.","print(""Hello, World!"")",Python Avanzado
+241,Python Study Plan,https://www.w3schools.com/python/python_study_plan.asp,"PythonStudy Plan
+Introduction
+The Python study plan helps you teach your students Python step-by-step.
+Creating a study plan for Python is easy.
+You can use a pre-built study plan or customize it.",,Python Avanzado
+242,Python Interview Q&A,https://www.w3schools.com/python/python_interview_questions.asp,"PythonInterview Questions
+This page contains a list of typical Python Interview Questions and Answers.
+Python Interview Questions
+These questions and answers cover some fundamental Python concepts that are often discussed in interviews.
+Lists, tuples, and sets are all used to store multiple items in a single variable, but they have different properties:","num = ""5""convert = int(num)
+---
+print(type(x))
+---
+x = 41
+
+if x > 10:
+  print(""Above ten,"")
+  if x > 20:
+    print(""and also above 20!"")
+  else:
+    print(""but not above 20."")",Python Avanzado
+243,Python Bootcamp,https://www.w3schools.com/python/python_bootcamp.asp,"W3SchoolsPython Bootcamp
+Python Bootcamp
+Learn More
+Live Online Bootcamp
+In this bootcamp, you will learn the fundamentals of Python. This powerful programming language is widely used in web development, data science and artificial intelligence, and many other fields.",,Python Avanzado
+244,Python Certificate,https://www.w3schools.com/python/python_exam.asp,"W3SchoolsPython Certificate
+W3Schools offers an Online Certification Program.
+The perfect solution for busy professionals who need to balance work, family, and career building.
+More than 50 000 certificates already issued!
+Get Your Certificate »",,Python Avanzado
+245,Python Training,https://www.w3schools.com/python/python_training.asp,"PythonTraining
+Introduction:Python is a popular programming language that can be used for a wide range of applications.
+W3Schools offers an Python training course that covers Python foundations and more.
+The course includes the W3SchoolsCertified Python Developercertification.
+The Python training is relevant for companies and schools that want to certify their employees or students.",,Python Avanzado

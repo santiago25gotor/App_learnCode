@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen - PYLEARN</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        .timer-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-bold" id="examTitle">Cargando examen...</h1>
+                <p class="text-sm text-gray-500" id="examDescription">...</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary timer-pulse">schedule</span>
+                    <span class="font-mono font-bold" id="timer">30:00</span>
+                </div>
+                <div class="bg-primary/20 px-4 py-2 rounded-lg">
+                    <span class="font-bold" id="questionCounter">0/0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        <!-- Start Screen -->
+        <div id="startScreen" class="max-w-2xl mx-auto text-center">
+            <div class="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-6xl text-primary">workspace_premium</span>
+            </div>
+            <h2 class="text-4xl font-black mb-4" id="startTitle">Examen de Certificación</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8" id="startDesc">Demuestra tu conocimiento en Python
+            </p>
+
+            <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 mb-8 border-2 border-gray-200 dark:border-gray-800">
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-primary mb-2" id="timeLimit">30</div>
+                        <div class="text-sm text-gray-600">Minutos</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-primary mb-2" id="questionCount">0</div>
+                        <div class="text-sm text-gray-600">Preguntas</div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 dark:border-gray-800 pt-6">
+                    <div class="flex items-center justify-between text-sm mb-2">
+                        <span class="text-gray-600">Puntuación mínima:</span>
+                        <span class="font-bold" id="passingScore">70%</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="startExam()"
+                class="px-10 py-4 bg-black text-white font-bold text-lg rounded-xl hover:bg-gray-800 transition-all shadow-lg flex items-center gap-2 mx-auto">
+                <span>Comenzar Examen</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+        </div>
+
+        <!-- Questions Screen -->
+        <div id="questionsScreen" class="hidden">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 border-2 border-gray-200 dark:border-gray-800 mb-6">
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                    <span>Pregunta</span>
+                    <span id="currentQuestionNum" class="font-bold text-primary">1</span>
+                    <span>de</span>
+                    <span id="totalQuestions">0</span>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-6" id="questionText">...</h3>
+
+                <!-- Multiple Choice -->
+                <div id="multipleChoiceOptions" class="space-y-3 hidden">
+                    <!-- Will be filled dynamically -->
+                </div>
+
+                <!-- Code Question -->
+                <div id="codeQuestion" class="hidden">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden border-2 border-gray-700 mb-4">
+                        <div class="bg-gray-800 px-4 py-2 border-b border-gray-700">
+                            <span class="text-gray-400 text-sm font-mono">solution.py</span>
+                        </div>
+                        <textarea id="codeAnswer"
+                            class="w-full h-64 p-4 bg-transparent text-gray-100 font-mono text-sm resize-none focus:outline-none"
+                            spellcheck="false"></textarea>
+                    </div>
+                    <button onclick="testCode()"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">play_arrow</span>
+                        <span>Probar Código</span>
+                    </button>
+                    <div id="codeOutput"
+                        class="mt-4 p-4 bg-gray-900 rounded-lg font-mono text-sm text-green-400 hidden"></div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between">
+                <button onclick="previousQuestion()" id="prevBtn"
+                    class="px-6 py-3 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 font-bold rounded-lg transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span>Anterior</span>
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600">Progreso:</span>
+                    <div class="w-32 h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                        <div id="progressBar" class="h-full bg-primary transition-all duration-300" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="nextQuestion()" id="nextBtn"
+                    class="px-6 py-3 bg-primary hover:bg-yellow-400 text-black font-bold rounded-lg transition-colors flex items-center gap-2">
+                    <span>Siguiente</span>
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="hidden max-w-2xl mx-auto text-center">
+            <div id="passedResult" class="hidden">
+                <div
+                    class="bg-green-100 dark:bg-green-900/30 w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                    <span class="material-symbols-outlined text-8xl text-green-600">check_circle</span>
+                </div>
+                <h2 class="text-4xl font-black mb-4 text-green-600">¡Examen Aprobado!</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">Felicidades por completar este nivel</p>
+            </div>
+
+            <div id="failedResult" class="hidden">
+                <div
+                    class="bg-red-100 dark:bg-red-900/30 w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-symbols-outlined text-8xl text-red-600">cancel</span>
+                </div>
+                <h2 class="text-4xl font-black mb-4 text-red-600">No Aprobado</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">Sigue practicando y vuelve a intentarlo</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 mb-8 border-2 border-gray-200 dark:border-gray-800">
+                <div class="text-center mb-6">
+                    <div class="text-6xl font-black text-primary mb-2" id="finalScore">0%</div>
+                    <div class="text-gray-600">Puntuación Final</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" id="correctCount">0</div>
+                        <div class="text-sm text-gray-600">Correctas</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" id="incorrectCount">0</div>
+                        <div class="text-sm text-gray-600">Incorrectas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+                <button onclick="window.location.href='/course'"
+                    class="px-8 py-4 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 font-bold rounded-xl transition-colors">
+                    Volver al Curso
+                </button>
+                <button onclick="location.reload()"
+                    class="px-8 py-4 bg-primary hover:bg-yellow-400 text-black font-bold rounded-xl transition-colors">
+                    Reintentar Examen
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal System -->
+    <script src="/static/js/modal-system.js"></script>
+
+    <script>
+        const category = '{{ category }}';
+        let examData = null;
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let timeRemaining = 0;
+        let timerInterval = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadExam();
+        });
+
+        // Load exam data
+        async function loadExam() {
+            try {
+                const response = await fetch(`/api/exams/${encodeURIComponent(category)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    examData = data.exam;
+                    setupStartScreen();
+                } else {
+                    Modal.error(data.message || 'Error al cargar el examen');
+                    window.location.href = '/course';
+                }
+            } catch (error) {
+                console.error('Error loading exam:', error);
+                Modal.error('Error al cargar el examen');
+                window.location.href = '/course';
+            }
+        }
+
+        // Setup start screen
+        function setupStartScreen() {
+            document.getElementById('startTitle').textContent = examData.title;
+            document.getElementById('startDesc').textContent = examData.description;
+            document.getElementById('timeLimit').textContent = examData.time_limit;
+            document.getElementById('questionCount').textContent = examData.questions.length;
+            document.getElementById('passingScore').textContent = examData.passing_score + '%';
+
+            timeRemaining = examData.time_limit * 60; // Convert to seconds
+        }
+
+        // Start exam
+        function startExam() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('questionsScreen').classList.remove('hidden');
+
+            document.getElementById('examTitle').textContent = examData.title;
+            document.getElementById('examDescription').textContent = examData.description;
+            document.getElementById('totalQuestions').textContent = examData.questions.length;
+            document.getElementById('questionCounter').textContent = `1/${examData.questions.length}`;
+
+            startTimer();
+            showQuestion(0);
+        }
+
+        // Start timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent =
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Show question
+        function showQuestion(index) {
+            currentQuestionIndex = index;
+            const question = examData.questions[index];
+
+            document.getElementById('currentQuestionNum').textContent = index + 1;
+            document.getElementById('questionText').textContent = question.question;
+
+            // Update progress
+            const progress = ((index + 1) / examData.questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Show appropriate question type
+            if (question.type === 'multiple_choice') {
+                document.getElementById('multipleChoiceOptions').classList.remove('hidden');
+                document.getElementById('codeQuestion').classList.add('hidden');
+                renderMultipleChoice(question);
+            } else if (question.type === 'code') {
+                document.getElementById('multipleChoiceOptions').classList.add('hidden');
+                document.getElementById('codeQuestion').classList.remove('hidden');
+                renderCodeQuestion(question);
+            }
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').innerHTML =
+                index === examData.questions.length - 1
+                    ? '<span>Finalizar</span><span class="material-symbols-outlined">check_circle</span>'
+                    : '<span>Siguiente</span><span class="material-symbols-outlined">arrow_forward</span>';
+        }
+
+        // Render multiple choice
+        function renderMultipleChoice(question) {
+            const container = document.getElementById('multipleChoiceOptions');
+            container.innerHTML = '';
+
+            question.options.forEach((option, i) => {
+                const isSelected = answers[question.id] === i;
+                const div = document.createElement('div');
+                div.className = `p-4 border-2 rounded-xl cursor-pointer transition-all ${isSelected
+                    ? 'border-primary bg-primary/10'
+                    : 'border-gray-200 dark:border-gray-800 hover:border-primary'
+                    }`;
+                div.onclick = () => selectAnswer(question.id, i);
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-full border-2 ${isSelected
+                        ? 'border-primary bg-primary'
+                        : 'border-gray-300 dark:border-gray-600'
+                    } flex items-center justify-center">
+                            ${isSelected ? '<span class="w-2 h-2 bg-black rounded-full"></span>' : ''}
+                        </div>
+                        <span class="font-medium">${option}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Render code question
+        function renderCodeQuestion(question) {
+            const textarea = document.getElementById('codeAnswer');
+            textarea.value = answers[question.id] || question.starter_code || '';
+        }
+
+        // Select answer
+        function selectAnswer(questionId, answerIndex) {
+            answers[questionId] = answerIndex;
+            showQuestion(currentQuestionIndex);
+        }
+
+        // Save code answer
+        function saveCodeAnswer() {
+            const question = examData.questions[currentQuestionIndex];
+            answers[question.id] = document.getElementById('codeAnswer').value;
+        }
+
+        // Test code
+        async function testCode() {
+            const code = document.getElementById('codeAnswer').value;
+            const output = document.getElementById('codeOutput');
+
+            try {
+                const response = await fetch('/api/code/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+                output.classList.remove('hidden');
+                output.textContent = data.success ? data.output : data.error;
+            } catch (error) {
+                output.classList.remove('hidden');
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Navigation
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                saveCodeAnswer();
+                showQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function nextQuestion() {
+            saveCodeAnswer();
+
+            if (currentQuestionIndex < examData.questions.length - 1) {
+                showQuestion(currentQuestionIndex + 1);
+            } else {
+                submitExam();
+            }
+        }
+
+        // Submit exam
+        async function submitExam() {
+            const confirmed = await Modal.confirm({
+                title: 'Enviar Examen',
+                message: '¿Seguro que quieres enviar el examen? No podrás cambiar tus respuestas.',
+                confirmText: 'Sí, Enviar',
+                type: 'warning'
+            });
+            if (!confirmed) return;
+
+            clearInterval(timerInterval);
+
+            try {
+                const response = await fetch(`/api/exams/${examData.id}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answers })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResults(data.score, data.passed);
+                }
+            } catch (error) {
+                Modal.error('Error al enviar el examen');
+            }
+        }
+
+        // Show results
+        function showResults(score, passed) {
+            document.getElementById('questionsScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+
+            if (passed) {
+                document.getElementById('passedResult').classList.remove('hidden');
+                document.getElementById('failedResult').classList.add('hidden');
+            } else {
+                document.getElementById('passedResult').classList.add('hidden');
+                document.getElementById('failedResult').classList.remove('hidden');
+            }
+
+            document.getElementById('finalScore').textContent = score + '%';
+
+            // Calculate correct/incorrect (simplified)
+            const correct = Math.round((score / 100) * examData.questions.length);
+            const incorrect = examData.questions.length - correct;
+
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+        }
+    </script>
+</body>
+
+</html>
