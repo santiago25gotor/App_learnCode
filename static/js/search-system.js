@@ -112,9 +112,12 @@ function renderSyllabusSearch(results) {
             return;
         }
 
-        container.innerHTML = lessons.map(lesson => {
+        container.innerHTML = lessons.map((lesson, index) => {
             const isCompleted = completedLessons.includes(lesson.id);
             
+            // 🆕 NUEVO: Verificar si está bloqueada
+            const isLocked = index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
+
             return `
                 <div class="flex items-center gap-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 hover:bg-yellow-100 dark:hover:bg-yellow-900/20 cursor-pointer transition-colors"
                      onclick="startLesson('${lesson.id}')">
