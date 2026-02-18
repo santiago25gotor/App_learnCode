@@ -195,6 +195,63 @@
                         Ruta de Aprendizaje
                     </button>
                 </div>
+                <!-- 🆕 NUEVO: Barra de Búsqueda -->
+                <div class="mt-4 relative">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Buscar lecciones por título o contenido..."
+                                class="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                autocomplete="off"
+                            />
+                            <button
+                                id="clearSearchBtn"
+                                onclick="clearSearch()"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors hidden"
+                            >
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <button
+                            onclick="performSearch()"
+                            id="searchBtn"
+                            class="px-6 py-3 bg-primary hover:bg-yellow-400 text-black font-bold rounded-lg transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
+                        >
+                            <span class="material-symbols-outlined">search</span>
+                            <span class="hidden sm:inline">Buscar</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Indicador de búsqueda activa -->
+                    <div id="searchIndicator" class="hidden mt-2 flex items-center gap-2 text-sm">
+                        <span class="material-symbols-outlined text-primary text-lg">filter_alt</span>
+                        <span class="text-gray-600 dark:text-gray-400">
+                            Buscando: <strong id="searchQuery" class="text-black dark:text-white"></strong>
+                        </span>
+                        <button onclick="clearSearch()" class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline text-sm">
+                            Limpiar
+                        </button>
+                    </div>
+
+                    <!-- Mensaje de resultados -->
+                    <div id="searchResults" class="hidden mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <div class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+                            <span class="material-symbols-outlined">info</span>
+                            <span id="searchResultsText"></span>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje sin resultados -->
+                    <div id="noResults" class="hidden mt-2 p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                        <div class="flex items-center gap-2 text-sm text-orange-700 dark:text-orange-300">
+                            <span class="material-symbols-outlined">search_off</span>
+                            <span>No se encontraron lecciones. Intenta con otros términos.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Tab Content: Temario -->
@@ -379,6 +436,9 @@
 
     <!-- Modal System -->
     <script src="/static/js/modal-system.js"></script>
+
+    <!-- Sistema de Búsqueda -->
+    <script src="/static/js/search-system.js"></script>
 
     <script>
         let allLessons = [];
@@ -637,7 +697,6 @@
 
         // Switch between tabs
         function switchTab(tabName) {
-            // Update tab buttons
             const tabs = {
                 syllabus: document.getElementById('tabSyllabus'),
                 path: document.getElementById('tabPath')
@@ -662,9 +721,14 @@
             tabs[tabName].classList.remove('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
             contents[tabName].classList.remove('hidden');
 
-            // Load syllabus if not loaded yet
-            if (tabName === 'syllabus' && allLessons.length > 0) {
-                renderSyllabus();
+            // NUEVO: Si hay búsqueda activa, mantenerla
+            if (isSearchActive && currentSearchQuery) {
+                performSearch();
+            } else {
+                // Cargar vista normal
+                if (tabName === 'syllabus' && allLessons.length > 0) {
+                    renderSyllabus();
+                }
             }
         }
 
