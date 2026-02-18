@@ -268,11 +268,13 @@
                     </div>
 
                     <!-- Complete Lesson Button -->
-                    <button onclick="completeLesson()"
-                        class="w-full bg-primary hover:bg-yellow-400 text-black font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-3 text-lg">
-                        <span class="material-symbols-outlined text-2xl">emoji_events</span>
-                        <span>Completar Leccion</span>
-                    </button>
+                    <div id="completeBtnContainer">
+                        <button onclick="completeLesson()"
+                            class="w-full bg-primary hover:bg-yellow-400 text-black font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-3 text-lg">
+                            <span class="material-symbols-outlined text-2xl">emoji_events</span>
+                            <span>Completar Leccion</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -412,6 +414,10 @@
                 if (data.success) {
                     currentLesson = data.lesson;
                     renderLesson();
+                    // Update complete button based on completion status
+                    if (data.is_completed) {
+                        setCompletedState();
+                    }
                 } else {
                     handleError(data.message || 'Error al cargar la leccion');
                 }
@@ -577,6 +583,18 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
         }
 
+        function setCompletedState() {
+            const container = document.getElementById('completeBtnContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="w-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold py-4 px-6 rounded-xl border border-green-200 dark:border-green-800 flex items-center justify-center gap-3 text-lg cursor-default">
+                        <span class="material-symbols-outlined text-2xl">check_circle</span>
+                        <span>Leccion Ya Completada</span>
+                    </div>
+                `;
+            }
+        }
+
         async function completeLesson() {
             if (typeof Modal !== 'undefined') {
                 const confirmed = await Modal.confirm({
@@ -596,6 +614,7 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    setCompletedState();
                     if (typeof Modal !== 'undefined') {
                         await Modal.success('Leccion completada! +10 XP ganados', 'Exito!');
                     } else {

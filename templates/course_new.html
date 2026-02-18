@@ -97,7 +97,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a class="text-gray-900 dark:text-white font-medium border-b-2 border-primary" href="#">Ruta de
                         Aprendizaje</a>
-                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
+                    <a id="navPlacementLink" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors hidden"
                         href="/placement-test">
                         Test de Nivel
                     </a>
@@ -165,7 +165,7 @@
             </div>
 
             <!-- Test de Nivel Card -->
-            <div class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 rounded-xl shadow-lg mt-6 text-white">
+            <div id="placementTestCard" class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 rounded-xl shadow-lg mt-6 text-white hidden">
                 <div class="flex items-center gap-3 mb-3">
                     <span class="material-icons text-2xl">psychology</span>
                     <h3 class="font-bold">Test de Nivel</h3>
@@ -423,6 +423,15 @@
                     document.getElementById('dailyLessonBar').style.width = `${Math.min(completedToday * 100, 100)}%`;
                     document.getElementById('dailyXP').textContent = `${Math.min(xpToday, 50)}/50`;
                     document.getElementById('dailyXPBar').style.width = `${Math.min((xpToday / 50) * 100, 100)}%`;
+
+                    // Mostrar Test de Nivel solo si NO está completado
+                    const card = document.getElementById('placementTestCard');
+                    const navLink = document.getElementById('navPlacementLink');
+                    if (!userProgress.placement_test_completed) {
+                        if (card) card.classList.remove('hidden');
+                        if (navLink) navLink.classList.remove('hidden');
+                    }
+                    // Si ya está completado, ambos quedan hidden (por defecto en el HTML)
                 }
             } catch (error) {
                 console.error('Error loading user data:', error);
@@ -437,11 +446,9 @@
 
                 if (data.success) {
                     allLessons = data.lessons;
-                    isLessonCompleted = data.is_completed; 
                     renderLearningPath();
                     // Renderizar el temario también
                     renderSyllabus();
-                    updateCompleteButton();
                 }
             } catch (error) {
                 console.error('Error loading lessons:', error);
@@ -453,18 +460,6 @@
                 `;
             }
         }
-
-        function updateCompleteButton() {
-    const container = document.getElementById('completeButtonContainer');
-    if (isCompleted) {
-        container.innerHTML = `
-            <div class="w-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold py-4 px-6 rounded-xl border border-green-200 dark:border-green-800 flex items-center justify-center gap-3 text-lg cursor-default">
-                <span class="material-symbols-outlined text-2xl">check_circle</span>
-                <span>Lección Completada</span>
-            </div>
-        `;
-    }
-}
 
         // Render learning path
         function renderLearningPath() {

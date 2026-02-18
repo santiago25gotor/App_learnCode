@@ -306,6 +306,20 @@
             }
         ];
 
+        // Al cargar la página, verificar si el test ya fue realizado
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/user/me');
+                const data = await res.json();
+                if (data.success && data.user?.progress?.placement_test_completed) {
+                    // Ya hizo el test — redirigir al curso
+                    window.location.replace('/course');
+                }
+            } catch (e) {
+                // Si falla la petición, dejamos pasar (puede ser modo offline)
+            }
+        });
+
         function startTest() {
             document.getElementById('welcomeScreen').classList.add('hidden');
             document.getElementById('testScreen').classList.remove('hidden');
@@ -424,7 +438,7 @@
 
             // Save results
             try {
-                await fetch('/api/placement-test/submit', {
+                const saveRes = await fetch('/api/user/placement-test/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -435,6 +449,10 @@
                         }
                     })
                 });
+                const saveData = await saveRes.json();
+                if (!saveData.success) {
+                    console.error('Error guardando resultados:', saveData.message);
+                }
             } catch (error) {
                 console.error('Error saving results:', error);
             }
