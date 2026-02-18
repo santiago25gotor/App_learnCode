@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - PYLEARN</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/course" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-gray-900 dark:text-gray-100">arrow_back</span>
+                </a>
+                <h1 class="text-2xl font-black text-gray-900 dark:text-white">Mi Perfil</h1>
+            </div>
+            <button onclick="toggleDarkMode()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg">
+                <span class="material-symbols-outlined dark:hidden text-gray-900">dark_mode</span>
+                <span class="material-symbols-outlined hidden dark:block text-primary">light_mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Profile Header -->
+        <div
+            class="bg-gradient-to-r from-primary/20 via-yellow-300/20 to-primary/20 rounded-2xl p-8 mb-8 border border-primary/40 dark:border-primary/30">
+            <div class="flex items-center gap-6">
+                <div
+                    class="w-24 h-24 bg-primary rounded-full flex items-center justify-center text-black text-3xl font-black shadow-lg">
+                    <span id="userInitials">?</span>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-3xl font-black mb-2 text-gray-900 dark:text-white" id="userName">Cargando...</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="20454d41494c60454a454d504c4f0e434f4d">[email&#160;protected]</a></p>
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2 bg-white/50 dark:bg-black/30 px-4 py-2 rounded-full">
+                            <span class="material-symbols-outlined text-primary">bolt</span>
+                            <span class="font-bold text-gray-900 dark:text-white" id="totalPoints">0 XP</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white/50 dark:bg-black/30 px-4 py-2 rounded-full">
+                            <span
+                                class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                            <span class="font-bold text-gray-900 dark:text-white" id="completedLessons">0
+                                lecciones</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Left Column: Stats -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Learning Stats -->
+                <div
+                    class="bg-white dark:bg-gray-950 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
+                        <span class="material-symbols-outlined text-primary">trending_up</span>
+                        Estadísticas de Aprendizaje
+                    </h3>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div
+                            class="text-center p-6 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-900">
+                            <div class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-2" id="statBasic">0
+                            </div>
+                            <div class="text-sm text-gray-700 dark:text-gray-300 font-medium">Python Básico</div>
+                        </div>
+                        <div
+                            class="text-center p-6 bg-purple-50 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-900">
+                            <div class="text-4xl font-black text-purple-600 dark:text-purple-400 mb-2"
+                                id="statIntermediate">0</div>
+                            <div class="text-sm text-gray-700 dark:text-gray-300 font-medium">Python Intermedio</div>
+                        </div>
+                        <div
+                            class="text-center p-6 bg-red-50 dark:bg-red-950/40 rounded-xl border border-red-200 dark:border-red-900">
+                            <div class="text-4xl font-black text-red-600 dark:text-red-400 mb-2" id="statAdvanced">0
+                            </div>
+                            <div class="text-sm text-gray-700 dark:text-gray-300 font-medium">Python Avanzado</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-900 dark:text-gray-100">Progreso Global</span>
+                            <span class="text-sm font-bold text-primary" id="globalProgress">0%</span>
+                        </div>
+                        <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                            <div id="progressBar"
+                                class="h-full bg-gradient-to-r from-primary to-yellow-400 transition-all duration-500"
+                                style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div
+                    class="bg-gradient-to-br from-primary/20 to-yellow-300/20 rounded-2xl p-8 border border-primary/40 dark:border-primary/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="material-symbols-outlined text-4xl">local_fire_department</span>
+                                <h4 class="text-2xl font-black text-gray-900 dark:text-white">Racha Actual</h4>
+                            </div>
+                            <div class="text-6xl font-black text-gray-900 dark:text-white mb-2" id="streakDays">0</div>
+                            <div class="text-lg text-gray-700 dark:text-gray-300">días consecutivos</div>
+                        </div>
+                        <div class="text-8xl opacity-20">🔥</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Settings -->
+            <div class="space-y-6">
+                <!-- Account Settings -->
+                <div
+                    class="bg-white dark:bg-gray-950 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
+                        <span class="material-symbols-outlined text-primary">settings</span>
+                        Configuración
+                    </h3>
+
+                    <div class="space-y-4">
+                        <!-- Dark Mode Toggle -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-gray-900 dark:text-white">dark_mode</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Modo Oscuro</span>
+                            </div>
+                            <label class="relative inline-block w-12 h-6">
+                                <input type="checkbox" id="darkModeToggle" class="sr-only peer"
+                                    onchange="toggleDarkMode()">
+                                <div
+                                    class="w-full h-full bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Email Notifications -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="material-symbols-outlined text-gray-900 dark:text-white">notifications</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Notificaciones</span>
+                            </div>
+                            <label class="relative inline-block w-12 h-6">
+                                <input type="checkbox" id="notificationsToggle" class="sr-only peer" checked>
+                                <div
+                                    class="w-full h-full bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Sound Effects -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-gray-900 dark:text-white">volume_up</span>
+                                <span class="font-medium text-gray-900 dark:text-white">Sonidos</span>
+                            </div>
+                            <label class="relative inline-block w-12 h-6">
+                                <input type="checkbox" id="soundToggle" class="sr-only peer" checked>
+                                <div
+                                    class="w-full h-full bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 border-gray-200 dark:border-gray-800">
+
+                    <!-- Account Actions con Iconos Grandes -->
+                    <div class="space-y-3">
+                        <button onclick="changePassword()"
+                            class="group w-full px-5 py-4 bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-xl font-medium text-left flex items-center gap-4 transition-all hover:scale-[1.02]">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <span
+                                    class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-2xl">lock_reset</span>
+                            </div>
+                            <span class="font-bold text-gray-900 dark:text-white">Cambiar Contraseña</span>
+                        </button>
+
+                        <button onclick="exportData()"
+                            class="group w-full px-5 py-4 bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-xl font-medium text-left flex items-center gap-4 transition-all hover:scale-[1.02]">
+                            <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                                <span
+                                    class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">download</span>
+                            </div>
+                            <span class="font-bold text-gray-900 dark:text-white">Exportar Datos</span>
+                        </button>
+
+                        <!-- Panel Admin (solo admins) -->
+                        <a id="adminBtn" href="/admin" style="display:none"
+                            class="group w-full px-5 py-4 bg-primary/10 hover:bg-primary/20 rounded-xl font-bold text-left flex items-center gap-4 transition-all hover:scale-[1.02] border border-primary/30">
+                            <div class="p-2 bg-primary/20 rounded-lg">
+                                <span class="material-symbols-outlined text-yellow-600 dark:text-primary text-2xl">admin_panel_settings</span>
+                            </div>
+                            <span class="text-yellow-700 dark:text-primary">Panel Admin</span>
+                        </a>
+
+                        <button onclick="logout()"
+                            class="group w-full px-5 py-4 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-950/60 rounded-xl font-bold text-left flex items-center gap-4 transition-all hover:scale-[1.02] border border-red-200 dark:border-red-900">
+                            <div class="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                                <span
+                                    class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">logout</span>
+                            </div>
+                            <span class="text-red-700 dark:text-red-400">Cerrar Sesión</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal System -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/static/js/modal-system.js"></script>
+
+    <script>
+        let userData = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadUserData();
+
+            // Mostrar boton admin si corresponde
+            try {
+                const r = await fetch('/api/admin/check');
+                const d = await r.json();
+                if (d.is_admin) document.getElementById('adminBtn').style.display = '';
+            } catch(e) {}
+
+            // Set dark mode toggle
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+        });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/me');
+                const data = await response.json();
+
+                if (data.success) {
+                    userData = data.user;
+                    renderUserData();
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error loading user:', error);
+                Modal.error('Error al cargar los datos del perfil');
+            }
+        }
+
+        // Render user data
+        function renderUserData() {
+            document.getElementById('userName').textContent = userData.username || 'Usuario';
+            document.getElementById('userEmail').textContent = userData.email || '';
+            document.getElementById('userInitials').textContent = (userData.username || 'U')[0].toUpperCase();
+
+            const progress = userData.progress || {};
+            const completedLessons = (progress.completed_lessons || []).length;
+            const totalPoints = progress.total_points || 0;
+
+            document.getElementById('totalPoints').textContent = totalPoints + ' XP';
+            document.getElementById('completedLessons').textContent = completedLessons + ' lecciones';
+
+            // Calculate stats by category (mejor lógica)
+            const basicCount = completedLessons > 0 ? Math.min(completedLessons, 20) : 0;
+            const intermediateCount = completedLessons > 20 ? Math.min(completedLessons - 20, 30) : 0;
+            const advancedCount = completedLessons > 50 ? completedLessons - 50 : 0;
+
+            document.getElementById('statBasic').textContent = basicCount;
+            document.getElementById('statIntermediate').textContent = intermediateCount;
+            document.getElementById('statAdvanced').textContent = advancedCount;
+
+            // Global progress
+            const totalLessons = 245; // Total real
+            const globalPercent = Math.min(100, Math.round((completedLessons / totalLessons) * 100));
+            document.getElementById('globalProgress').textContent = globalPercent + '%';
+            document.getElementById('progressBar').style.width = globalPercent + '%';
+
+            // Streak (simulado mejor)
+            const streakDays = Math.min(Math.floor(completedLessons / 3), 30);
+            document.getElementById('streakDays').textContent = streakDays;
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            document.getElementById('darkModeToggle').checked = isDark;
+        }
+
+        // Change password
+        async function changePassword() {
+            Modal.info('Esta función estará disponible próximamente', 'Cambiar Contraseña');
+        }
+
+        // Export data
+        async function exportData() {
+            const confirmed = await Modal.confirm({
+                title: 'Exportar Datos',
+                message: '¿Deseas descargar todos tus datos de aprendizaje?',
+                confirmText: 'Descargar'
+            });
+
+            if (confirmed) {
+                const dataStr = JSON.stringify(userData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `pylearn-data-${Date.now()}.json`;
+                link.click();
+
+                Modal.success('Datos exportados correctamente');
+            }
+        }
+
+        // Logout
+        async function logout() {
+            const confirmed = await Modal.confirm({
+                title: 'Cerrar Sesión',
+                message: '¿Estás seguro de que quieres cerrar sesión?',
+                confirmText: 'Sí, Cerrar Sesión',
+                type: 'warning'
+            });
+
+            if (confirmed) {
+                try {
+                    await fetch('/api/auth/logout', { method: 'POST' });
+                    window.location.href = '/login';
+                } catch (e) {
+                    window.location.href = '/login';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

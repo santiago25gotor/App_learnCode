@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página no encontrada | PYLEARN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#f4d125" },
+                    fontFamily: { display: ["Space Grotesk", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-display min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-2xl w-full text-center">
+        <!-- Animated Icon -->
+        <div class="mb-8 float">
+            <div class="inline-block bg-primary text-black p-6 rounded-3xl shadow-2xl">
+                <span class="material-symbols-outlined" style="font-size: 120px;">search_off</span>
+            </div>
+        </div>
+
+        <!-- Error Code -->
+        <h1 class="text-9xl font-black text-black mb-4">404</h1>
+
+        <!-- Message -->
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            ¡Oops! Página no encontrada
+        </h2>
+
+        <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+            La página que buscas parece haber desaparecido. Quizás fue movida, eliminada, o nunca existió.
+        </p>
+
+        <!-- Code Block Style -->
+        <div class="bg-gray-900 text-green-400 font-mono text-left p-6 rounded-xl mb-8 max-w-md mx-auto shadow-lg">
+            <div class="text-gray-500"># Error de Python</div>
+            <div class="text-red-400">FileNotFoundError:</div>
+            <div class="ml-4">No se pudo encontrar la página</div>
+            <div class="ml-4 text-gray-500">'/{{ request.path }}'</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/"
+                class="px-8 py-4 bg-black text-white font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-lg flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">home</span>
+                <span>Ir al Inicio</span>
+            </a>
+            <a href="/course"
+                class="px-8 py-4 bg-primary text-black font-bold rounded-xl hover:bg-yellow-400 transition-colors shadow-lg flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">school</span>
+                <span>Ir a Lecciones</span>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-gray-500 text-sm">
+            <p>Si crees que esto es un error, por favor contacta al soporte</p>
+        </div>
+    </div>
+</body>
+
+</html>
