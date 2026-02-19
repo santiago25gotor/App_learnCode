@@ -405,13 +405,96 @@ body.dark .btn-exam { background: #f3f3ef; color: #0f0f0f; }
 .btn-exam:hover { background: #1f1f1f; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
 
 /* ============================================
-   ACTIVITY MODAL (Exercises & Exam)
+   ACTIVITY MODAL (Exercises & Exam) — mismo tamaño que course modal
    ============================================ */
 .activity-overlay { z-index: 9500; }
-.activity-modal { max-width: 660px; max-height: 88vh; }
-.activity-modal-body { padding: 1.75rem; overflow-y: auto; flex: 1; }
-.activity-modal-body::-webkit-scrollbar { width: 4px; }
-.activity-modal-body::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 4px; }
+
+/* Mismo tamaño que el course modal */
+.activity-modal {
+    max-width: 1200px !important;
+    width: 100% !important;
+    height: 88vh !important;
+    max-height: 840px !important;
+}
+
+/* Layout dos columnas: contenido | panel referencia */
+.activity-modal-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Columna izquierda — preguntas */
+.activity-main-panel {
+    display: flex; flex-direction: column; overflow: hidden;
+    border-right: 1.5px solid var(--gray-2);
+}
+body.dark .activity-main-panel { border-color: #333320; }
+.activity-main-body {
+    padding: 1.75rem; overflow-y: auto; flex: 1;
+}
+.activity-main-body::-webkit-scrollbar { width: 4px; }
+.activity-main-body::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 4px; }
+.activity-main-footer {
+    padding: 1rem 1.75rem;
+    border-top: 1.5px solid var(--gray-2);
+    flex-shrink: 0;
+}
+body.dark .activity-main-footer { border-color: #333320; }
+
+/* Columna derecha — referencia (miniatura + teoría) */
+.activity-ref-panel {
+    display: flex; flex-direction: column;
+    background: var(--gray-1); overflow: hidden;
+}
+body.dark .activity-ref-panel { background: #1a1a0e; }
+.activity-ref-thumb {
+    position: relative; width: 100%; padding-bottom: 56.25%;
+    flex-shrink: 0; overflow: hidden; background: #0d1117;
+    border-bottom: 1.5px solid var(--gray-2);
+}
+body.dark .activity-ref-thumb { border-color: #333320; }
+.activity-ref-thumb img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.85;
+}
+.activity-ref-thumb-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5) 100%);
+    display: flex; align-items: flex-end; padding: 0.75rem;
+}
+.activity-ref-back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--yellow); color: #000;
+    border: none; border-radius: 8px;
+    padding: 7px 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    width: 100%; justify-content: center;
+}
+.activity-ref-back-btn:hover { background: var(--yellow-h); transform: translateY(-1px); }
+.activity-ref-theory {
+    flex: 1; overflow-y: auto; padding: 1.25rem;
+}
+.activity-ref-theory::-webkit-scrollbar { width: 3px; }
+.activity-ref-theory::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 3px; }
+.activity-ref-theory h4 {
+    font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--gray-3); margin-bottom: 0.75rem;
+}
+.activity-ref-theory p {
+    font-size: 0.82rem; line-height: 1.75; color: var(--text-2);
+}
+
+/* Responsive activity modal */
+@media (max-width: 768px) {
+    .activity-modal-layout { grid-template-columns: 1fr; }
+    .activity-ref-panel { display: none; }
+}
 
 .quiz-progress {
     display: flex; align-items: center; gap: 0.75rem;
@@ -1222,9 +1305,9 @@ function openCourseModal(index) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
 
-    // Attach button listeners (avoids inline JSON escaping issues)
-    modal.querySelector('#btn-open-exercises').addEventListener('click', () => openExercises(preguntas_test));
-    modal.querySelector('#btn-open-exam').addEventListener('click', () => openExam(preguntas_examen));
+    // Pasamos videoId y teoria para el panel de referencia del activity modal
+    modal.querySelector('#btn-open-exercises').addEventListener('click', () => openExercises(preguntas_test, videoId, teoria));
+    modal.querySelector('#btn-open-exam').addEventListener('click', () => openExam(preguntas_examen, videoId, teoria));
 
     modal.addEventListener('click', (e) => { if (e.target === modal) closeCourseModal(); });
     document.addEventListener('keydown', handleModalEsc);
@@ -1248,7 +1331,7 @@ function handleModalEsc(e) { if (e.key === 'Escape') { closeActivityModal(); clo
 // EJERCICIOS — opción múltiple
 // respuesta_correcta puede ser letra (A/B/C/D) o texto exacto de la opción
 // ============================================
-function openExercises(questions) {
+function openExercises(questions, videoId, teoria) {
     if (!questions || questions.length === 0) {
         showNotification('⚠️ No hay ejercicios disponibles para este video', 'warning');
         return;
@@ -1291,8 +1374,9 @@ function openExercises(questions) {
                 <div class="quiz-result-score">${score} / ${questions.length}</div>
                 <p class="quiz-result-pct">${pct}% de aciertos</p>
                 <p class="quiz-result-msg">${pct>=80?'¡Excelente! Dominas el tema.':pct>=50?'Buen trabajo. ¡Sigue practicando!':'Repasa el material e inténtalo de nuevo.'}</p>
-                <button class="course-action-btn btn-exercises" onclick="closeActivityModal()" style="margin-top:1.5rem;max-width:240px;">
-                    Volver al curso
+                <button class="course-action-btn btn-exercises" onclick="closeActivityModal()"
+                    style="margin-top:1.5rem;width:100%;justify-content:center;">
+                    ← Volver al curso
                 </button>
             </div>`;
     }
@@ -1307,18 +1391,12 @@ function openExercises(questions) {
                 if (answered) return;
                 answered = true;
                 const clickedIdx = parseInt(btn.dataset.idx);
-
                 body.querySelectorAll('.quiz-option').forEach((b, i) => {
                     b.disabled = true;
                     if (i === correctIdx) b.classList.add('correct');
                 });
-
-                if (clickedIdx === correctIdx) {
-                    btn.classList.add('correct');
-                    score++;
-                } else {
-                    btn.classList.add('wrong');
-                }
+                if (clickedIdx === correctIdx) { btn.classList.add('correct'); score++; }
+                else { btn.classList.add('wrong'); }
                 document.getElementById('quiz-next').style.display = 'inline-flex';
             });
         });
@@ -1331,14 +1409,88 @@ function openExercises(questions) {
         });
     }
 
-    openActivityModal('📝 Ejercicios de práctica', renderQuestion());
+    openActivityModal('📝 Ejercicios de práctica', renderQuestion(), videoId, teoria);
     attachListeners();
 }
 
 // ============================================
 // EXAMEN — preguntas abiertas con puntos_clave
 // ============================================
-function openExam(questions) {
+// ============================================
+// ACTIVITY MODAL — mismo tamaño que el modal del curso
+// Layout: contenido (izq) | miniatura + teoría (der)
+// ============================================
+function openActivityModal(title, mainHTML, videoId, teoria) {
+    closeActivityModal();
+
+    const thumb    = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+    const thumbFb  = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+    const teoriaShort = teoria ? escapeHtml(teoria).substring(0, 600) + (teoria.length > 600 ? '…' : '') : '';
+
+    const modal = document.createElement('div');
+    modal.id = 'activity-modal';
+    modal.className = 'course-modal-overlay activity-overlay';
+    modal.innerHTML = `
+        <div class="course-modal activity-modal">
+
+            <!-- Header igual que el modal del curso -->
+            <div class="course-modal-header">
+                <h2 class="course-modal-title">${title}</h2>
+                <button class="course-modal-close" onclick="closeActivityModal()" title="Volver al curso">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dos columnas -->
+            <div class="activity-modal-layout">
+
+                <!-- Izquierda: preguntas / resultado -->
+                <div class="activity-main-panel">
+                    <div class="activity-main-body" id="activity-body">
+                        ${mainHTML}
+                    </div>
+                </div>
+
+                <!-- Derecha: miniatura + resumen teoría -->
+                <div class="activity-ref-panel">
+                    ${videoId ? `
+                    <div class="activity-ref-thumb">
+                        <img src="${thumb}" onerror="this.src='${thumbFb}'" alt="Video del curso">
+                        <div class="activity-ref-thumb-overlay">
+                            <button class="activity-ref-back-btn" onclick="closeActivityModal()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                                Volver al curso
+                            </button>
+                        </div>
+                    </div>` : ''}
+                    <div class="activity-ref-theory">
+                        <h4>📖 Resumen del tema</h4>
+                        <p>${teoriaShort || 'Sin resumen disponible.'}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>`;
+
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeActivityModal(); });
+    requestAnimationFrame(() => modal.classList.add('visible'));
+}
+
+function closeActivityModal() {
+    const modal = document.getElementById('activity-modal');
+    if (!modal) return;
+    modal.classList.remove('visible');
+    setTimeout(() => modal.remove(), 320);
+}
+
+// ── openExam ──
+function openExam(questions, videoId, teoria) {
     if (!questions || questions.length === 0) {
         showNotification('⚠️ No hay preguntas de examen disponibles', 'warning');
         return;
@@ -1353,15 +1505,18 @@ function openExam(questions) {
             <textarea class="exam-textarea" id="exam-answer-${i}" placeholder="Escribe tu respuesta aquí..."></textarea>
         </div>`).join('');
 
-    openActivityModal('📄 Examen del curso', `
+    const mainHTML = `
         <p class="exam-intro">Responde con tus propias palabras. Al entregar verás los puntos clave esperados para autoevaluarte.</p>
         <div class="exam-questions">${questionsHTML}</div>
-        <button class="course-action-btn btn-exam" id="submit-exam-btn" style="margin-top:1.5rem;width:100%;justify-content:center;">
+        <button class="course-action-btn btn-exam" id="submit-exam-btn"
+            style="margin-top:1.5rem;width:100%;justify-content:center;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17">
                 <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
             Entregar examen
-        </button>`);
+        </button>`;
+
+    openActivityModal('📄 Examen del curso', mainHTML, videoId, teoria);
 
     document.getElementById('submit-exam-btn').addEventListener('click', () => {
         const resultsHTML = questions.map((q, i) => {
@@ -1370,7 +1525,6 @@ function openExam(questions) {
             const keysHTML = puntos.length
                 ? puntos.map(pk => '<li>' + escapeHtml(pk) + '</li>').join('')
                 : '<li><em>Sin puntos clave definidos</em></li>';
-
             return `
                 <div class="exam-result-item">
                     <div class="exam-result-question">
@@ -1397,42 +1551,9 @@ function openExam(questions) {
             ${resultsHTML}
             <button class="course-action-btn btn-exercises" onclick="closeActivityModal()"
                 style="margin-top:1rem;width:100%;justify-content:center;">
-                Volver al curso
+                ← Volver al curso
             </button>`;
     });
-}
-
-// ============================================
-// ACTIVITY MODAL (shared)
-// ============================================
-function openActivityModal(title, bodyHTML) {
-    closeActivityModal();
-    const modal = document.createElement('div');
-    modal.id = 'activity-modal';
-    modal.className = 'course-modal-overlay activity-overlay';
-    modal.innerHTML = `
-        <div class="course-modal activity-modal">
-            <div class="course-modal-header">
-                <h2 class="course-modal-title">${title}</h2>
-                <button class="course-modal-close" onclick="closeActivityModal()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div class="activity-modal-body" id="activity-body">${bodyHTML}</div>
-        </div>`;
-    document.body.appendChild(modal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeActivityModal(); });
-    requestAnimationFrame(() => modal.classList.add('visible'));
-}
-
-function closeActivityModal() {
-    const modal = document.getElementById('activity-modal');
-    if (!modal) return;
-    modal.classList.remove('visible');
-    setTimeout(() => modal.remove(), 320);
 }
 </script>
 </body>
