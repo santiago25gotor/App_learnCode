@@ -85,6 +85,7 @@ function clearSearch() {
 }
 
 // Renderizar resultados en vista Temario
+// Renderizar resultados en vista Temario
 function renderSyllabusSearch(results) {
     const categories = {
         'Python Básico': { id: 'basicLessonsList', lessons: [] },
@@ -115,8 +116,11 @@ function renderSyllabusSearch(results) {
             return;
         }
 
-        container.innerHTML = lessons.map(lesson => {
+        container.innerHTML = lessons.map((lesson, index) => {
             const isCompleted = completedLessons.includes(lesson.id);
+            
+            // 🆕 NUEVO: Verificar si está bloqueada
+            const isLocked = index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
             
             return `
                 <div class="flex items-center gap-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 hover:bg-yellow-100 dark:hover:bg-yellow-900/20 cursor-pointer transition-colors"
@@ -124,16 +128,21 @@ function renderSyllabusSearch(results) {
                     <div class="flex-shrink-0">
                         ${isCompleted ?
                             '<span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>' :
+                            isLocked ?
+                            '<span class="material-symbols-outlined text-orange-500">visibility</span>' :
                             '<span class="material-symbols-outlined text-primary">search</span>'
                         }
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="font-bold text-gray-900 dark:text-white truncate">${highlightMatch(lesson.titulo, currentSearchQuery)}</div>
+                        <div class="font-bold text-gray-900 dark:text-white truncate">
+                            ${highlightMatch(lesson.titulo, currentSearchQuery)}
+                            ${isLocked ? '<span class="ml-2 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-0.5 rounded">Vista Previa</span>' : ''}
+                        </div>
                         ${lesson.descripcion ? `<div class="text-xs text-gray-600 dark:text-gray-400 truncate">${highlightMatch(lesson.descripcion.substring(0, 80), currentSearchQuery)}...</div>` : ''}
                     </div>
                     <div class="flex items-center gap-2 text-xs">
                         <span class="bg-primary/20 text-black dark:text-primary px-2 py-1 rounded font-bold">
-                            ${isCompleted ? '✓ +10 XP' : '10 XP'}
+                            ${isCompleted ? '✓ +10 XP' : isLocked ? '👁️ Solo lectura' : '10 XP'}
                         </span>
                     </div>
                 </div>
@@ -141,7 +150,6 @@ function renderSyllabusSearch(results) {
         }).join('');
     });
 }
-
 // Resaltar coincidencias en el texto
 function highlightMatch(text, query) {
     if (!text || !query) return text || '';
