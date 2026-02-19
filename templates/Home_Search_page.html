@@ -192,23 +192,7 @@
 
         <!-- Center: Tabs System -->
         <section class="lg:col-span-6 relative flex flex-col">
-            <!-- Tab Navigation -->
-            <div class="sticky top-20 z-30 bg-background-light dark:bg-background-dark pb-4">
-                <div
-                    class="flex gap-2 p-1 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-                    <button onclick="switchTab('syllabus')" id="tabSyllabus"
-                        class="flex-1 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 bg-primary text-black">
-                        <span class="material-symbols-outlined">list_alt</span>
-                        Temario
-                    </button>
-                    <button onclick="switchTab('path')" id="tabPath"
-                        class="flex-1 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
-                        <span class="material-symbols-outlined">route</span>
-                        Ruta de Aprendizaje
-                    </button>
-                </div>
-            </div>
-
+            
             <!-- Tab Content: Temario -->
             <div id="contentSyllabus" class="tab-content">
                 <div class="space-y-6 mt-6">
@@ -289,49 +273,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Tab Content: Ruta de Aprendizaje -->
-            <div id="contentPath" class="tab-content hidden">
-                <!-- SVG Path for Zigzag Connector (Desktop) -->
-                <svg class="absolute top-0 w-full h-full pointer-events-none z-0 hidden md:block"
-                    preserveAspectRatio="none" viewBox="0 0 400 1200">
-                    <defs>
-                        <linearGradient id="pathGradient" x1="0%" x2="0%" y1="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"></stop>
-                            <stop offset="40%" style="stop-color:#f4d125;stop-opacity:1"></stop>
-                            <stop offset="100%" style="stop-color:#9ca3af;stop-opacity:0.3"></stop>
-                        </linearGradient>
-                    </defs>
-                    <path class="path-line opacity-50 dark:opacity-30"
-                        d="M 200,50 Q 200,100 200,120 C 200,180 350,180 350,250 C 350,320 50,320 50,450 C 50,580 200,580 200,650 C 200,720 350,720 350,850 C 350,980 200,980 200,1100"
-                        fill="none" stroke="url(#pathGradient)" stroke-dasharray="8 8" stroke-width="4">
-                    </path>
-                </svg>
-
-                <!-- Vertical line for mobile -->
-                <div
-                    class="absolute top-0 bottom-0 left-8 md:hidden w-1 bg-gradient-to-b from-green-500 via-primary to-gray-300 dark:to-gray-700 z-0">
-                </div>
-
-                <!-- Path Items Container -->
-                <div class="w-full space-y-24 md:space-y-32 relative z-10 pt-10 pb-32" id="lessonsPath">
-                    <!-- Loading State -->
-                    <div class="flex justify-center py-20">
-                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Future Path Indicator -->
-                <div class="w-full flex justify-center mt-4">
-                    <div class="flex flex-col items-center gap-2 opacity-30">
-                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Más por
-                            venir</span>
-                    </div>
-                </div>
         </section>
 
         <!-- Right Sidebar: Stats & Leaderboard -->
@@ -638,38 +579,6 @@
             localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
         }
 
-        // Switch between tabs
-        function switchTab(tabName) {
-            // Update tab buttons
-            const tabs = {
-                syllabus: document.getElementById('tabSyllabus'),
-                path: document.getElementById('tabPath')
-            };
-
-            const contents = {
-                syllabus: document.getElementById('contentSyllabus'),
-                path: document.getElementById('contentPath')
-            };
-
-            // Reset all tabs
-            Object.values(tabs).forEach(tab => {
-                tab.classList.remove('bg-primary', 'text-black');
-                tab.classList.add('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
-            });
-
-            // Hide all contents
-            Object.values(contents).forEach(content => content.classList.add('hidden'));
-
-            // Activate selected tab
-            tabs[tabName].classList.add('bg-primary', 'text-black');
-            tabs[tabName].classList.remove('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
-            contents[tabName].classList.remove('hidden');
-
-            // Load syllabus if not loaded yet
-            if (tabName === 'syllabus' && allLessons.length > 0) {
-                renderSyllabus();
-            }
-        }
 
         // Render syllabus view
         function renderSyllabus() {

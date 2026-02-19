@@ -115,7 +115,7 @@ function renderSyllabusSearch(results) {
         container.innerHTML = lessons.map((lesson, index) => {
             const isCompleted = completedLessons.includes(lesson.id);
             
-            // 🆕 NUEVO: Verificar si está bloqueada
+            //Verificar si está bloqueada
             const isLocked = index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
             
             return `

@@ -36,6 +36,7 @@ def get_lesson(lesson_id):
             'message': 'Lección no encontrada'
         }), 404
 '''
+    
 @lesson_api.route('/<lesson_id>', methods=['GET'])
 @login_required
 def get_lesson(lesson_id):
@@ -49,7 +50,7 @@ def get_lesson(lesson_id):
         # Comprobar si está completada
         is_completed = lesson_id in completed_lessons
         
-        # 🆕 NUEVO: Verificar si está bloqueada (no es la siguiente en secuencia)
+        # Verificar si está bloqueada (no es la siguiente en secuencia)
         all_lessons = firebase_service.get_all_lessons()
         all_lessons.sort(key=lambda x: x.get('numero_leccion', 0))
         
@@ -66,8 +67,8 @@ def get_lesson(lesson_id):
             'success': True,
             'lesson': lesson,
             'is_completed': is_completed,
-            'is_locked': is_locked,  # 🆕 NUEVO
-            'is_preview': is_locked  # 🆕 NUEVO: Modo preview si está bloqueada
+            'is_locked': is_locked,  
+            'is_preview': is_locked  
         }), 200
     
     else:
@@ -75,7 +76,6 @@ def get_lesson(lesson_id):
             'success': False,
             'message': 'Lección no encontrada'
         }), 404
-
 
 @lesson_api.route('/lessons/categories', methods=['GET'])
 @login_required
