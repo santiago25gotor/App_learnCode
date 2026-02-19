@@ -1,7 +1,3 @@
-"""
-Servicio de conexion y operaciones con Firebase
-Incluye modo offline de respaldo cuando Firebase no esta disponible
-"""
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from config import Config
@@ -391,27 +387,28 @@ class FirebaseService:
             if not query:
                 return []
             
-            # Dividir query en palabras
             query_words = query.split()
+            query_nospace = query.replace(' ', '')  # "pythonsyntax" para buscar en textos concatenados
             
             results = []
             for lid, lesson in self.mock_db['lessons'].items():
-                # Construir texto buscable
                 searchable = ' '.join([
                     str(lesson.get('titulo', '')),
                     str(lesson.get('descripcion', '')),
                     str(lesson.get('ejemplos_codigo', '')),
                     str(lesson.get('categoria', ''))
                 ]).lower()
+                searchable_nospace = searchable.replace(' ', '')
                 
-                # Verificar que TODAS las palabras estén presentes
-                if all(word in searchable for word in query_words):
+                # Coincide si: la query completa está en el texto, o la query sin espacios, o ALGUNA palabra coincide
+                if (query in searchable or 
+                    query_nospace in searchable_nospace or
+                    any(word in searchable for word in query_words)):
                     results.append({**lesson, 'id': lid})
             
-            # Ordenar por relevancia
             results.sort(key=lambda x: (
                 not all(word in str(x.get('titulo', '')).lower() for word in query_words),
-                not all(word in str(x.get('descripcion', '')).lower() for word in query_words),
+                not any(word in str(x.get('titulo', '')).lower() for word in query_words),
                 x.get('numero_leccion', 0)
             ))
             
@@ -423,8 +420,8 @@ class FirebaseService:
             if not query:
                 return []
             
-            # Dividir query en palabras
             query_words = query.split()
+            query_nospace = query.replace(' ', '')  # para buscar en "PythonSyntax" → "pythonsyntax"
 
             lessons = self.db.collection(Config.LESSONS_COLLECTION).get()
             results = []
@@ -432,22 +429,23 @@ class FirebaseService:
             for lesson in lessons:
                 data = lesson.to_dict()
                 
-                # Construir texto buscable
                 searchable_text = " ".join([
                     str(data.get("titulo", "")),
                     str(data.get("descripcion", "")),
                     str(data.get("ejemplos_codigo", "")),
                     str(data.get("categoria", ""))
                 ]).lower()
+                searchable_nospace = searchable_text.replace(' ', '')
 
-                # Verificar que TODAS las palabras estén presentes
-                if all(word in searchable_text for word in query_words):
+                # Coincide si: la query completa está en el texto, o sin espacios, o ALGUNA palabra coincide
+                if (query in searchable_text or
+                    query_nospace in searchable_nospace or
+                    any(word in searchable_text for word in query_words)):
                     results.append({**data, "id": lesson.id})
 
-            # Ordenar por relevancia
             results.sort(key=lambda x: (
                 not all(word in str(x.get("titulo", "")).lower() for word in query_words),
-                not all(word in str(x.get("descripcion", "")).lower() for word in query_words),
+                not any(word in str(x.get("titulo", "")).lower() for word in query_words),
                 x.get("numero_leccion", 0)
             ))
 
@@ -662,5 +660,4 @@ class FirebaseService:
             print(f"Error en mass_unlock: {str(e)}")
             return False, str(e)
 
-# Crear instancia global
 firebase_service = FirebaseService()

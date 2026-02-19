@@ -15,7 +15,6 @@ async function performSearch() {
     }
 
     currentSearchQuery = query;
-    isSearchActive = true;
 
     // Mostrar indicadores
     document.getElementById('searchQuery').textContent = query;
@@ -28,26 +27,25 @@ async function performSearch() {
 
         if (data.success) {
             const results = data.results;
-            
-            // Mostrar cantidad de resultados
-            document.getElementById('searchResultsText').textContent = 
-                `Se encontraron ${results.length} lección${results.length !== 1 ? 'es' : ''} que coinciden con tu búsqueda`;
-            document.getElementById('searchResults').classList.remove('hidden');
-            document.getElementById('noResults').classList.add('hidden');
 
-            // Renderizar según la pestaña activa
-            const activeTab = document.getElementById('tabSyllabus').classList.contains('bg-primary') ? 'syllabus' : 'path';
-            
-            if (activeTab === 'syllabus') {
-                renderSyllabusSearch(results);
-            } else {
-                renderPathSearch(results);
+            // Marcar búsqueda activa ANTES de switchTab para que switchTab no llame renderSyllabus
+            isSearchActive = true;
+
+            // Cambiar al tab Temario (isSearchActive=true evita que sobreescriba los resultados)
+            if (typeof switchTab === 'function') {
+                switchTab('syllabus');
             }
 
-            // Si no hay resultados
+            document.getElementById('searchResultsText').textContent = 
+                `Se encontraron ${results.length} lección${results.length !== 1 ? 'es' : ''} que coinciden con tu búsqueda`;
+
             if (results.length === 0) {
                 document.getElementById('searchResults').classList.add('hidden');
                 document.getElementById('noResults').classList.remove('hidden');
+            } else {
+                document.getElementById('searchResults').classList.remove('hidden');
+                document.getElementById('noResults').classList.add('hidden');
+                renderSyllabusSearch(results);
             }
 
         } else {
@@ -58,6 +56,11 @@ async function performSearch() {
         console.error('Error al buscar:', error);
         showSearchError();
     }
+}
+
+// Alias por compatibilidad
+function renderPathSearch(results) {
+    renderSyllabusSearch(results);
 }
 
 // Limpiar búsqueda
@@ -139,11 +142,9 @@ function renderSyllabusSearch(results) {
     });
 }
 
-
 // Resaltar coincidencias en el texto
 function highlightMatch(text, query) {
     if (!text || !query) return text || '';
-    
     const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark class="bg-primary/40 dark:bg-primary/20 px-1 rounded">$1</mark>');
 }

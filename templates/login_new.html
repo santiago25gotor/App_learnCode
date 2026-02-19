@@ -181,6 +181,35 @@
 
                 <!-- Register Form (Hidden by default) -->
                 <form class="hidden flex-col gap-4" id="registerForm">
+                    <!-- Avatar picker -->
+                    <div class="flex flex-col gap-1.5 mb-2">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white">
+                            Profile photo <span class="text-stone-400 font-normal">(optional)</span>
+                        </label>
+                        <div class="flex items-center gap-4">
+                            <div class="relative group cursor-pointer flex-shrink-0"
+                                onclick="document.getElementById('regAvatarInput').click()">
+                                <div id="regAvatarCircle"
+                                    class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-black text-xl font-black overflow-hidden border-2 border-stone-200 dark:border-stone-700 select-none">
+                                    <span id="regAvatarInitial">?</span>
+                                    <img id="regAvatarImg" src="" alt="" class="hidden w-full h-full object-cover">
+                                </div>
+                                <div
+                                    class="absolute inset-0 rounded-full bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                    <span class="material-symbols-outlined text-white text-base">photo_camera</span>
+                                </div>
+                                <input type="file" id="regAvatarInput" accept="image/*" class="hidden"
+                                    onchange="handleRegisterAvatar(event)">
+                            </div>
+                            <div class="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">
+                                Click to upload a photo<br>
+                                JPG, PNG · Max 500KB<br>
+                                <button type="button" id="regRemoveBtn" onclick="clearRegisterAvatar()"
+                                    class="hidden text-red-500 hover:underline mt-1 text-xs">Remove photo</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex flex-col gap-1.5 mb-4">
                         <label class="text-sm font-bold text-[#1c190d] dark:text-white"
                             for="register-username">Username</label>
@@ -363,6 +392,40 @@
             }
         });
 
+        // ── REGISTER AVATAR ─────────────────────────────────────
+        let regAvatarBase64 = '';
+
+        // Update avatar initial as user types username
+        document.getElementById('register-username').addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            document.getElementById('regAvatarInitial').textContent = val ? val[0].toUpperCase() : '?';
+        });
+
+        function handleRegisterAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { alert('Please select a valid image file'); return; }
+            if (file.size > 500 * 1024) { alert('Image cannot exceed 500KB'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                regAvatarBase64 = e.target.result;
+                document.getElementById('regAvatarImg').src = regAvatarBase64;
+                document.getElementById('regAvatarImg').classList.remove('hidden');
+                document.getElementById('regAvatarInitial').classList.add('hidden');
+                document.getElementById('regRemoveBtn').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearRegisterAvatar() {
+            regAvatarBase64 = '';
+            document.getElementById('regAvatarImg').src = '';
+            document.getElementById('regAvatarImg').classList.add('hidden');
+            document.getElementById('regAvatarInitial').classList.remove('hidden');
+            document.getElementById('regRemoveBtn').classList.add('hidden');
+            document.getElementById('regAvatarInput').value = '';
+        }
+
         // Handle register
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -375,18 +438,26 @@
             try {
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 });
 
                 const data = await response.json();
 
                 if (data.success) {
+                    // Si hay avatar, guardarlo antes de redirigir
+                    if (regAvatarBase64) {
+                        try {
+                            await fetch('/api/user/avatar', {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ avatar: regAvatarBase64 })
+                            });
+                            localStorage.setItem('userAvatar', regAvatarBase64);
+                        } catch (e) { /* no bloquear registro si falla el avatar */ }
+                    }
                     showAlert('Account created successfully! Redirecting...', 'success');
                     setTimeout(() => {
-                        // Nuevos usuarios van al placement test
                         window.location.href = '/placement-test';
                     }, 1000);
                 } else {

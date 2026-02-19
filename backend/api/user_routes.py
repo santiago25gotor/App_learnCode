@@ -4,21 +4,48 @@ from backend.utils.decorators import login_required
 
 user_api = Blueprint('user', __name__, url_prefix='/api/user')
 
+@user_api.route('/avatar', methods=['PUT'])
+@login_required
+def update_avatar():
+    """Guardar avatar del usuario como base64"""
+    try:
+        user_id = session.get('user_id')
+        data = request.get_json()
+        avatar = data.get('avatar', '')
+
+        # Validar tamaño (max ~500KB en base64)
+        if len(avatar) > 700000:
+            return jsonify({'success': False, 'message': 'La imagen es demasiado grande. Máximo 500KB'}), 400
+
+        # Validar que sea base64 de imagen
+        if avatar and not avatar.startswith('data:image/'):
+            return jsonify({'success': False, 'message': 'Formato de imagen inválido'}), 400
+
+        firebase_service.db.collection('users').document(user_id).update({'avatar': avatar})
+        return jsonify({'success': True, 'message': 'Avatar actualizado correctamente'}), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
 @user_api.route('/me', methods=['GET'])
 @login_required
-def get_current_user():
-    """Obtener información del usuario actual"""
+def get_current_user_with_avatar():
+    """Obtener información del usuario actual incluyendo avatar"""
     user_id = session.get('user_id')
     username = session.get('username')
-    
-    # Obtener progreso del usuario
+    try:
+        doc = firebase_service.db.collection('users').document(user_id).get()
+        avatar = doc.to_dict().get('avatar', '') if doc.exists else ''
+    except Exception:
+        avatar = ''
     progress = firebase_service.get_user_progress(user_id)
-    
     return jsonify({
         'success': True,
         'user': {
             'id': user_id,
             'username': username,
+            'avatar': avatar,
             'progress': progress
         }
     }), 200

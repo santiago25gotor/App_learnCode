@@ -121,7 +121,8 @@
                     <a href="/profile"
                         class="h-8 w-8 rounded-full bg-primary border-2 border-black dark:border-white overflow-hidden flex items-center justify-center text-black font-bold hover:scale-110 transition-transform cursor-pointer"
                         id="headerAvatar">
-                        U
+                        <span id="headerAvatarInitial">U</span>
+                        <img id="headerAvatarImg" src="" alt="" class="hidden w-full h-full object-cover">
                     </a>
                 </div>
             </div>
@@ -433,7 +434,7 @@
     <!-- Modal System -->
     <script src="/static/js/modal-system.js"></script>
 
-    <!-- Sistema de Búsqueda -->
+     <!-- Sistema de Búsqueda -->
     <script src="/static/js/search-system.js"></script>
 
     <script>
@@ -442,10 +443,10 @@
         let currentUsername = '{{ username }}';
         let completedLessons = []; // Array de IDs de lecciones completadas
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadUserData();
-            loadLessons();
+        // Initialize - en serie para garantizar que el progreso carga antes de renderizar
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadUserData();
+            await loadLessons();
 
             // Load dark mode preference
             if (localStorage.getItem('darkMode') === 'true') {
@@ -463,9 +464,27 @@
                     userProgress = data.user.progress || {};
                     currentUsername = data.user.username;
                     completedLessons = userProgress.completed_lessons || [];
+                    if (allLessons.length > 0) { renderLearningPath(); renderSyllabus(); }
 
-                    // Update header
-                    document.getElementById('headerAvatar').textContent = currentUsername.charAt(0).toUpperCase();
+                    // Update header avatar
+                    const initial = currentUsername.charAt(0).toUpperCase();
+                    document.getElementById('headerAvatarInitial').textContent = initial;
+                    if (userProgress.avatar || data.user.avatar) {
+                        const avatarSrc = data.user.avatar || localStorage.getItem('userAvatar') || '';
+                        if (avatarSrc) {
+                            document.getElementById('headerAvatarImg').src = avatarSrc;
+                            document.getElementById('headerAvatarImg').classList.remove('hidden');
+                            document.getElementById('headerAvatarInitial').classList.add('hidden');
+                        }
+                    } else {
+                        // Check localStorage cache
+                        const cached = localStorage.getItem('userAvatar');
+                        if (cached) {
+                            document.getElementById('headerAvatarImg').src = cached;
+                            document.getElementById('headerAvatarImg').classList.remove('hidden');
+                            document.getElementById('headerAvatarInitial').classList.add('hidden');
+                        }
+                    }
                     document.getElementById('headerPoints').textContent = userProgress.total_points || 0;
 
                     // Update stats sidebar
@@ -520,7 +539,7 @@
         // Render learning path
         function renderLearningPath() {
             const container = document.getElementById('lessonsPath');
-            const completed = userProgress.completed_lessons || [];
+            const completed = completedLessons;
             const categories = ['Python Básico', 'Python Intermedio', 'Python Avanzado'];
 
             let html = '';
@@ -659,7 +678,7 @@
 
         // Update milestone info
         function updateMilestoneInfo() {
-            const completed = userProgress.completed_lessons || [];
+            const completed = completedLessons;
             const total = allLessons.length;
             const percentage = total > 0 ? Math.round((completed.length / total) * 100) : 0;
 
@@ -717,11 +736,8 @@
             tabs[tabName].classList.remove('text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800');
             contents[tabName].classList.remove('hidden');
 
-            // NUEVO: Si hay búsqueda activa, mantenerla
-            if (isSearchActive && currentSearchQuery) {
-                performSearch();
-            } else {
-                // Cargar vista normal
+            // Si hay búsqueda activa, no tocar el contenido
+            if (!isSearchActive) {
                 if (tabName === 'syllabus' && allLessons.length > 0) {
                     renderSyllabus();
                 }
@@ -780,7 +796,7 @@
                 // Render lessons
                 container.innerHTML = lessons.map((lesson, index) => {
                     const isCompleted = completedLessons.includes(lesson.id);
-                    const isLocked = index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
+                    const isLocked = !isCompleted && index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
 
                     return `
                         <div class="flex items-center gap-3 p-3 rounded-lg ${isLocked ? 'opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'} transition-colors"
