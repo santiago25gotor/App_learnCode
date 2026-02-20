@@ -8,9 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
-/* ============================================
-   BASE
-   ============================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
     --yellow: #f4d125; --yellow-h: #e6c520; --black: #0f0f0f;
@@ -32,9 +29,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ============================================
-   NAVBAR — idéntico al de PYLEARN course_new.html
-   ============================================ */
 .navbar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     background: rgba(248,248,245,0.92);
@@ -56,7 +50,7 @@ body.dark .navbar {
     display: flex; align-items: center; justify-content: space-between;
 }
 
-/* Brand */
+
 .nav-brand { display: flex; align-items: center; gap: 10px; }
 .brand-icon {
     width: 32px; height: 32px;
@@ -68,7 +62,7 @@ body.dark .navbar {
 .brand-icon .material-symbols-outlined { font-size: 18px; }
 .brand-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
 
-/* Nav links */
+
 .nav-links { display: flex; align-items: center; gap: 2rem; }
 .nav-link {
     font-size: 0.9rem; font-weight: 500;
@@ -80,7 +74,7 @@ body.dark .navbar {
     border-bottom: 2px solid var(--yellow); padding-bottom: 2px;
 }
 
-/* Dark toggle */
+
 .dark-toggle {
     background: none; border: none; cursor: pointer;
     color: var(--text-2);
@@ -93,7 +87,7 @@ body.dark .navbar {
 body.dark .dark-icon-sun  { display: block; color: var(--yellow); }
 body.dark .dark-icon-moon { display: none; }
 
-/* Points badge */
+
 .nav-points {
     display: flex; align-items: center; gap: 6px;
     background: var(--gray-1);
@@ -103,7 +97,7 @@ body.dark .dark-icon-moon { display: none; }
 body.dark .nav-points { background: #1f2937; }
 .nav-points .material-icons { font-size: 16px; color: var(--yellow); }
 
-/* Avatar */
+
 .nav-avatar {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -117,9 +111,6 @@ body.dark .nav-points { background: #1f2937; }
 body.dark .nav-avatar { border-color: #fff; }
 .nav-avatar:hover { transform: scale(1.1); }
 
-/* ============================================
-   HERO
-   ============================================ */
 .hero { padding: 96px 1.5rem 60px; background: var(--bg); }
 .hero-inner {
     max-width: 1280px; margin: 0 auto;
@@ -217,9 +208,6 @@ body.dark .nav-avatar { border-color: #fff; }
 .vc-footer { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: #141820; font-size: 0.8rem; color: #8892a4; font-family: monospace; border-top: 1px solid rgba(255,255,255,0.05); }
 .vc-footer .material-symbols-outlined { font-size: 16px; color: #4ade80; }
 
-/* ============================================
-   LIBRARY
-   ============================================ */
 .library-section { flex: 1; padding: 0 1.5rem 4rem; }
 .lib-inner { max-width: 1280px; margin: 0 auto; }
 
@@ -245,9 +233,6 @@ body.dark .nav-avatar { border-color: #fff; }
 .control-btn:hover { background: var(--gray-1); color: var(--text); }
 .control-btn.active { background: var(--yellow); color: #000; }
 
-/* ============================================
-   CARDS
-   ============================================ */
 .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; }
 
 .video-card {
@@ -288,9 +273,7 @@ body.dark .video-footer { border-color: #2a2a1a; }
 .loading-text { font-size: 1rem; color: var(--gray-3); font-weight: 500; }
 .error-text, .empty-text { font-size: 0.9rem; color: var(--gray-3); max-width: 320px; }
 
-/* ============================================
-   FOOTER — idéntico al de PYLEARN (dark #1a1a0e)
-   ============================================ */
+
 .site-footer {
     background: #1a1a0e;
     border-top: 1px solid rgba(255,255,255,0.05);
@@ -306,13 +289,11 @@ body.dark .video-footer { border-color: #2a2a1a; }
 .footer-brand .brand-name { color: #f3f3ef; font-size: 1.1rem; font-weight: 800; }
 .footer-copy { font-size: 0.8rem; color: #5a5a3a; }
 
-/* Toast */
+
 @keyframes toastIn  { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
-/* ============================================
-   COURSE MODAL
-   ============================================ */
+
 .course-modal-overlay {
     position: fixed; inset: 0; z-index: 9000;
     background: rgba(0,0,0,0.72);
@@ -404,9 +385,7 @@ body.dark .video-footer { border-color: #2a2a1a; }
 body.dark .btn-exam { background: #f3f3ef; color: #0f0f0f; }
 .btn-exam:hover { background: #1f1f1f; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
 
-/* ============================================
-   ACTIVITY MODAL (Exercises & Exam) — mismo tamaño que course modal
-   ============================================ */
+
 .activity-overlay { z-index: 9500; }
 
 /* Mismo tamaño que el course modal */
@@ -642,9 +621,7 @@ body.dark .btn-exam:hover { background: #e5e5e0; }
 
 <body>
 
-<!-- ============================================
-     NAVBAR — igual que PYLEARN course_new.html
-     ============================================ -->
+
 <nav class="navbar">
     <div class="nav-inner">
         <!-- Brand -->
@@ -682,9 +659,6 @@ body.dark .btn-exam:hover { background: #e5e5e0; }
     </div>
 </nav>
 
-<!-- ============================================
-     HERO
-     ============================================ -->
 <section class="hero">
     <div class="hero-inner">
 
@@ -774,9 +748,6 @@ body.dark .btn-exam:hover { background: #e5e5e0; }
     </div>
 </section>
 
-<!-- ============================================
-     LIBRARY
-     ============================================ -->
 <section class="library-section">
     <div class="lib-inner">
         <div class="section-header">
@@ -810,9 +781,6 @@ body.dark .btn-exam:hover { background: #e5e5e0; }
     </div>
 </section>
 
-<!-- ============================================
-     FOOTER — igual que PYLEARN (fondo #1a1a0e)
-     ============================================ -->
 <footer class="site-footer">
     <div class="footer-inner">
         <div class="footer-brand">
@@ -826,9 +794,6 @@ body.dark .btn-exam:hover { background: #e5e5e0; }
 </footer>
 
 <script>
-// ============================================
-// DARK MODE
-// ============================================
 function toggleDark() {
     document.body.classList.toggle('dark');
     localStorage.setItem('eduai-dark', document.body.classList.contains('dark'));
@@ -845,9 +810,6 @@ const CONFIG = {
     AUTO_LOAD_ON_START: true
 };
 
-// ============================================
-// DOM ELEMENTS (original)
-// ============================================
 const DOM = {
     videosContainer: document.getElementById('videos-container'),
     searchInput:     document.getElementById('search-input'),
@@ -856,14 +818,8 @@ const DOM = {
     viewControls:    document.querySelectorAll('.control-btn')
 };
 
-// ============================================
-// STATE (original)
-// ============================================
 const state = { isLoading: false, currentVideos: [] };
 
-// ============================================
-// UI COMPONENTS
-// ============================================
 function renderLoadingState(message = 'Cargando videos...') {
     return `<div class="loading-state">
         <div class="loading-spinner"></div>
@@ -935,11 +891,6 @@ function createVideoCard(video, index) {
     </article>`;
 }
 
-// ============================================
-// API FUNCTIONS
-// ============================================
-
-// Obtiene los videos de la BD y los devuelve (sin tocar el DOM)
 async function fetchVideoList() {
     const response = await fetch(CONFIG.WEBHOOK_URL, {
         method: 'POST',
@@ -1062,9 +1013,6 @@ async function searchVideo(query) {
     }
 }
 
-// ============================================
-// SEARCH PROGRESS BANNER (no borra la grid)
-// ============================================
 function showSearchProgress(message) {
     let banner = document.getElementById('search-progress-banner');
     if (!banner) {
@@ -1114,9 +1062,6 @@ function hideSearchProgress() {
     document.getElementById('search-progress-banner')?.remove();
 }
 
-// ============================================
-// UI UPDATE FUNCTIONS (original)
-// ============================================
 function displayVideos(videos) {
     if (!videos || videos.length === 0) { DOM.videosContainer.innerHTML = renderEmptyState(); return; }
     DOM.videosContainer.innerHTML = videos.map((v, i) => createVideoCard(v, i)).join('');
@@ -1150,17 +1095,11 @@ function showNotification(message, type = 'info') {
     }, 4000);
 }
 
-// ============================================
-// UTILITY (original)
-// ============================================
 function escapeHtml(text) {
     const map = { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' };
     return String(text).replace(/[&<>"']/g, m => map[m]);
 }
 
-// ============================================
-// EVENT LISTENERS (original)
-// ============================================
 DOM.searchButton.addEventListener('click', () => searchVideo(DOM.searchInput.value));
 DOM.searchInput.addEventListener('keypress', e => { if (e.key === 'Enter') searchVideo(DOM.searchInput.value); });
 DOM.quickTags.forEach(tag => tag.addEventListener('click', () => {
@@ -1173,9 +1112,6 @@ DOM.viewControls.forEach(btn => btn.addEventListener('click', () => {
     DOM.videosContainer.style.gridTemplateColumns = btn.dataset.view === 'list' ? '1fr' : '';
 }));
 
-// ============================================
-// INIT (original)
-// ============================================
 function init() {
     console.log('🚀 EduAI Platform inicializada');
     console.log('📡 Webhook:', CONFIG.WEBHOOK_URL);
@@ -1188,11 +1124,6 @@ else init();
 
 window.eduAI = { loadVideos, searchVideo, state, config: CONFIG };
 
-// ============================================
-// HELPERS
-// ============================================
-
-// Parsea un campo que puede llegar como string JSON, array, u objeto
 function parseField(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -1203,8 +1134,6 @@ function parseField(raw) {
     return [];
 }
 
-// Dada una pregunta con opciones[] y respuesta_correcta (letra "A"/"B"/"C"/"D" o texto exacto),
-// devuelve el índice (0-3) de la opción correcta
 function resolveCorrectIndex(q) {
     const letters = ['A','B','C','D'];
     const rc = (q.respuesta_correcta || '').trim();
@@ -1217,9 +1146,6 @@ function resolveCorrectIndex(q) {
     return idx >= 0 ? idx : 0;
 }
 
-// ============================================
-// COURSE MODAL
-// ============================================
 function openCourseModal(index) {
     const video = state.currentVideos[index];
     if (!video) return;
@@ -1228,7 +1154,6 @@ function openCourseModal(index) {
     const title   = video.video_title || 'Video sin título';
     const teoria  = video.teoria || 'Sin contenido disponible.';
 
-    // Soporta preguntas_examen_avanzado (flujo nuevo) y preguntas_examen (flujo actual/antiguo)
     const preguntas_test   = parseField(video.preguntas_test);
     const preguntas_examen = parseField(
         video.preguntas_examen_avanzado ||
@@ -1324,13 +1249,6 @@ function closeCourseModal() {
 
 function handleModalEsc(e) { if (e.key === 'Escape') { closeActivityModal(); closeCourseModal(); } }
 
-// ============================================
-// EXERCISES (Multiple Choice)
-// ============================================
-// ============================================
-// EJERCICIOS — opción múltiple
-// respuesta_correcta puede ser letra (A/B/C/D) o texto exacto de la opción
-// ============================================
 function openExercises(questions, videoId, teoria) {
     if (!questions || questions.length === 0) {
         showNotification('⚠️ No hay ejercicios disponibles para este video', 'warning');
@@ -1413,13 +1331,6 @@ function openExercises(questions, videoId, teoria) {
     attachListeners();
 }
 
-// ============================================
-// EXAMEN — preguntas abiertas con puntos_clave
-// ============================================
-// ============================================
-// ACTIVITY MODAL — mismo tamaño que el modal del curso
-// Layout: contenido (izq) | miniatura + teoría (der)
-// ============================================
 function openActivityModal(title, mainHTML, videoId, teoria) {
     closeActivityModal();
 

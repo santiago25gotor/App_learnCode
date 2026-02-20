@@ -17,17 +17,10 @@ const DOM = {
     viewControls: document.querySelectorAll('.control-btn')
 };
 
-// ============================================
-// STATE
-// ============================================
 const state = {
     isLoading: false,
     currentVideos: []
 };
-
-// ============================================
-// UI COMPONENTS
-// ============================================
 
 function renderLoadingState(message = 'Cargando videos...') {
     return `
@@ -125,10 +118,6 @@ function createVideoCard(video, index) {
     `;
 }
 
-// ============================================
-// API FUNCTIONS
-// ============================================
-
 async function loadVideos() {
     if (state.isLoading) return;
     
@@ -205,9 +194,6 @@ async function searchVideo(query) {
     }
 }
 
-// ============================================
-// UI UPDATE FUNCTIONS
-// ============================================
 
 function displayVideos(videos) {
     if (!videos || videos.length === 0) {
@@ -303,9 +289,6 @@ styleSheet.textContent = `
 `;
 document.head.appendChild(styleSheet);
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
 
 function escapeHtml(text) {
     const map = {
@@ -318,9 +301,6 @@ function escapeHtml(text) {
     return String(text).replace(/[&<>"']/g, m => map[m]);
 }
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
 
 DOM.searchButton.addEventListener('click', () => {
     searchVideo(DOM.searchInput.value);
@@ -354,9 +334,6 @@ DOM.viewControls.forEach(btn => {
     });
 });
 
-// ============================================
-// INITIALIZATION
-// ============================================
 
 function init() {
     console.log('🚀 EduAI Platform inicializada');
@@ -375,9 +352,6 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// ============================================
-// COURSE MODAL
-// ============================================
 
 function openCourseModal(index) {
     const video = state.currentVideos[index];
@@ -492,9 +466,6 @@ function handleModalEsc(e) {
     if (e.key === 'Escape') closeCourseModal();
 }
 
-// ============================================
-// EXERCISES (Multiple Choice)
-// ============================================
 
 function openExercises(questions) {
     if (!questions || questions.length === 0) {
@@ -587,9 +558,6 @@ function openExercises(questions) {
     };
 }
 
-// ============================================
-// EXAM (Open-ended)
-// ============================================
 
 function openExam(questions) {
     if (!questions || questions.length === 0) {
@@ -659,9 +627,6 @@ function openExam(questions) {
     };
 }
 
-// ============================================
-// ACTIVITY MODAL (shared for exercises & exam)
-// ============================================
 
 function openActivityModal(title, bodyHTML) {
     // Close existing activity modal if any
