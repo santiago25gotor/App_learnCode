@@ -6,7 +6,7 @@ from backend.api.auth_routes import auth_api
 from backend.api.user_routes import user_api
 from backend.api.lesson_routes import lesson_api
 from backend.api.code_routes import code_api
-from backend.api.admin_routes import admin_api   # ← NUEVO
+from backend.api.admin_routes import admin_api   
 
 
 def create_app():
@@ -14,13 +14,12 @@ def create_app():
     app.config.from_object(Config)
     CORS(app, origins=Config.CORS_ORIGINS, supports_credentials=True)
 
-    app.register_blueprint(auth_api,   url_prefix='/api/auth')
-    app.register_blueprint(user_api,   url_prefix='/api/user')
-    app.register_blueprint(lesson_api, url_prefix='/api/lessons')
-    app.register_blueprint(code_api,   url_prefix='/api/code')
-    app.register_blueprint(admin_api,  url_prefix='/api/admin')  # ← NUEVO
-
-    # ── Rutas de plantillas ────────────────────────────────────────
+    app.register_blueprint(auth_api,          url_prefix='/api/auth')
+    app.register_blueprint(user_api,          url_prefix='/api/user')
+    app.register_blueprint(lesson_api,        url_prefix='/api/lessons')
+    app.register_blueprint(code_api,          url_prefix='/api/code')
+    app.register_blueprint(admin_api,         url_prefix='/api/admin')  # ← NUEVO
+  
     @app.route('/')
     def index():
         if 'user_id' in session:
