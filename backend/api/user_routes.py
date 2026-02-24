@@ -32,45 +32,48 @@ def submit_placement_test():
         user_id = session.get('user_id')
         data = request.get_json()
         scores = data.get('scores', {})
-
-        total_score = scores.get('total', 0)
-
-        # Determinar nivel según umbrales
-        if total_score <= 50:
-            nivel = 'Básico'
-        elif total_score <= 79:
-            nivel = 'Intermedio'
-        else:
-            nivel = 'Avanzado'
-
-        # Desbloquear niveles y lecciones según la nota
+        
+        basic_score = scores.get('basic', 0)
+        intermediate_score = scores.get('intermediate', 0)
+        advanced_score = scores.get('advanced', 0)
+        
+        # Desbloquear niveles según puntuación
         unlocked_categories = ['Python Básico']  # Siempre desbloqueado
         lessons_unlocked = 0
-
-        if nivel in ('Intermedio', 'Avanzado'):
+        
+        # Si aprueba básico, desbloquear todas las lecciones básicas y dar acceso a intermedio
+        if basic_score >= 70:
             unlocked_categories.append('Python Intermedio')
+            # Marcar todas las lecciones básicas como completadas
             success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
             if success:
                 lessons_unlocked += count
-
-        if nivel == 'Avanzado':
+        
+        # Si aprueba intermedio, desbloquear todas las lecciones intermedias y dar acceso a avanzado
+        if intermediate_score >= 75:
             unlocked_categories.append('Python Avanzado')
+            # Marcar todas las lecciones intermedias como completadas
             success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
             if success:
                 lessons_unlocked += count
-
+        
+        # Si aprueba avanzado, desbloquear todas las avanzadas
+        if advanced_score >= 80:
+            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Avanzado')
+            if success:
+                lessons_unlocked += count
+        
         # Guardar resultados en Firebase
         firebase_service.save_placement_test_results(user_id, scores, unlocked_categories)
-
+        
         return jsonify({
             'success': True,
             'scores': scores,
-            'nivel': nivel,
             'unlocked_categories': unlocked_categories,
             'lessons_unlocked': lessons_unlocked,
-            'message': f'Test completado. Nivel: {nivel}. {lessons_unlocked} lecciones desbloqueadas.'
+            'message': f'Test completado. {lessons_unlocked} lecciones desbloqueadas.'
         }), 200
-
+        
     except Exception as e:
         return jsonify({
             'success': False,
