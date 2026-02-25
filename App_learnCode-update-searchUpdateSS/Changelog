@@ -1,0 +1,52 @@
+# CHANGELOG - PYLEARN
+
+## [1.2.0] - 2026-02-17
+
+### 🔐 Autenticación - Fix crítico de login
+- **`config.py`** — La `FIREBASE_WEB_API_KEY` estaba hardcodeada como `"TU_API_KEY_WEB_DE_FIREBASE"`, lo que hacía que el login fallara para todos los usuarios existentes. Ahora se carga correctamente desde variables de entorno.
+- **`.env`** — Añadido archivo de variables de entorno con la Web API Key real de Firebase. Los usuarios anteriores (como `santia25`) ya pueden iniciar sesión correctamente.
+- **`backend/core/firebase.py`** — El método `verify_user` llamaba a la Identity Toolkit de Firebase con una key inválida. Con la key correcta, la autenticación funciona para todos los usuarios existentes y nuevos.
+
+### 👤 Perfil de usuario - Fix logout y botón admin
+- **`templates/profile.html`** — Tres correcciones:
+  1. La URL del logout apuntaba a `/api/logout` (inexistente) en lugar de `/api/auth/logout`. El botón de cerrar sesión ya funciona correctamente.
+  2. La función `logout()` estaba truncada y sin cerrar, causando errores de JS silenciosos.
+  3. Añadido botón **"Panel Admin"** que solo aparece visualmente si el usuario autenticado tiene `role: admin` en Firestore.
+
+### 🛡️ Panel de administración - Nuevo módulo
+- **`backend/api/admin_routes.py`** — Nueva API REST de administración con los siguientes endpoints:
+  - `GET /api/admin/stats` — Estadísticas generales (usuarios, lecciones, puntos promedio)
+  - `GET /api/admin/users` — Lista todos los usuarios con búsqueda en tiempo real
+  - `GET /api/admin/users/<id>` — Detalle completo de un usuario
+  - `PUT /api/admin/users/<id>/role` — Cambiar rol entre `user` y `admin`
+  - `POST /api/admin/users/<id>/unlock` — Desbloquear todas las lecciones de un usuario
+  - `POST /api/admin/users/<id>/reset` — Resetear el progreso de un usuario
+  - `DELETE /api/admin/users/<id>` — Eliminar usuario de Firestore y Firebase Auth
+  - `GET /api/admin/check` — Verificar si el usuario actual es admin
+  - Protección doble: decorador `admin_required` en todas las rutas sensibles
+  - Salvaguardas: el admin no puede eliminarse, resetearse ni quitarse el rol a sí mismo
+
+- **`templates/admin.html`** — Panel visual de administración con estética consistente con el resto de la plataforma (Space Grotesk, colores primary #f4d125, dark mode). Incluye tarjetas de estadísticas, tabla de usuarios con acciones y modal de detalle.
+
+- **`static/js/admin.js`** — Lógica JS del panel admin extraída en archivo separado para mantener el HTML por debajo de 350 líneas. Fix: el check de admin ya no redirige si hay un error de red, evitando falsos positivos.
+
+- **`app.py`** — Registrado el Blueprint `admin_api` en `/api/admin` y añadida la ruta `/admin` que renderiza el panel. Los usuarios sin rol admin son redirigidos automáticamente al curso.
+
+---
+
+## [1.1.0] - 2026-02-13
+
+### 🏗️ Refactorización a estructura modular
+- Separación de rutas en Blueprints independientes: `auth_routes`, `user_routes`, `lesson_routes`, `code_routes`
+- Añadidos validadores (`validators.py`) y decoradores (`decorators.py`) reutilizables
+- Herramientas de gestión: `import_lessons.py`, `manage_users.py`, `verify_integration.py`
+
+---
+
+## [1.0.0] - Versión inicial
+- Plataforma de aprendizaje Python con lecciones por categorías
+- Autenticación con Firebase
+- Editor de código con ejecución en sandbox
+- Sistema de progreso y puntos XP
+- Placement test para detección de nivel
+- Integración con n8n para búsqueda de vídeos con IA
