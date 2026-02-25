@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYLEARN - Login & Registro</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#221f10",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e5e5e5;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4d4d4;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased overflow-x-hidden">
+    <div class="min-h-screen w-full flex">
+        <!-- Left Panel - Branding -->
+        <div class="hidden lg:flex w-1/2 bg-primary flex-col justify-between p-12 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 pointer-events-none"
+                style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+            <div class="z-10">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-4xl text-black font-bold">terminal</span>
+                    <h1 class="text-black tracking-tight text-[32px] font-bold leading-tight">PYLEARN</h1>
+                </div>
+            </div>
+
+            <div class="z-10 flex flex-col items-center justify-center flex-1">
+                <div class="w-full max-w-md aspect-square relative">
+                    <div
+                        class="w-full h-full flex items-center justify-center rounded-xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 ease-out border-4 border-black bg-gray-900">
+                        <div class="text-center text-white p-8">
+                            <span class="material-symbols-outlined text-9xl mb-4 text-primary">code</span>
+                            <h2 class="text-3xl font-bold">Python Learning</h2>
+                            <p class="text-gray-300 mt-4">Interactive Code Editor</p>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-green-600">check_circle</span>
+                            <span class="text-black font-bold text-sm">Python 3.12 Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="z-10 mt-12">
+                <p class="text-black text-4xl font-black leading-tight tracking-[-0.033em] mb-4">
+                    Master Python,<br>One Line at a Time.
+                </p>
+                <div class="flex items-center gap-3">
+                    <p class="text-black/80 font-medium">Join 10,000+ developers.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Auth Form -->
+        <div
+            class="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-background-light dark:bg-background-dark relative">
+            <!-- Mobile Logo -->
+            <div class="lg:hidden absolute top-6 left-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-3xl text-primary font-bold">terminal</span>
+                <span class="text-[#1c190d] dark:text-white tracking-tight text-2xl font-bold">PYLEARN</span>
+            </div>
+
+            <div class="w-full max-w-[420px] flex flex-col gap-8">
+                <!-- Toggle between Login/Register -->
+                <div class="flex flex-col gap-6">
+                    <div
+                        class="flex h-12 w-full items-center justify-center rounded-lg bg-[#f4f1e7] dark:bg-stone-800 p-1">
+                        <label
+                            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
+                            <span class="truncate text-sm font-bold">Login</span>
+                            <input checked class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Login"
+                                onclick="showLogin()">
+                        </label>
+                        <label
+                            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
+                            <span class="truncate text-sm font-bold">Register</span>
+                            <input class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Register"
+                                onclick="showRegister()">
+                        </label>
+                    </div>
+
+                    <!-- Dynamic Header -->
+                    <div class="flex flex-col gap-2" id="formHeader">
+                        <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Welcome Back</h2>
+                        <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to
+                            sign in.</p>
+                    </div>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alertContainer"></div>
+
+                <!-- Login Form -->
+                <form class="flex-col gap-4" id="loginForm">
+                    <div class="flex flex-col gap-1.5 mb-4">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="login-identifier">Email or
+                            Username</label>
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                id="login-identifier" placeholder="dev@example.com or username" type="text" required>
+                            <span
+                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5 mb-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white"
+                                for="login-password">Password</label>
+                        </div>
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                id="login-password" placeholder="••••••••" type="password" required>
+                            <span
+                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                                onclick="togglePassword('login-password')">visibility_off</span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="mt-2 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl"
+                        type="submit">
+                        Log In
+                        <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                    </button>
+                </form>
+
+                <!-- Register Form (Hidden by default) -->
+                <form class="hidden flex-col gap-4" id="registerForm">
+                    <!-- Avatar picker -->
+                    <div class="flex flex-col gap-1.5 mb-2">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white">
+                            Profile photo <span class="text-stone-400 font-normal">(optional)</span>
+                        </label>
+                        <div class="flex items-center gap-4">
+                            <div class="relative group cursor-pointer flex-shrink-0"
+                                onclick="document.getElementById('regAvatarInput').click()">
+                                <div id="regAvatarCircle"
+                                    class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-black text-xl font-black overflow-hidden border-2 border-stone-200 dark:border-stone-700 select-none">
+                                    <span id="regAvatarInitial">?</span>
+                                    <img id="regAvatarImg" src="" alt="" class="hidden w-full h-full object-cover">
+                                </div>
+                                <div
+                                    class="absolute inset-0 rounded-full bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                    <span class="material-symbols-outlined text-white text-base">photo_camera</span>
+                                </div>
+                                <input type="file" id="regAvatarInput" accept="image/*" class="hidden"
+                                    onchange="handleRegisterAvatar(event)">
+                            </div>
+                            <div class="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">
+                                Click to upload a photo<br>
+                                JPG, PNG · Max 500KB<br>
+                                <button type="button" id="regRemoveBtn" onclick="clearRegisterAvatar()"
+                                    class="hidden text-red-500 hover:underline mt-1 text-xs">Remove photo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5 mb-4">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white"
+                            for="register-username">Username</label>
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                id="register-username" placeholder="johndoe" type="text" required>
+                            <span
+                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">person</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5 mb-4">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="register-email">Email
+                            address</label>
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                id="register-email" placeholder="dev@example.com" type="email" required>
+                            <span
+                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5 mb-4">
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white"
+                            for="register-password">Password</label>
+                        <div class="relative flex items-center">
+                            <input
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                id="register-password" placeholder="••••••••" type="password" required>
+                            <span
+                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                                onclick="togglePassword('register-password')">visibility_off</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Min 6 characters, at least one number</p>
+                    </div>
+
+                    <button
+                        class="mt-2 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl"
+                        type="submit">
+                        Create Account
+                        <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="absolute bottom-6 text-center w-full px-6">
+                <p class="text-xs text-stone-400">
+                    By continuing, you agree to our <a class="underline hover:text-stone-600 dark:hover:text-stone-300"
+                        href="#">Terms of Service</a> and <a
+                        class="underline hover:text-stone-600 dark:hover:text-stone-300" href="#">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between login and register forms
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('flex');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('flex');
+            document.getElementById('formHeader').innerHTML = `
+                <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Welcome Back</h2>
+                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to sign in.</p>
+            `;
+        }
+
+        function showRegister() {
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('flex');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('flex');
+            document.getElementById('formHeader').innerHTML = `
+                <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Create Account</h2>
+                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Join PyLearn and start coding today.</p>
+            `;
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const bgColor = type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800';
+
+            alertContainer.innerHTML = `
+                <div class="${bgColor} border rounded-lg p-4 text-sm font-medium animate-pulse">
+                    ${message}
+                </div>
+            `;
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        function setLoading(formId, isLoading) {
+            const form = document.getElementById(formId);
+            const button = form.querySelector('button[type="submit"]');
+
+            if (isLoading) {
+                const originalText = button.dataset.originalText || button.innerHTML;
+                button.dataset.originalText = originalText;
+                button.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                `;
+                button.disabled = true;
+                button.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                button.innerHTML = button.dataset.originalText;
+                button.disabled = false;
+                button.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Login submitted");
+
+            setLoading('loginForm', true);
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            try {
+                // Timeout controller
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ identifier, password }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/course';
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Login failed. Please try again.');
+                    setLoading('loginForm', false);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                let msg = 'An error occurred. Please try again.';
+                if (error.name === 'AbortError') {
+                    msg = 'Connection timed out. Check your server.';
+                }
+                showAlert(msg);
+                setLoading('loginForm', false);
+            }
+        });
+
+        // ── REGISTER AVATAR ─────────────────────────────────────
+        let regAvatarBase64 = '';
+
+        // Update avatar initial as user types username
+        document.getElementById('register-username').addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            document.getElementById('regAvatarInitial').textContent = val ? val[0].toUpperCase() : '?';
+        });
+
+        function handleRegisterAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { alert('Please select a valid image file'); return; }
+            if (file.size > 500 * 1024) { alert('Image cannot exceed 500KB'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                regAvatarBase64 = e.target.result;
+                document.getElementById('regAvatarImg').src = regAvatarBase64;
+                document.getElementById('regAvatarImg').classList.remove('hidden');
+                document.getElementById('regAvatarInitial').classList.add('hidden');
+                document.getElementById('regRemoveBtn').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearRegisterAvatar() {
+            regAvatarBase64 = '';
+            document.getElementById('regAvatarImg').src = '';
+            document.getElementById('regAvatarImg').classList.add('hidden');
+            document.getElementById('regAvatarInitial').classList.remove('hidden');
+            document.getElementById('regRemoveBtn').classList.add('hidden');
+            document.getElementById('regAvatarInput').value = '';
+        }
+
+        // Handle register
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setLoading('registerForm', true);
+
+            const username = document.getElementById('register-username').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Si hay avatar, guardarlo antes de redirigir
+                    if (regAvatarBase64) {
+                        try {
+                            await fetch('/api/user/avatar', {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ avatar: regAvatarBase64 })
+                            });
+                            localStorage.setItem('userAvatar', regAvatarBase64);
+                        } catch (e) { /* no bloquear registro si falla el avatar */ }
+                    }
+                    showAlert('Account created successfully! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/placement-test';
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Registration failed. Please try again.');
+                    setLoading('registerForm', false);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert('An error occurred. Please try again.');
+                setLoading('registerForm', false);
+            }
+        });
+    </script>
+</body>
+
+</html>
