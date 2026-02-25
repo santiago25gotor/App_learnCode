@@ -273,6 +273,29 @@ class FirebaseService:
             print(f"Error al buscar usuario: {str(e)}")
             return None
     
+    def get_user_by_email(self, email):
+        """Buscar usuario por email"""
+        if self.offline_mode:
+            for uid, user in self.mock_db['users'].items():
+                if user.get('email') == email:
+                    return {**user, 'uid': uid}
+            return None
+
+        try:
+            users = self.db.collection(Config.USERS_COLLECTION).where(
+                'email', '==', email
+            ).limit(1).get()
+
+            if users:
+                user_data = users[0].to_dict()
+                user_data['uid'] = users[0].id
+                return user_data
+            return None
+
+        except Exception as e:
+            print(f"Error al buscar usuario por email: {str(e)}")
+            return None
+
     def user_exists(self, username=None, email=None):
         """Verificar si un usuario o email ya existe"""
         if self.offline_mode:

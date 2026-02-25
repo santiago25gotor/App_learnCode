@@ -162,7 +162,7 @@ def logout():
 @auth_api.route('/change-password', methods=['POST'])
 @login_required
 def change_password():
-    """Cambiar contraseña del usuario"""
+    
     try:
         data = request.get_json()
         user_id = session.get('user_id')
@@ -170,47 +170,176 @@ def change_password():
         new_password = data.get('new_password', '').strip()
         confirm_password = data.get('confirm_password', '').strip()
         
-        # Validaciones básicas
         if not new_password or not confirm_password:
-            return jsonify({
-                'success': False,
-                'message': 'Todos los campos son obligatorios'
-            }), 400
+            return jsonify({'success': False, 'message': 'Todos los campos son obligatorios'}), 400
         
         if new_password != confirm_password:
-            return jsonify({
-                'success': False,
-                'message': 'Las contraseñas no coinciden'
-            }), 400
+            return jsonify({'success': False, 'message': 'Las contraseñas no coinciden'}), 400
         
-        # Validar contraseña con validate_password
         is_valid, message = validate_password(new_password)
         if not is_valid:
-            return jsonify({
-                'success': False,
-                'message': message
-            }), 400
+            return jsonify({'success': False, 'message': message}), 400
         
-        # Cambiar contraseña en Firebase Auth
         try:
-            firebase_auth.update_user(
-                user_id,
-                password=new_password
-            )
-            
-            return jsonify({
-                'success': True,
-                'message': 'Contraseña actualizada exitosamente'
-            }), 200
-            
+            firebase_auth.update_user(user_id, password=new_password)
+            return jsonify({'success': True, 'message': 'Contraseña actualizada exitosamente'}), 200
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'message': f'Error al actualizar contraseña: {str(e)}'
-            }), 500
+            return jsonify({'success': False, 'message': f'Error al actualizar contraseña: {str(e)}'}), 500
             
     except Exception as e:
+        return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
+
+@auth_api.route('/forgot-password/send-code', methods=['POST'])
+def forgot_password_send_code():
+   
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'success': False, 'message': 'No se recibieron datos'}), 400
+
+        email = data.get('email', '').strip().lower()
+
+        if not validate_email(email):
+            return jsonify({'success': False, 'message': 'Formato de email inválido'}), 400
+
+        # Verificar que el email existe en la BD
+        user = firebase_service.get_user_by_email(email)
+        if not user:
+            # Por seguridad, no revelar si el email existe o no
+            return jsonify({'success': True, 'message': 'Si ese email existe en nuestra base de datos, recibirás un código de verificación.'}), 200
+
+        if _rate_limited(email):
+            return jsonify({'success': False, 'message': 'Demasiadas solicitudes. Espera un momento.'}), 429
+
+        username = user.get('username', 'usuario')
+        code = generate_code(email)
+        ok, message = send_verification_email(email, code, username)
+
+        if not ok:
+            return jsonify({'success': False, 'message': message}), 500
+
+        return jsonify({'success': True, 'message': 'Código enviado. Revisa tu bandeja de entrada.'}), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
+
+
+@auth_api.route('/forgot-password/reset', methods=['POST'])
+def forgot_password_reset():
+    
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'success': False, 'message': 'No se recibieron datos'}), 400
+
+        email        = data.get('email',            '').strip().lower()
+        code         = data.get('code',             '').strip()
+        new_password = data.get('new_password',     '').strip()
+        confirm_pass = data.get('confirm_password', '').strip()
+
+        if not all([email, code, new_password, confirm_pass]):
+            return jsonify({'success': False, 'message': 'Todos los campos son obligatorios'}), 400
+
+        if new_password != confirm_pass:
+            return jsonify({'success': False, 'message': 'Las contraseñas no coinciden'}), 400
+
+        is_valid, msg = validate_password(new_password)
+        if not is_valid:
+            return jsonify({'success': False, 'message': msg}), 400
+
+       
+        ok, msg = validate_code(email, code)
+        if not ok:
+            return jsonify({'success': False, 'message': msg}), 400
+
+        try:
+            fb_user = firebase_auth.get_user_by_email(email)
+            firebase_auth.update_user(fb_user.uid, password=new_password)
+        except Exception as e:
+            return jsonify({'success': False, 'message': f'Error al actualizar la contraseña: {str(e)}'}), 500
+
+        return jsonify({'success': True, 'message': '¡Contraseña actualizada! Ya puedes iniciar sesión.'}), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
+
+
+@auth_api.route('/google', methods=['POST'])
+def google_login():
+   
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'success': False, 'message': 'No se recibieron datos'}), 400
+
+        id_token = data.get('id_token', '').strip()
+        if not id_token:
+            return jsonify({'success': False, 'message': 'Token de Google requerido'}), 400
+
+        try:
+            decoded = firebase_auth.verify_id_token(id_token)
+        except Exception as e:
+            return jsonify({'success': False, 'message': f'Token inválido: {str(e)}'}), 401
+
+        uid   = decoded['uid']
+        email = decoded.get('email', '')
+        name  = decoded.get('name', '')
+        photo = decoded.get('picture', '')
+
+        from backend.core.firebase import firebase_service
+        from config import Config
+        from firebase_admin import firestore
+
+        user_ref = firebase_service.db.collection(Config.USERS_COLLECTION).document(uid)
+        user_doc = user_ref.get()
+
+        if user_doc.exists:
+            user_data = user_doc.to_dict()
+            username  = user_data.get('username', email.split('@')[0])
+        else:
+            base_username = (name.replace(' ', '_').lower() or email.split('@')[0])[:20]
+            # Asegurarse de que empiece con letra y solo tenga chars válidos
+            import re
+            base_username = re.sub(r'[^a-z0-9_]', '', base_username)
+            if not base_username or not base_username[0].isalpha():
+                base_username = 'user_' + base_username
+
+            # Si el username ya existe, añadir sufijo numérico
+            username = base_username
+            counter  = 1
+            while firebase_service.user_exists(username=username):
+                username = f"{base_username}{counter}"
+                counter += 1
+
+            user_ref.set({
+                'username':   username,
+                'email':      email,
+                'photo_url':  photo,
+                'role':       'user',
+                'auth_provider': 'google',
+                'created_at': firestore.SERVER_TIMESTAMP,
+                'progress': {
+                    'completed_lessons':      [],
+                    'current_level':          'Python Básico',
+                    'total_points':           0,
+                    'unlocked_categories':    ['Python Básico'],
+                    'placement_test_completed': False
+                }
+            })
+            
+        session['user_id']  = uid
+        session['username'] = username
+
         return jsonify({
-            'success': False,
-            'message': f'Error en el servidor: {str(e)}'
-        }), 500
+            'success':  True,
+            'message':  'Login con Google exitoso',
+            'is_new':   not user_doc.exists,
+            'user': {
+                'id':       uid,
+                'username': username,
+                'email':    email,
+            }
+        }), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
