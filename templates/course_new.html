@@ -466,24 +466,17 @@
                     completedLessons = userProgress.completed_lessons || [];
                     if (allLessons.length > 0) { renderLearningPath(); renderSyllabus(); }
 
-                    // Update header avatar
+                    // Update header avatar — usar key específica por usuario para evitar
+                    // que el avatar de un usuario se muestre a otro en el mismo navegador
                     const initial = currentUsername.charAt(0).toUpperCase();
                     document.getElementById('headerAvatarInitial').textContent = initial;
-                    if (userProgress.avatar || data.user.avatar) {
-                        const avatarSrc = data.user.avatar || localStorage.getItem('userAvatar') || '';
-                        if (avatarSrc) {
-                            document.getElementById('headerAvatarImg').src = avatarSrc;
-                            document.getElementById('headerAvatarImg').classList.remove('hidden');
-                            document.getElementById('headerAvatarInitial').classList.add('hidden');
-                        }
-                    } else {
-                        // Check localStorage cache
-                        const cached = localStorage.getItem('userAvatar');
-                        if (cached) {
-                            document.getElementById('headerAvatarImg').src = cached;
-                            document.getElementById('headerAvatarImg').classList.remove('hidden');
-                            document.getElementById('headerAvatarInitial').classList.add('hidden');
-                        }
+                    const userId = data.user.id;
+                    const avatarSrc = data.user.avatar || localStorage.getItem(`userAvatar_${userId}`) || '';
+                    if (avatarSrc) {
+                        document.getElementById('headerAvatarImg').src = avatarSrc;
+                        document.getElementById('headerAvatarImg').classList.remove('hidden');
+                        document.getElementById('headerAvatarInitial').classList.add('hidden');
+                        localStorage.setItem(`userAvatar_${userId}`, avatarSrc);
                     }
                     document.getElementById('headerPoints').textContent = userProgress.total_points || 0;
 
@@ -516,7 +509,7 @@
         // Load lessons
         async function loadLessons() {
             try {
-                const response = await fetch('/api/lessons/lessons');
+                const response = await fetch('/api/lessons/');
                 const data = await response.json();
 
                 if (data.success) {
@@ -678,9 +671,12 @@
 
         // Update milestone info
         function updateMilestoneInfo() {
-            const completed = completedLessons;
+            // Filtrar solo IDs que realmente existen en las lecciones actuales
+            // (evita que IDs de versiones anteriores inflen el porcentaje)
+            const validIds = new Set(allLessons.map(l => l.id));
+            const validCompleted = completedLessons.filter(id => validIds.has(id));
             const total = allLessons.length;
-            const percentage = total > 0 ? Math.round((completed.length / total) * 100) : 0;
+            const percentage = total > 0 ? Math.min(100, Math.round((validCompleted.length / total) * 100)) : 0;
 
             document.getElementById('milestoneBar').style.width = `${percentage}%`;
             document.getElementById('milestoneProgress').textContent = `${percentage}%`;

@@ -2,9 +2,9 @@ from flask import Blueprint, request, jsonify, session
 from backend.core.firebase import firebase_service
 from backend.utils.decorators import login_required
 
-lesson_api = Blueprint('lesson', __name__, url_prefix='/api/lessons')
+lesson_api = Blueprint('lesson', __name__)
 
-@lesson_api.route('/lessons', methods=['GET'])
+@lesson_api.route('/', methods=['GET'])
 @login_required
 def get_lessons():
     category = request.args.get('category')
@@ -74,7 +74,7 @@ def get_lesson(lesson_id):
             'message': 'Lección no encontrada'
         }), 404
 
-@lesson_api.route('/lessons/categories', methods=['GET'])
+@lesson_api.route('/categories', methods=['GET'])
 @login_required
 def get_categories():
     from config import Config

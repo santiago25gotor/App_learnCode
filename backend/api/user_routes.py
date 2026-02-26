@@ -20,8 +20,10 @@ def get_current_user():
         'success': True,
         'user': {
             'id': user_id,
-            'username': username,
+            'username': user_data.get('username', username),
+            'email': user_data.get('email', ''),
             'avatar': avatar,
+            'role': user_data.get('role', 'user'),
             'progress': progress
         }
     }), 200

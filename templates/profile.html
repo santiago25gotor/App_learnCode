@@ -58,7 +58,7 @@
                 </div>
                 <div class="flex-1">
                     <h2 class="text-3xl font-black mb-2 text-gray-900 dark:text-white" id="userName">Cargando...</h2>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4" id="userEmail">email@example.com</p>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4" id="userEmail"></p>
                     <div class="flex items-center gap-6">
                         <div class="flex items-center gap-2 bg-white/50 dark:bg-black/30 px-4 py-2 rounded-full">
                             <span class="material-symbols-outlined text-primary">bolt</span>
@@ -290,103 +290,331 @@
         </div>
     </div>
 
+
     <script src="/static/js/modal-system.js"></script>
     <script>
         let userData = null;
+
         document.addEventListener('DOMContentLoaded', async () => {
-            loadUserData();
-            try { const r = await fetch('/api/admin/check'); const d = await r.json(); if (d.is_admin) document.getElementById('adminBtn').style.display = ''; } catch(e) {}
-            if (localStorage.getItem('darkMode') === 'true') { document.documentElement.classList.add('dark'); document.getElementById('darkModeToggle').checked = true; }
+            // Dark mode primero para evitar flash
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+
+            // Verificar si es admin (en paralelo, no bloquea la carga del perfil)
+            fetch('/api/admin/check')
+                .then(r => r.json())
+                .then(d => { if (d.is_admin) document.getElementById('adminBtn').style.display = ''; })
+                .catch(() => {});
+
+            // Cargar datos del usuario — con await para capturar errores correctamente
+            await loadUserData();
         });
+
         async function loadUserData() {
             try {
                 const response = await fetch('/api/user/me');
                 const data = await response.json();
-                if (data.success) { userData = data.user; renderUserData(); }
-                else { window.location.href = '/login'; }
-            } catch (error) { console.error('Error loading user:', error); Modal.error('Error al cargar los datos del perfil'); }
+
+                if (data.success) {
+                    userData = data.user;
+
+                    // Combinar avatar de Firestore con caché local (por usuario, nunca global)
+                    if (userData.id) {
+                        const cached = localStorage.getItem(`userAvatar_${userData.id}`);
+                        if (!userData.avatar && cached) {
+                            userData.avatar = cached;
+                        }
+                    }
+
+                    // Renderizar y esperar — si falla, el catch lo captura
+                    await renderUserData();
+
+                } else {
+                    window.location.href = '/login';
+                }
+
+            } catch (error) {
+                console.error('Error cargando perfil:', error);
+                // Mostrar error solo si Modal ya está cargado
+                if (typeof Modal !== 'undefined') {
+                    Modal.error('Error al cargar los datos del perfil. Recarga la página.');
+                } else {
+                    document.getElementById('userName').textContent = 'Error al cargar';
+                }
+            }
         }
-        function renderUserData() {
-            document.getElementById('userName').textContent = userData.username || 'Usuario';
-            document.getElementById('userEmail').textContent = userData.email || '';
+
+        async function renderUserData() {
+            // ── Datos básicos — se muestran INMEDIATAMENTE, antes de cualquier fetch ──
+            document.getElementById('userName').textContent    = userData.username || 'Usuario';
+            document.getElementById('userEmail').textContent   = userData.email    || '';
+
             const initial = (userData.username || 'U')[0].toUpperCase();
-            document.getElementById('userInitials').textContent = initial;
+            document.getElementById('userInitials').textContent  = initial;
             document.getElementById('thumbInitials').textContent = initial;
-            if (userData.avatar) { showAvatarImage(userData.avatar); }
-            const progress = userData.progress || {};
-            const completedLessons = (progress.completed_lessons || []).length;
-            const totalPoints = progress.total_points || 0;
-            document.getElementById('totalPoints').textContent = totalPoints + ' XP';
-            document.getElementById('completedLessons').textContent = completedLessons + ' lecciones';
-            const basicCount = completedLessons > 0 ? Math.min(completedLessons, 20) : 0;
-            const intermediateCount = completedLessons > 20 ? Math.min(completedLessons - 20, 30) : 0;
-            const advancedCount = completedLessons > 50 ? completedLessons - 50 : 0;
-            document.getElementById('statBasic').textContent = basicCount;
-            document.getElementById('statIntermediate').textContent = intermediateCount;
-            document.getElementById('statAdvanced').textContent = advancedCount;
-            const totalLessons = 245;
-            const globalPercent = Math.min(100, Math.round((completedLessons / totalLessons) * 100));
+
+            if (userData.avatar) {
+                showAvatarImage(userData.avatar);
+            }
+
+            const progress       = userData.progress || {};
+            const completedIds   = progress.completed_lessons || [];
+            const completedCount = completedIds.length;
+            const totalPoints    = progress.total_points || 0;
+
+            document.getElementById('totalPoints').textContent      = totalPoints + ' XP';
+            document.getElementById('completedLessons').textContent = completedCount + ' lecciones';
+            document.getElementById('streakDays').textContent       = Math.min(Math.floor(completedCount / 3), 30);
+
+            // ── Estadísticas por categoría — fetch secundario, no bloquea lo de arriba ──
+            let totalLessons     = 0;
+            let basicDone        = 0;
+            let intermediateDone = 0;
+            let advancedDone     = 0;
+
+            try {
+                const lessonsRes  = await fetch('/api/lessons/');
+                const lessonsData = await lessonsRes.json();
+
+                if (lessonsData.success && lessonsData.lessons) {
+                    const lessons  = lessonsData.lessons;
+                    totalLessons   = lessons.length;
+                    const validIds = new Set(completedIds);
+
+                    lessons.forEach(l => {
+                        const cat  = l.categoria || '';
+                        const done = validIds.has(l.id);
+                        if      (cat.includes('Básico'))     { if (done) basicDone++; }
+                        else if (cat.includes('Intermedio')) { if (done) intermediateDone++; }
+                        else if (cat.includes('Avanzado'))   { if (done) advancedDone++; }
+                    });
+                }
+            } catch (e) {
+                console.warn('No se pudieron cargar las lecciones para estadísticas:', e);
+                totalLessons = Math.max(completedCount, 1);
+            }
+
+            document.getElementById('statBasic').textContent        = basicDone;
+            document.getElementById('statIntermediate').textContent  = intermediateDone;
+            document.getElementById('statAdvanced').textContent      = advancedDone;
+
+            const globalPercent = totalLessons > 0
+                ? Math.min(100, Math.round((completedCount / totalLessons) * 100))
+                : 0;
             document.getElementById('globalProgress').textContent = globalPercent + '%';
-            document.getElementById('progressBar').style.width = globalPercent + '%';
-            const streakDays = Math.min(Math.floor(completedLessons / 3), 30);
-            document.getElementById('streakDays').textContent = streakDays;
+            document.getElementById('progressBar').style.width    = globalPercent + '%';
         }
+
         function showAvatarImage(src) {
-            const img = document.getElementById('userAvatarImg'); const initials = document.getElementById('userInitials');
-            if (src) { img.src = src; img.classList.remove('hidden'); initials.classList.add('hidden'); } else { img.classList.add('hidden'); initials.classList.remove('hidden'); }
-            const thumbImg = document.getElementById('thumbImg'); const thumbInitials = document.getElementById('thumbInitials');
-            if (src) { thumbImg.src = src; thumbImg.classList.remove('hidden'); thumbInitials.classList.add('hidden'); } else { thumbImg.classList.add('hidden'); thumbInitials.classList.remove('hidden'); }
+            const img      = document.getElementById('userAvatarImg');
+            const initials = document.getElementById('userInitials');
+            if (src) {
+                img.src = src;
+                img.classList.remove('hidden');
+                initials.classList.add('hidden');
+            } else {
+                img.classList.add('hidden');
+                initials.classList.remove('hidden');
+            }
+            const thumbImg      = document.getElementById('thumbImg');
+            const thumbInitials = document.getElementById('thumbInitials');
+            if (src) {
+                thumbImg.src = src;
+                thumbImg.classList.remove('hidden');
+                thumbInitials.classList.add('hidden');
+            } else {
+                thumbImg.classList.add('hidden');
+                thumbInitials.classList.remove('hidden');
+            }
         }
+
         function handleAvatarChange(event) {
-            const file = event.target.files[0]; if (!file) return;
+            const file = event.target.files[0];
+            if (!file) return;
             if (!file.type.startsWith('image/')) { Modal.error('Por favor selecciona una imagen válida'); return; }
             if (file.size > 500 * 1024) { Modal.error('La imagen no puede superar 500KB. Reduce el tamaño e inténtalo de nuevo.'); return; }
+
             const reader = new FileReader();
             reader.onload = async (e) => {
-                const base64 = e.target.result; showAvatarImage(base64);
-                try { const res = await fetch('/api/user/avatar', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ avatar: base64 }) });
-                const data = await res.json(); if (data.success) { Modal.success('Foto de perfil actualizada'); localStorage.setItem('userAvatar', base64); } else { Modal.error(data.message || 'Error al guardar la imagen'); }
-                } catch (err) { Modal.error('Error de conexión al guardar la imagen'); }
+                const base64 = e.target.result;
+                showAvatarImage(base64);
+                try {
+                    const res  = await fetch('/api/user/avatar', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ avatar: base64 })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        if (userData && userData.id) {
+                            localStorage.setItem(`userAvatar_${userData.id}`, base64);
+                        }
+                        Modal.success('Foto de perfil actualizada');
+                    } else {
+                        Modal.error(data.message || 'Error al guardar la imagen');
+                    }
+                } catch (err) {
+                    Modal.error('Error de conexión al guardar la imagen');
+                }
             };
             reader.readAsDataURL(file);
         }
+
         async function removeAvatar() {
-            const confirmed = await Modal.confirm({ title: 'Eliminar foto', message: '¿Quieres volver a usar tu inicial como avatar?', confirmText: 'Sí, eliminar', type: 'warning' });
+            const confirmed = await Modal.confirm({
+                title: 'Eliminar foto',
+                message: '¿Quieres volver a usar tu inicial como avatar?',
+                confirmText: 'Sí, eliminar',
+                type: 'warning'
+            });
             if (!confirmed) return;
-            try { const res = await fetch('/api/user/avatar', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ avatar: '' }) });
-            const data = await res.json(); if (data.success) { const img = document.getElementById('userAvatarImg'); const initials = document.getElementById('userInitials'); img.src = ''; img.classList.add('hidden'); initials.classList.remove('hidden'); localStorage.removeItem('userAvatar'); Modal.success('Foto eliminada'); }
-            } catch (err) { Modal.error('Error al eliminar la imagen'); }
-        }
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); const isDark = document.documentElement.classList.contains('dark'); localStorage.setItem('darkMode', isDark); document.getElementById('darkModeToggle').checked = isDark; }
-        async function exportData() {
-            const confirmed = await Modal.confirm({ title: 'Exportar Datos', message: '¿Deseas descargar todos tus datos de aprendizaje?', confirmText: 'Descargar' });
-            if (confirmed) { const dataStr = JSON.stringify(userData, null, 2); const dataBlob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(dataBlob); const link = document.createElement('a'); link.href = url; link.download = `pylearn-data-${Date.now()}.json`; link.click(); Modal.success('Datos exportados correctamente'); }
-        }
-        async function logout() {
-            const confirmed = await Modal.confirm({ title: 'Cerrar Sesión', message: '¿Estás seguro de que quieres cerrar sesión?', confirmText: 'Sí, Cerrar Sesión', type: 'warning' });
-            if (confirmed) { try { await fetch('/api/auth/logout', { method: 'POST' }); window.location.href = '/login'; } catch (e) { window.location.href = '/login'; } }
-        }
-        function openChangePasswordModal() { document.getElementById('changePasswordModal').classList.remove('hidden'); document.getElementById('changePasswordForm').reset(); document.getElementById('passwordError').classList.add('hidden'); document.getElementById('passwordMatch').classList.add('hidden'); document.getElementById('passwordRequirements').classList.add('hidden'); }
-        function closeChangePasswordModal() { document.getElementById('changePasswordModal').classList.add('hidden'); document.getElementById('changePasswordForm').reset(); }
-        function togglePasswordVisibility(fieldId) { const field = document.getElementById(fieldId); const button = field.nextElementSibling; const icon = button.querySelector('.material-symbols-outlined'); if (field.type === 'password') { field.type = 'text'; icon.textContent = 'visibility_off'; } else { field.type = 'password'; icon.textContent = 'visibility'; } }
-        document.getElementById('confirmPassword')?.addEventListener('input', function() { const newPassword = document.getElementById('newPassword').value; const confirmPassword = this.value; const matchDiv = document.getElementById('passwordMatch'); if (confirmPassword.length > 0 && newPassword === confirmPassword) { matchDiv.classList.remove('hidden'); } else { matchDiv.classList.add('hidden'); } });
-        document.getElementById('changePasswordForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitPasswordBtn'); const errorDiv = document.getElementById('passwordError'); const errorText = document.getElementById('passwordErrorText'); const requirementsDiv = document.getElementById('passwordRequirements'); const matchDiv = document.getElementById('passwordMatch');
-            const newPassword = document.getElementById('newPassword').value; const confirmPassword = document.getElementById('confirmPassword').value;
-            errorDiv.classList.add('hidden'); requirementsDiv.classList.add('hidden'); matchDiv.classList.add('hidden');
-            if (newPassword !== confirmPassword) { errorText.textContent = 'Las contraseñas no coinciden'; errorDiv.classList.remove('hidden'); return; }
-            submitBtn.disabled = true; const originalHTML = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Guardando...</span>';
             try {
-                const response = await fetch('/api/auth/change-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ new_password: newPassword, confirm_password: confirmPassword }) });
-                const data = await response.json();
-                if (data.success) { closeChangePasswordModal(); if (typeof Modal !== 'undefined') { await Modal.success('Tu contraseña ha sido actualizada correctamente', '¡Contraseña Cambiada!'); } else { alert('✓ Contraseña cambiada exitosamente'); } }
-                else { errorText.textContent = data.message; errorDiv.classList.remove('hidden'); if (data.message.includes('caracteres') || data.message.includes('mayúscula') || data.message.includes('minúscula') || data.message.includes('número') || data.message.includes('especial')) { requirementsDiv.classList.remove('hidden'); } }
-            } catch (error) { console.error('Error:', error); errorText.textContent = 'Error de conexión. Intenta nuevamente.'; errorDiv.classList.remove('hidden'); }
-            finally { submitBtn.disabled = false; submitBtn.innerHTML = originalHTML; }
+                const res  = await fetch('/api/user/avatar', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ avatar: '' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showAvatarImage('');
+                    if (userData && userData.id) {
+                        localStorage.removeItem(`userAvatar_${userData.id}`);
+                    }
+                    Modal.success('Foto eliminada');
+                }
+            } catch (err) {
+                Modal.error('Error al eliminar la imagen');
+            }
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            document.getElementById('darkModeToggle').checked = isDark;
+        }
+
+        async function exportData() {
+            const confirmed = await Modal.confirm({
+                title: 'Exportar Datos',
+                message: '¿Deseas descargar todos tus datos de aprendizaje?',
+                confirmText: 'Descargar'
+            });
+            if (confirmed) {
+                const dataStr  = JSON.stringify(userData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url      = URL.createObjectURL(dataBlob);
+                const link     = document.createElement('a');
+                link.href      = url;
+                link.download  = `pylearn-data-${Date.now()}.json`;
+                link.click();
+                Modal.success('Datos exportados correctamente');
+            }
+        }
+
+        async function logout() {
+            const confirmed = await Modal.confirm({
+                title: 'Cerrar Sesión',
+                message: '¿Estás seguro de que quieres cerrar sesión?',
+                confirmText: 'Sí, Cerrar Sesión',
+                type: 'warning'
+            });
+            if (confirmed) {
+                try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+                window.location.href = '/login';
+            }
+        }
+
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.remove('hidden');
+            document.getElementById('changePasswordForm').reset();
+            document.getElementById('passwordError').classList.add('hidden');
+            document.getElementById('passwordMatch').classList.add('hidden');
+            document.getElementById('passwordRequirements').classList.add('hidden');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('hidden');
+            document.getElementById('changePasswordForm').reset();
+        }
+
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon  = field.nextElementSibling.querySelector('.material-symbols-outlined');
+            if (field.type === 'password') {
+                field.type      = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                field.type      = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('confirmPassword')?.addEventListener('input', function () {
+                const newPwd  = document.getElementById('newPassword').value;
+                const matchEl = document.getElementById('passwordMatch');
+                if (this.value.length > 0 && newPwd === this.value) {
+                    matchEl.classList.remove('hidden');
+                } else {
+                    matchEl.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('changePasswordForm')?.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitBtn      = document.getElementById('submitPasswordBtn');
+                const errorDiv       = document.getElementById('passwordError');
+                const errorText      = document.getElementById('passwordErrorText');
+                const requirementsEl = document.getElementById('passwordRequirements');
+                const matchEl        = document.getElementById('passwordMatch');
+                const newPassword    = document.getElementById('newPassword').value;
+                const confirmPwd     = document.getElementById('confirmPassword').value;
+
+                errorDiv.classList.add('hidden');
+                requirementsEl.classList.add('hidden');
+                matchEl.classList.add('hidden');
+
+                if (newPassword !== confirmPwd) {
+                    errorText.textContent = 'Las contraseñas no coinciden';
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                const originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Guardando...</span>';
+
+                try {
+                    const response = await fetch('/api/auth/change-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ new_password: newPassword, confirm_password: confirmPwd })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        closeChangePasswordModal();
+                        await Modal.success('Tu contraseña ha sido actualizada correctamente', '¡Contraseña Cambiada!');
+                    } else {
+                        errorText.textContent = data.message;
+                        errorDiv.classList.remove('hidden');
+                        const needsReqs = ['caracteres','mayúscula','minúscula','número','especial'];
+                        if (needsReqs.some(w => data.message.includes(w))) {
+                            requirementsEl.classList.remove('hidden');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorText.textContent = 'Error de conexión. Intenta nuevamente.';
+                    errorDiv.classList.remove('hidden');
+                } finally {
+                    submitBtn.disabled  = false;
+                    submitBtn.innerHTML = originalHTML;
+                }
+            });
         });
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && !document.getElementById('changePasswordModal').classList.contains('hidden')) { closeChangePasswordModal(); } });
     </script>
 </body>
 </html>
