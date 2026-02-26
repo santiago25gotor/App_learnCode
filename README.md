@@ -20,7 +20,7 @@
 
 ## Descripción
 
-PYLEARN es una aplicación web full-stack diseñada para aprender Python de forma progresiva y gamificada. Los usuarios avanzan a través de más de **1.700 lecciones** organizadas en tres niveles, ganan XP al completar ejercicios, y pueden ejecutar código Python directamente en el navegador.
+PYLEARN es una aplicación web full-stack diseñada para aprender Python de forma progresiva y gamificada. Los usuarios avanzan a través de más de **30 lecciones** organizadas en tres niveles, ganan XP al completar ejercicios, y pueden ejecutar código Python directamente en el navegador.
 
 El sistema incluye un **test de nivel inicial** (placement test) que detecta los conocimientos previos del usuario y desbloquea automáticamente el nivel correspondiente, evitando que tenga que empezar desde cero si ya tiene experiencia.
 
