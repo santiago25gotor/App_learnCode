@@ -1,4 +1,3 @@
-# utils/decorators.py
 from functools import wraps
 from flask import jsonify, session
 

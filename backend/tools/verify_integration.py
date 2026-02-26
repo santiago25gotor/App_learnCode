@@ -2,7 +2,7 @@ import os
 import sys
 
 def check_file(filepath, description):
-    """Verificar si un archivo existe"""
+    
     if os.path.exists(filepath):
         print(f"  [OK] {description}")
         return True
@@ -18,7 +18,6 @@ def main():
     
     all_ok = True
     
-    # 1. Archivos principales
     print("📂 Archivos principales:")
     all_ok &= check_file("app.py", "Aplicación Flask principal")
     all_ok &= check_file("config.py", "Archivo de configuración")
@@ -26,8 +25,7 @@ def main():
     all_ok &= check_file("firebase-credentials.json", "Credenciales de Firebase")
     print()
     
-    # 2. Nueva Estructura Modular (Blueprints)
-    # Reemplaza la antigua comprobación de backend/routes.py
+   
     print("🔌 Módulos de la API (Blueprints):")
     all_ok &= check_file("api/auth_routes.py", "Módulo de Autenticación")
     all_ok &= check_file("api/user_routes.py", "Módulo de Usuario/Progreso")
@@ -36,7 +34,6 @@ def main():
     all_ok &= check_file("core/firebase.py", "Servicio Central de Firebase")
     print()
     
-    # 3. Utilidades y Herramientas
     print("🛠️  Utilidades y Herramientas:")
     all_ok &= check_file("utils/validators.py", "Validadores de datos")
     all_ok &= check_file("utils/decorators.py", "Decoradores (login_required)")
@@ -44,7 +41,6 @@ def main():
     all_ok &= check_file("tools/import_lessons.py", "Importador de lecciones")
     print()
     
-    # 4. Plantillas HTML
     print("🖼️  Plantillas HTML:")
     templates = [
         ("templates/index_new.html", "Landing page"),
@@ -57,7 +53,6 @@ def main():
         all_ok &= check_file(path, desc)
     print()
 
-    # 5. Verificación de dependencias críticas
     print("📦 Librerías de Python:")
     dependencies = ["flask", "firebase_admin", "flask_cors", "pandas"]
     for dep in dependencies:
@@ -69,7 +64,6 @@ def main():
             all_ok = False
     print()
     
-    # Resultado final
     print("=" * 70)
     if all_ok:
         print("✅ VERIFICACIÓN EXITOSA: La nueva estructura es correcta.")

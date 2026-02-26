@@ -47,10 +47,8 @@ def get_lesson(lesson_id):
         user_progress = firebase_service.get_user_progress(user_id)
         completed_lessons = user_progress.get('completed_lessons', [])
         
-        # Comprobar si está completada
         is_completed = lesson_id in completed_lessons
         
-        # Verificar si está bloqueada (no es la siguiente en secuencia)
         all_lessons = firebase_service.get_all_lessons()
         all_lessons.sort(key=lambda x: x.get('numero_leccion', 0))
         
@@ -58,7 +56,6 @@ def get_lesson(lesson_id):
         lesson_index = next((i for i, l in enumerate(all_lessons) if l.get('id') == lesson_id), None)
         
         if lesson_index is not None and lesson_index > 0:
-            # Verificar si la lección anterior está completada
             previous_lesson = all_lessons[lesson_index - 1]
             if previous_lesson.get('id') not in completed_lessons:
                 is_locked = True
@@ -80,7 +77,6 @@ def get_lesson(lesson_id):
 @lesson_api.route('/lessons/categories', methods=['GET'])
 @login_required
 def get_categories():
-    """Obtener lista de categorías disponibles"""
     from config import Config
     
     return jsonify({
@@ -109,7 +105,6 @@ def search():
             "message": "Parámetro de búsqueda vacío"
         }), 400
 
-    # Usar busqueda avanzada si hay filtros
     if category or difficulty is not None:
         results = firebase_service.search_lessons_advanced(query, category, difficulty)
     else:
@@ -130,13 +125,13 @@ def search():
 @lesson_api.route('/complete/<lesson_id>', methods=['POST'])
 @login_required
 def complete_lesson(lesson_id):
-    """Marcar una lección como completada"""
+    
     user_id = session.get('user_id')
     
     success, message = firebase_service.update_user_progress(user_id, lesson_id, completed=True)
     
     if success:
-        # Obtener progreso actualizado
+        
         progress = firebase_service.get_user_progress(user_id)
         
         return jsonify({
@@ -154,7 +149,7 @@ def complete_lesson(lesson_id):
 
 @lesson_api.route('/health', methods=['GET'])
 def health_check():
-    """Verificar que la API está funcionando"""
+
     return jsonify({
         'success': True,
         'message': 'API funcionando correctamente',

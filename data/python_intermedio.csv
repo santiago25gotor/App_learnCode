@@ -1,0 +1,581 @@
+﻿numero_leccion,titulo,url,descripcion,ejemplos_codigo,categoria
+16,Funciones lambda,,"Una función lambda es una función anónima y de una sola expresión. Se define con la palabra clave lambda y es útil para funciones simples que se usan en un momento puntual, especialmente como argumento de otras funciones.
+
+Sintaxis: lambda parametros: expresion
+
+Diferencias con def:
+- No tienen nombre (son anónimas)
+- Solo pueden contener una expresión (no múltiples líneas)
+- Devuelven el resultado de la expresión automáticamente
+- Se usan principalmente como argumentos de funciones de orden superior
+
+Funciones de orden superior:
+- map(funcion, iterable): aplica la función a cada elemento
+- filter(funcion, iterable): filtra elementos según la función
+- sorted(iterable, key=funcion): ordena usando la función como criterio
+- reduce(funcion, iterable): reduce la lista a un solo valor (módulo functools)","# Lambda básica
+cuadrado = lambda x: x ** 2
+print(cuadrado(5))     # 25
+
+sumar = lambda x, y: x + y
+print(sumar(3, 4))     # 7
+
+# Más útil: como argumento de otra función
+
+# sorted con key
+personas = [
+    {""nombre"": ""Carlos"", ""edad"": 35},
+    {""nombre"": ""Ana"",    ""edad"": 22},
+    {""nombre"": ""Pedro"",  ""edad"": 28},
+]
+# Ordenar por edad
+por_edad = sorted(personas, key=lambda p: p[""edad""])
+for p in por_edad:
+    print(f""{p['nombre']}: {p['edad']} años"")
+
+# Ordenar cadenas por longitud
+palabras = [""Python"", ""es"", ""un"", ""lenguaje"", ""genial""]
+por_longitud = sorted(palabras, key=lambda s: len(s))
+print(por_longitud)
+
+# map() - transformar cada elemento
+precios = [10.5, 25.0, 8.75, 15.0]
+con_iva = list(map(lambda p: round(p * 1.21, 2), precios))
+print(con_iva)   # [12.7, 30.25, 10.59, 18.15]
+
+# filter() - filtrar elementos
+numeros = [1, -5, 3, -2, 8, -1, 6]
+positivos = list(filter(lambda x: x > 0, numeros))
+print(positivos)   # [1, 3, 8, 6]
+
+# Combinando map y filter
+resultado = list(map(lambda x: x**2,
+                     filter(lambda x: x % 2 == 0, range(10))))
+print(resultado)   # [0, 4, 16, 36, 64]",Python Intermedio
+17,Comprensiones avanzadas,,"Las comprensiones son una forma compacta y pythónica de crear colecciones. Ya viste las list comprehensions; Python también tiene dict comprehensions, set comprehensions y generator expressions.
+
+Sintaxis general de list comprehension:
+[expresion for elemento in iterable if condicion]
+
+Dict comprehension:
+{clave: valor for elemento in iterable if condicion}
+
+Set comprehension:
+{expresion for elemento in iterable if condicion}
+
+Generator expression:
+(expresion for elemento in iterable if condicion)
+A diferencia de las listas, los generadores no almacenan todos los valores en memoria, sino que los generan uno a uno. Son mucho más eficientes para grandes volúmenes de datos.
+
+Comprensiones anidadas: permiten trabajar con estructuras de datos anidadas como matrices.","# List comprehension con condición
+pares_cuadrados = [x**2 for x in range(20) if x % 2 == 0]
+print(pares_cuadrados)
+
+# Dict comprehension
+palabras = [""casa"", ""perro"", ""sol"", ""python"", ""luna""]
+longitudes = {palabra: len(palabra) for palabra in palabras}
+print(longitudes)
+# {'casa': 4, 'perro': 5, 'sol': 3, 'python': 6, 'luna': 4}
+
+# Invertir clave-valor de un diccionario
+codigo_pais = {""ES"": ""España"", ""FR"": ""Francia"", ""DE"": ""Alemania""}
+pais_codigo = {v: k for k, v in codigo_pais.items()}
+print(pais_codigo)
+
+# Set comprehension - letras únicas
+frase = ""la programacion en python es muy divertida""
+letras_unicas = {letra for letra in frase if letra != "" ""}
+print(len(letras_unicas))   # número de letras únicas
+
+# Generator expression (eficiente en memoria)
+suma_cuadrados = sum(x**2 for x in range(1_000_000))
+print(suma_cuadrados)
+
+# Comprensión anidada - transponer una matriz
+matriz = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+transpuesta = [[fila[i] for fila in matriz] for i in range(3)]
+for fila in transpuesta:
+    print(fila)
+# [1, 4, 7]
+# [2, 5, 8]
+# [3, 6, 9]
+
+# Aplanar una lista de listas
+listas = [[1, 2], [3, 4], [5, 6]]
+plana = [n for sublista in listas for n in sublista]
+print(plana)   # [1, 2, 3, 4, 5, 6]",Python Intermedio
+18,Decoradores,,"Un decorador es una función que toma otra función como argumento, le añade funcionalidad y devuelve una nueva función. Es un patrón de diseño muy utilizado en Python, especialmente en frameworks web como Flask o Django.
+
+Concepto clave: las funciones en Python son objetos de primera clase. Pueden asignarse a variables, pasarse como argumentos y devolverse desde otras funciones. Los decoradores aprovechan esto.
+
+La sintaxis @decorador es azúcar sintáctico (syntactic sugar) para función = decorador(función).
+
+Casos de uso comunes:
+- Logging: registrar cuándo se llama una función
+- Medición de tiempo: calcular cuánto tarda una función
+- Control de acceso: verificar permisos antes de ejecutar
+- Caché: guardar resultados de funciones costosas
+- Validación: verificar argumentos antes de ejecutar
+
+functools.wraps: se usa para preservar el nombre y docstring de la función original.","from functools import wraps
+import time
+
+# Decorador básico
+def mayusculas(funcion):
+    @wraps(funcion)
+    def wrapper(*args, **kwargs):
+        resultado = funcion(*args, **kwargs)
+        return resultado.upper()
+    return wrapper
+
+@mayusculas
+def saludar(nombre):
+    return f""hola, {nombre}""
+
+print(saludar(""mundo""))   # HOLA, MUNDO
+
+# Decorador para medir tiempo de ejecución
+def medir_tiempo(funcion):
+    @wraps(funcion)
+    def wrapper(*args, **kwargs):
+        inicio = time.perf_counter()
+        resultado = funcion(*args, **kwargs)
+        fin = time.perf_counter()
+        print(f""{funcion.__name__} tardó {fin - inicio:.4f}s"")
+        return resultado
+    return wrapper
+
+@medir_tiempo
+def suma_lenta(n):
+    return sum(range(n))
+
+total = suma_lenta(1_000_000)
+print(f""Suma: {total}"")
+
+# Decorador con argumentos
+def repetir(veces):
+    def decorador(funcion):
+        @wraps(funcion)
+        def wrapper(*args, **kwargs):
+            for _ in range(veces):
+                resultado = funcion(*args, **kwargs)
+            return resultado
+        return wrapper
+    return decorador
+
+@repetir(3)
+def decir(mensaje):
+    print(mensaje)
+
+decir(""¡Hola!"")   # imprime 3 veces
+
+# Apilar decoradores
+@medir_tiempo
+@mayusculas
+def obtener_saludo(nombre):
+    return f""buenos días, {nombre}""
+
+print(obtener_saludo(""Ana""))",Python Intermedio
+19,Generadores e iteradores,,"Un iterador es cualquier objeto que implementa los métodos __iter__ y __next__. Un generador es una forma sencilla de crear iteradores usando la palabra clave yield en lugar de return.
+
+¿Por qué usar generadores?
+Los generadores producen valores uno a uno bajo demanda (lazy evaluation). No almacenan toda la secuencia en memoria, lo que los hace ideales para trabajar con grandes volúmenes de datos o secuencias infinitas.
+
+yield vs return:
+- return termina la función y devuelve un valor
+- yield pausa la función, devuelve un valor y recuerda el estado para la siguiente llamada
+
+yield from: delega la generación a otro generador o iterable.
+
+Generadores infinitos: pueden generar secuencias sin fin, limitadas por quien las consume (con next(), un bucle for con break, o islice).
+
+itertools: módulo de la biblioteca estándar con herramientas avanzadas para trabajar con iteradores.","# Generador básico
+def contar_hasta(n):
+    i = 0
+    while i < n:
+        yield i
+        i += 1
+
+for numero in contar_hasta(5):
+    print(numero, end="" "")   # 0 1 2 3 4
+print()
+
+# Los generadores son perezosos (lazy)
+def numeros_grandes():
+    for i in range(1_000_000_000):  # mil millones
+        yield i
+
+gen = numeros_grandes()
+print(next(gen))   # 0
+print(next(gen))   # 1
+print(next(gen))   # 2
+# Nunca guarda el billón de números en memoria
+
+# Generador de Fibonacci
+def fibonacci():
+    a, b = 0, 1
+    while True:   # infinito
+        yield a
+        a, b = b, a + b
+
+fib = fibonacci()
+primeros_10 = [next(fib) for _ in range(10)]
+print(primeros_10)   # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
+# Generador con parámetros
+def leer_en_chunks(datos, tamaño):
+    for i in range(0, len(datos), tamaño):
+        yield datos[i:i + tamaño]
+
+texto = ""abcdefghijklmnopqrstuvwxyz""
+for chunk in leer_en_chunks(texto, 5):
+    print(chunk)   # abcde, fghij, klmno, pqrst, uvwxy, z
+
+# yield from
+def encadenar(*iterables):
+    for iterable in iterables:
+        yield from iterable
+
+for x in encadenar([1, 2], [3, 4], [5, 6]):
+    print(x, end="" "")   # 1 2 3 4 5 6",Python Intermedio
+20,Programación Orientada a Objetos: Clases y Objetos,,"La Programación Orientada a Objetos (POO) es un paradigma que organiza el código en torno a objetos que combinan datos (atributos) y comportamientos (métodos).
+
+Conceptos clave:
+- Clase: plantilla o molde que define la estructura (tipo de objeto)
+- Objeto/Instancia: un ejemplar concreto creado a partir de una clase
+- Atributos: datos que pertenecen al objeto (self.nombre, self.edad)
+- Métodos: funciones que pertenecen a la clase
+
+__init__: el método constructor, se ejecuta automáticamente al crear un objeto. Inicializa los atributos del objeto.
+
+self: referencia al propio objeto dentro de la clase. Siempre es el primer parámetro de los métodos de instancia.
+
+Atributos de clase vs atributos de instancia:
+- Atributos de clase: compartidos por todas las instancias
+- Atributos de instancia: únicos para cada objeto (definidos en __init__)
+
+__str__ y __repr__: métodos especiales para representar el objeto como texto.","class Coche:
+    # Atributo de clase (compartido por todos los coches)
+    ruedas = 4
+    
+    def __init__(self, marca, modelo, año, color=""blanco""):
+        # Atributos de instancia
+        self.marca  = marca
+        self.modelo = modelo
+        self.año    = año
+        self.color  = color
+        self.km     = 0
+        self.encendido = False
+    
+    def encender(self):
+        if not self.encendido:
+            self.encendido = True
+            print(f""{self.marca} {self.modelo}: ¡Motor en marcha!"")
+        else:
+            print(""El coche ya está encendido"")
+    
+    def conducir(self, distancia):
+        if self.encendido:
+            self.km += distancia
+            print(f""Conduces {distancia} km. Total: {self.km} km"")
+        else:
+            print(""Primero debes encender el coche"")
+    
+    def __str__(self):
+        estado = ""encendido"" if self.encendido else ""apagado""
+        return f""{self.marca} {self.modelo} ({self.año}) - {self.km} km - {estado}""
+    
+    def __repr__(self):
+        return f""Coche('{self.marca}', '{self.modelo}', {self.año})""
+
+
+# Crear instancias
+mi_coche = Coche(""Toyota"", ""Corolla"", 2022, ""rojo"")
+coche_amigo = Coche(""Honda"", ""Civic"", 2021)
+
+mi_coche.encender()
+mi_coche.conducir(150)
+mi_coche.conducir(80)
+
+print(mi_coche)         # Toyota Corolla (2022) - 230 km - encendido
+print(repr(mi_coche))   # Coche('Toyota', 'Corolla', 2022)
+
+# Atributo de clase
+print(Coche.ruedas)           # 4
+print(mi_coche.ruedas)        # 4
+print(coche_amigo.ruedas)     # 4",Python Intermedio
+21,Herencia y polimorfismo,,"La herencia permite crear nuevas clases basadas en clases existentes, reutilizando y extendiendo su funcionalidad. La clase hija hereda todos los atributos y métodos de la clase padre.
+
+super(): función que permite llamar a métodos de la clase padre desde la clase hija. Es especialmente útil en __init__ para inicializar los atributos heredados.
+
+Polimorfismo: la capacidad de objetos de diferentes clases de responder al mismo mensaje (método) de formas distintas. Permite escribir código genérico que funciona con distintos tipos de objetos.
+
+Herencia múltiple: Python permite heredar de varias clases a la vez. El orden de resolución de métodos (MRO) se determina con el algoritmo C3.
+
+isinstance() e issubclass(): funciones para verificar el tipo y la jerarquía de clases.
+
+Métodos abstractos: con el módulo abc se pueden definir métodos que las clases hijas están obligadas a implementar.","class Animal:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad   = edad
+    
+    def respirar(self):
+        print(f""{self.nombre} respira"")
+    
+    def sonido(self):
+        raise NotImplementedError(""Cada animal debe implementar su sonido"")
+    
+    def __str__(self):
+        return f""{type(self).__name__}: {self.nombre} ({self.edad} años)""
+
+
+class Perro(Animal):
+    def __init__(self, nombre, edad, raza):
+        super().__init__(nombre, edad)   # inicializa nombre y edad
+        self.raza = raza
+    
+    def sonido(self):
+        return ""¡Guau guau!""
+    
+    def buscar(self, objeto):
+        print(f""{self.nombre} va a buscar el {objeto}"")
+
+
+class Gato(Animal):
+    def __init__(self, nombre, edad, indoor=True):
+        super().__init__(nombre, edad)
+        self.indoor = indoor
+    
+    def sonido(self):
+        return ""¡Miau!""
+    
+    def ronronear(self):
+        print(f""{self.nombre} ronronea..."")
+
+
+class PajaroCantor(Animal):
+    def sonido(self):
+        return ""¡Pío pío!""
+    
+    def cantar(self):
+        print(f""{self.nombre} canta una melodía"")
+
+
+# Polimorfismo en acción
+animales = [
+    Perro(""Rex"", 3, ""Labrador""),
+    Gato(""Luna"", 5),
+    PajaroCantor(""Pío"", 2),
+    Perro(""Toby"", 7, ""Beagle""),
+]
+
+for animal in animales:
+    print(f""{animal.nombre}: {animal.sonido()}"")
+
+# isinstance
+print(isinstance(animales[0], Perro))   # True
+print(isinstance(animales[0], Animal))  # True
+print(isinstance(animales[1], Perro))   # False
+
+# issubclass
+print(issubclass(Perro, Animal))        # True",Python Intermedio
+22,Módulos y paquetes,,"Un módulo es simplemente un archivo .py que contiene funciones, clases y variables. Los paquetes son directorios que contienen varios módulos (y un archivo __init__.py).
+
+Importar módulos:
+- import modulo: importa el módulo completo, se accede con modulo.funcion()
+- from modulo import funcion: importa solo lo que necesitas
+- from modulo import *: importa todo (no recomendado, puede generar conflictos)
+- import modulo as alias: importa con un nombre alternativo
+
+Módulos de la biblioteca estándar más útiles:
+- os: interactuar con el sistema operativo
+- sys: información del intérprete Python
+- math: funciones matemáticas
+- random: números aleatorios
+- datetime: fechas y horas
+- json: trabajar con JSON
+- re: expresiones regulares
+- collections: estructuras de datos avanzadas
+- itertools: herramientas para iteradores
+- pathlib: manipulación de rutas de archivos","import math
+import random
+from datetime import datetime, timedelta
+from collections import Counter, defaultdict
+import os
+
+# math
+print(math.pi)              # 3.141592653589793
+print(math.sqrt(144))       # 12.0
+print(math.ceil(4.2))       # 5
+print(math.floor(4.8))      # 4
+print(math.log(100, 10))    # 2.0
+
+# random
+print(random.randint(1, 10))           # entero entre 1 y 10
+print(random.choice([""A"", ""B"", ""C""])) # elemento aleatorio
+lista = [1, 2, 3, 4, 5]
+random.shuffle(lista)
+print(lista)
+muestra = random.sample(range(100), 5) # 5 únicos
+print(muestra)
+
+# datetime
+ahora = datetime.now()
+print(ahora.strftime(""%d/%m/%Y %H:%M""))
+
+mañana = ahora + timedelta(days=1)
+print(f""Mañana: {mañana.strftime('%A %d/%m/%Y')}"")
+
+# collections.Counter
+texto = ""mississippi""
+conteo = Counter(texto)
+print(conteo)                          # Counter({'i':4, 's':4, 'p':2, 'm':1})
+print(conteo.most_common(3))           # los 3 más comunes
+
+# defaultdict
+grupos = defaultdict(list)
+personas = [(""ventas"", ""Ana""), (""IT"", ""Luis""), (""ventas"", ""Sara""), (""IT"", ""Pedro"")]
+for departamento, nombre in personas:
+    grupos[departamento].append(nombre)
+print(dict(grupos))
+
+# os
+print(os.getcwd())          # directorio actual
+archivos = os.listdir(""."")  # listar archivos",Python Intermedio
+23,Manejo de archivos,,"Python facilita la lectura y escritura de archivos con la función open(). El gestor de contexto with garantiza que el archivo se cierre correctamente aunque ocurra un error.
+
+Modos de apertura:
+- 'r': lectura (por defecto)
+- 'w': escritura (crea o sobreescribe)
+- 'a': añadir al final (append)
+- 'x': crear nuevo (error si ya existe)
+- 'b': modo binario (se combina: 'rb', 'wb')
+- '+': lectura y escritura ('r+', 'w+')
+
+Métodos de lectura:
+- read(): lee todo el contenido
+- readline(): lee una línea
+- readlines(): lee todas las líneas como lista
+
+Módulo pathlib: forma moderna y orientada a objetos de manejar rutas y archivos.
+
+CSV y JSON: dos de los formatos más comunes; Python tiene módulos dedicados para cada uno.","import json
+from pathlib import Path
+
+# Escribir un archivo
+ruta = Path(""datos.txt"")
+with open(ruta, ""w"", encoding=""utf-8"") as f:
+    f.write(""Primera línea\n"")
+    f.write(""Segunda línea\n"")
+    f.writelines([""Tercera\n"", ""Cuarta\n""])
+
+# Leer el archivo completo
+with open(ruta, ""r"", encoding=""utf-8"") as f:
+    contenido = f.read()
+print(contenido)
+
+# Leer línea a línea (eficiente para archivos grandes)
+with open(ruta, ""r"", encoding=""utf-8"") as f:
+    for i, linea in enumerate(f, 1):
+        print(f""Línea {i}: {linea.strip()}"")
+
+# Añadir al final
+with open(ruta, ""a"", encoding=""utf-8"") as f:
+    f.write(""Quinta línea\n"")
+
+# JSON
+inventario = {
+    ""productos"": [
+        {""id"": 1, ""nombre"": ""Teclado"", ""precio"": 45.99, ""stock"": 12},
+        {""id"": 2, ""nombre"": ""Ratón"",   ""precio"": 25.50, ""stock"": 0},
+        {""id"": 3, ""nombre"": ""Monitor"", ""precio"": 299.0, ""stock"": 5},
+    ]
+}
+
+# Guardar JSON
+with open(""inventario.json"", ""w"", encoding=""utf-8"") as f:
+    json.dump(inventario, f, ensure_ascii=False, indent=2)
+
+# Leer JSON
+with open(""inventario.json"", ""r"", encoding=""utf-8"") as f:
+    datos = json.load(f)
+
+for producto in datos[""productos""]:
+    estado = ""✓"" if producto[""stock""] > 0 else ""✗""
+    print(f""{estado} {producto['nombre']}: {producto['precio']}€"")
+
+# Limpiar archivos de prueba
+Path(""datos.txt"").unlink(missing_ok=True)
+Path(""inventario.json"").unlink(missing_ok=True)",Python Intermedio
+24,Expresiones regulares,,"Las expresiones regulares (regex) son patrones de texto que permiten buscar, validar y transformar cadenas de forma muy potente. Se usan con el módulo re de Python.
+
+Metacaracteres básicos:
+- . cualquier carácter (excepto salto de línea)
+- ^ inicio de cadena
+- $ fin de cadena
+- * cero o más repeticiones
+- + una o más repeticiones
+- ? cero o una repetición
+- {n,m} entre n y m repeticiones
+- [] conjunto de caracteres [aeiou] [a-z] [0-9]
+- [^] cualquier carácter que NO esté en el conjunto
+- | alternativa (o)
+- () grupo de captura
+
+Secuencias especiales:
+- \d dígito (equivale a [0-9])
+- \w carácter de palabra [a-zA-Z0-9_]
+- \s espacio en blanco
+- \D, \W, \S: las versiones negadas
+
+Funciones principales del módulo re:
+- re.search(): busca la primera coincidencia
+- re.match(): busca solo al inicio
+- re.findall(): devuelve todas las coincidencias
+- re.sub(): sustituye coincidencias
+- re.compile(): compila un patrón para reutilizarlo","import re
+
+# Validar email
+def validar_email(email):
+    patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(patron, email))
+
+print(validar_email(""usuario@ejemplo.com""))  # True
+print(validar_email(""mal_email""))             # False
+print(validar_email(""otro@mail.co""))          # True
+
+# Extraer todos los números de un texto
+texto = ""En 2023 se vendieron 1500 unidades a 29.99€ cada una (total: 44985€)""
+numeros = re.findall(r'\d+\.?\d*', texto)
+print(numeros)   # ['2023', '1500', '29.99', '44985']
+
+# Buscar y reemplazar
+sucio = ""  esto   tiene    muchos    espacios   ""
+limpio = re.sub(r'\s+', ' ', sucio).strip()
+print(limpio)   # esto tiene muchos espacios
+
+# Grupos de captura: extraer partes de una fecha
+fecha_texto = ""La reunión es el 15/03/2024 a las 10:30""
+patron_fecha = r'(\d{2})/(\d{2})/(\d{4})'
+match = re.search(patron_fecha, fecha_texto)
+if match:
+    dia, mes, año = match.groups()
+    print(f""Día: {dia}, Mes: {mes}, Año: {año}"")
+
+# Validar número de teléfono español
+def validar_telefono(tel):
+    patron = r'^(\+34|0034)?[6789]\d{8}$'
+    numero = tel.replace("" "", """").replace(""-"", """")
+    return bool(re.match(patron, numero))
+
+print(validar_telefono(""612 345 678""))   # True
+print(validar_telefono(""+34 912345678"")) # True
+print(validar_telefono(""123456789""))     # False
+
+# finditer - iterador de coincidencias con posición
+for match in re.finditer(r'\b\w{6}\b', ""Python es un lenguaje potente y elegante""):
+    print(f""'{match.group()}' en posición {match.start()}"")",Python Intermedio

@@ -1,9 +1,7 @@
-# tools/manage_users.py
 import sys
 import os
 import argparse
 
-# Asegurar que el path incluya la raíz del proyecto para importar core y config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.firebase import firebase_service
@@ -22,24 +20,21 @@ def main():
     print(f"--- Iniciando acción: {args.action.upper()} ---")
 
     if args.action == "create":
-        # 1. Crear usuario
         success, msg, uid = firebase_service.create_user(args.email, args.password, args.username)
         if not success:
             print(f"Error: {msg}")
             return
         
-        # 2. Si es admin, podríamos añadir un campo de rol (opcional según tu lógica)
         if args.role == "admin":
             firebase_service.db.collection(Config.USERS_COLLECTION).document(uid).update({'role': 'admin'})
         
-        # 3. Desbloqueo masivo inmediato
         print(f"Desbloqueando lecciones para {args.username}...")
         ok, count = firebase_service.mass_unlock_lessons(uid)
         if ok:
             print(f"Éxito: Usuario {uid} creado con {count} lecciones desbloqueadas.")
 
     elif args.action == "unlock":
-        # Buscar usuario por email para obtener UID
+        
         user = firebase_service.get_user_by_email(args.email)
         if user:
             ok, count = firebase_service.mass_unlock_lessons(user['uid'])

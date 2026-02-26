@@ -5,7 +5,6 @@ from contextlib import redirect_stdout, redirect_stderr
 from backend.utils.decorators import login_required
 from data.exams_data import EXAMS 
 
-# Blueprint con nombre único
 code_api = Blueprint('code', __name__, url_prefix='/api/code')
 
 @code_api.route('/execute', methods=['POST'])

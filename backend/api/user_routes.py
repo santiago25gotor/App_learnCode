@@ -41,7 +41,6 @@ def update_avatar():
 
         avatar_url = data.get('avatar', '')
 
-        # Actualizar en Firestore
         firebase_service.db.collection('users') \
             .document(user_id) \
             .update({'avatar': avatar_url})
@@ -60,7 +59,7 @@ def update_avatar():
 @user_api.route('/placement-test/submit', methods=['POST'])
 @login_required
 def submit_placement_test():
-    """Guardar resultados del placement test y desbloquear niveles"""
+    
     try:
         user_id = session.get('user_id')
         data = request.get_json()

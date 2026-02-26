@@ -26,7 +26,6 @@ def admin_required(f):
 @admin_api.route('/stats', methods=['GET'])
 @admin_required
 def get_stats():
-    """Estadísticas generales de la plataforma"""
     try:
         users = firebase_service.db.collection(Config.USERS_COLLECTION).get()
         lessons = firebase_service.db.collection(Config.LESSONS_COLLECTION).get()
@@ -62,7 +61,6 @@ def get_stats():
 @admin_api.route('/users', methods=['GET'])
 @admin_required
 def get_users():
-    """Listar todos los usuarios con su progreso"""
     try:
         search = request.args.get('search', '').lower()
         docs = firebase_service.db.collection(Config.USERS_COLLECTION).get()
@@ -95,7 +93,6 @@ def get_users():
 @admin_api.route('/users/<user_id>', methods=['GET'])
 @admin_required
 def get_user_detail(user_id):
-    """Detalle completo de un usuario"""
     try:
         doc = firebase_service.db.collection(Config.USERS_COLLECTION).document(user_id).get()
         if not doc.exists:
@@ -110,14 +107,12 @@ def get_user_detail(user_id):
 @admin_api.route('/users/<user_id>/role', methods=['PUT'])
 @admin_required
 def update_user_role(user_id):
-    """Cambiar rol de un usuario (admin/user)"""
     try:
         data = request.get_json()
         new_role = data.get('role')
         if new_role not in ['user', 'admin']:
             return jsonify({'success': False, 'message': 'Rol inválido'}), 400
 
-        # No permitir que el admin se quite su propio rol
         if user_id == session.get('user_id') and new_role != 'admin':
             return jsonify({'success': False, 'message': 'No puedes quitarte el rol admin'}), 400
 
@@ -130,7 +125,6 @@ def update_user_role(user_id):
 @admin_api.route('/users/<user_id>/unlock', methods=['POST'])
 @admin_required
 def unlock_user_lessons(user_id):
-    """Desbloquear todas las lecciones de un usuario"""
     try:
         ok, result = firebase_service.mass_unlock_lessons(user_id)
         if ok:
