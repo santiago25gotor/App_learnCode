@@ -10,6 +10,7 @@ from backend.api.admin_routes import admin_api
 
 def create_app():
     app = Flask(__name__)
+    
     app.config.from_object(Config)
     CORS(app, origins=Config.CORS_ORIGINS, supports_credentials=True)
 
