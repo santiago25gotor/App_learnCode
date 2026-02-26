@@ -38,7 +38,6 @@
 
 ### 🏗️ Refactorización a estructura modular
 - Separación de rutas en Blueprints independientes: `auth_routes`, `user_routes`, `lesson_routes`, `code_routes`
-- Creación de `backend/core/firebase.py` como servicio centralizado con modo offline
 - Añadidos validadores (`validators.py`) y decoradores (`decorators.py`) reutilizables
 - Herramientas de gestión: `import_lessons.py`, `manage_users.py`, `verify_integration.py`
 

@@ -30,7 +30,6 @@ if errorlevel 1 (
 REM Verificar credenciales de Firebase
 if not exist "firebase-credentials.json" (
     echo [WARN] No se encontro firebase-credentials.json
-    echo [INFO] La app funcionara en modo offline
     echo.
 )
 

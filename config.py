@@ -24,3 +24,10 @@ class Config:
     
     # CORS
     CORS_ORIGINS = ['http://localhost:5000', 'http://127.0.0.1:5000']
+
+    # cloudinary
+
+    CLOUDINARY_CLOUD_NAME = "dgxblc89t"
+    CLOUDINARY_API_KEY = "616626934632247"
+    CLOUDINARY_API_SECRET = "IAWS-6Of35vevF0yGdRPBMH68qc"
+    CLOUDINARY_UPLOAD_PRESET = "avatar_upload"

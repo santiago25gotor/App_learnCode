@@ -11,11 +11,6 @@ start.bat
 
 Abre http://localhost:5000 en tu navegador.
 
-### Credenciales por defecto (modo offline)
-- **Email:** `admin@pylearn.com`
-- **Password:** cualquiera
-
-## Estructura del Proyecto
 
 ```
 App_learnCode/
@@ -26,7 +21,7 @@ App_learnCode/
 ├── firebase-credentials.json # Credenciales Firebase (gitignored)
 │
 ├── backend/                # Logica del servidor
-│   ├── firebase_service.py # Servicio Firebase + modo offline
+│   ├── firebase_service.py # Servicio Firebase
 │   ├── routes.py           # Endpoints de la API
 │   └── validators.py       # Validacion de datos
 │
@@ -62,7 +57,7 @@ App_learnCode/
 
 ## Funcionalidades
 
-- **Login/Registro** con Firebase Auth (o modo offline automatico)
+- **Login/Registro** con Firebase Auth
 - **258 lecciones** de Python (basico, intermedio, avanzado)
 - **Editor de codigo** integrado con terminal en cada leccion
 - **Busqueda de videos con IA** via n8n + YouTube
@@ -70,13 +65,6 @@ App_learnCode/
 - **Test de nivel** para saltar contenido conocido
 - **Examenes** por categoria
 - **Modo oscuro**
-
-## Modo Offline
-
-Si Firebase no esta disponible, la app arranca automaticamente en modo offline:
-- Base de datos en memoria con todas las lecciones cargadas desde `data/`
-- Login con `admin@pylearn.com` (cualquier password)
-- Progreso se guarda en sesion (se pierde al reiniciar)
 
 ## API Endpoints
 

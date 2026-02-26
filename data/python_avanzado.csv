@@ -1,0 +1,424 @@
+﻿numero_leccion,titulo,url,descripcion,ejemplos_codigo,categoria
+25,Gestores de contexto (with),,"Un gestor de contexto es un objeto que define qué ocurre al entrar y salir de un bloque with. La instrucción with garantiza que ciertos recursos (archivos, conexiones, locks) se liberen correctamente aunque ocurra una excepción.
+
+Protocolo de gestor de contexto:
+- __enter__: se ejecuta al entrar en el bloque with; puede devolver un valor
+- __exit__: se ejecuta al salir (siempre, con o sin error); recibe info de la excepción
+
+contextlib.contextmanager: decorador que permite crear gestores de contexto con un generador y yield, sin necesidad de crear una clase completa.
+
+Casos de uso:
+- Manejo de archivos
+- Transacciones de base de datos
+- Bloqueos de threading (Lock)
+- Medición de tiempo de bloques de código
+- Configuraciones temporales
+- Conexiones de red","from contextlib import contextmanager
+import time
+
+# Gestor de contexto propio con clase
+class Temporizador:
+    def __enter__(self):
+        self.inicio = time.perf_counter()
+        return self
+    
+    def __exit__(self, tipo, valor, traceback):
+        self.fin = time.perf_counter()
+        self.transcurrido = self.fin - self.inicio
+        print(f""Tiempo: {self.transcurrido:.4f}s"")
+        return False  # no suprime excepciones
+
+with Temporizador() as t:
+    suma = sum(range(1_000_000))
+print(f""Suma: {suma}"")
+
+# Gestor de contexto con @contextmanager
+@contextmanager
+def abrir_archivo_seguro(ruta, modo=""r""):
+    archivo = None
+    try:
+        archivo = open(ruta, modo, encoding=""utf-8"")
+        print(f""Archivo '{ruta}' abierto"")
+        yield archivo
+    except FileNotFoundError:
+        print(f""No se encontró '{ruta}'"")
+        yield None
+    finally:
+        if archivo:
+            archivo.close()
+            print(f""Archivo '{ruta}' cerrado"")
+
+# Gestor para configuración temporal
+@contextmanager
+def precision_decimal(decimales):
+    import decimal
+    contexto_prev = decimal.getcontext().copy()
+    decimal.getcontext().prec = decimales
+    try:
+        yield
+    finally:
+        decimal.setcontext(contexto_prev)
+
+import decimal
+with precision_decimal(50):
+    resultado = decimal.Decimal(1) / decimal.Decimal(7)
+    print(resultado)   # altísima precisión
+
+# Múltiples gestores en un with
+# with open(""a.txt"") as a, open(""b.txt"") as b:
+#     contenido_a = a.read()
+#     contenido_b = b.read()",Python Avanzado
+26,Concurrencia: Threading y Multiprocessing,,"Python ofrece varias formas de ejecutar código de forma concurrente. Es importante entender sus diferencias para elegir la adecuada según el caso.
+
+Threading (hilos):
+- Hilos dentro del mismo proceso, comparten memoria
+- Limitado por el GIL (Global Interpreter Lock): solo un hilo ejecuta Python a la vez
+- Ideal para tareas de I/O (red, archivos, base de datos)
+- No mejora el rendimiento en tareas intensivas de CPU en Python puro
+
+Multiprocessing (procesos):
+- Procesos independientes, cada uno con su propio intérprete y memoria
+- No tiene limitación del GIL
+- Ideal para tareas intensivas de CPU
+- Mayor overhead (más costoso en memoria y arranque)
+
+concurrent.futures: interfaz de alto nivel que unifica ambos enfoques con ThreadPoolExecutor y ProcessPoolExecutor.
+
+asyncio: concurrencia cooperativa con async/await (se ve en lección siguiente).","import threading
+import multiprocessing
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+import requests  # pip install requests
+
+# Threading básico
+def tarea(nombre, segundos):
+    print(f""{nombre}: inicio"")
+    time.sleep(segundos)
+    print(f""{nombre}: fin ({segundos}s)"")
+
+# Ejecutar en paralelo (I/O)
+hilos = []
+inicio = time.time()
+for i, seg in enumerate([2, 1, 3, 1, 2], 1):
+    h = threading.Thread(target=tarea, args=(f""Hilo-{i}"", seg))
+    hilos.append(h)
+    h.start()
+
+for h in hilos:
+    h.join()   # esperar a que terminen
+
+print(f""Total: {time.time() - inicio:.2f}s"")  # ~3s, no 9s
+
+# ThreadPoolExecutor (más limpio)
+def descargar_url(url):
+    # Simula descarga
+    time.sleep(0.5)
+    return f""Descargado: {url}""
+
+urls = [f""https://api.example.com/item/{i}"" for i in range(10)]
+
+with ThreadPoolExecutor(max_workers=5) as executor:
+    futuros = {executor.submit(descargar_url, url): url for url in urls}
+    for futuro in as_completed(futuros):
+        resultado = futuro.result()
+        print(resultado)
+
+# Multiprocessing para CPU intensivo
+def calcular_primos(hasta):
+    primos = []
+    for n in range(2, hasta):
+        if all(n % i != 0 for i in range(2, int(n**0.5) + 1)):
+            primos.append(n)
+    return len(primos)
+
+if __name__ == ""__main__"":
+    rangos = [50_000] * 4
+    with multiprocessing.Pool(processes=4) as pool:
+        resultados = pool.map(calcular_primos, rangos)
+    print(f""Primos encontrados: {resultados}"")",Python Avanzado
+27,Programación asíncrona con asyncio,,"asyncio es el framework de Python para programación asíncrona. Usa un modelo de concurrencia cooperativa: las tareas se turnan voluntariamente (con await) en lugar de ser interrumpidas por el sistema operativo.
+
+Conceptos clave:
+- async def: define una corrutina (función asíncrona)
+- await: pausa la corrutina y cede el control hasta que la operación termine
+- asyncio.run(): punto de entrada para ejecutar código asíncrono
+- asyncio.gather(): ejecuta múltiples corrutinas concurrentemente
+- asyncio.create_task(): crea una tarea que se ejecuta en segundo plano
+
+¿Cuándo usar asyncio?
+- Operaciones de red (HTTP, WebSockets, bases de datos)
+- Servidores de alta concurrencia (FastAPI, aiohttp)
+- Múltiples operaciones de I/O simultáneas
+
+Diferencia con threading:
+- Threading: concurrencia gestionada por el OS
+- asyncio: concurrencia cooperativa en un solo hilo, mucho más eficiente para I/O","import asyncio
+import time
+
+# Corrutina básica
+async def saludar(nombre, espera):
+    print(f""Hola, {nombre}!"")
+    await asyncio.sleep(espera)   # no bloquea el event loop
+    print(f""Adiós, {nombre}!"")
+
+async def main():
+    # Ejecución secuencial: tarda sum(esperas)
+    await saludar(""Ana"", 1)
+    await saludar(""Luis"", 2)
+
+# asyncio.run(main())
+
+# Ejecución concurrente con gather
+async def tarea(id, duracion):
+    print(f""Tarea {id}: inicio"")
+    await asyncio.sleep(duracion)
+    print(f""Tarea {id}: fin"")
+    return f""Resultado-{id}""
+
+async def principal():
+    inicio = time.perf_counter()
+    
+    # gather ejecuta todas en paralelo
+    resultados = await asyncio.gather(
+        tarea(1, 2),
+        tarea(2, 1),
+        tarea(3, 3),
+        tarea(4, 1),
+    )
+    
+    fin = time.perf_counter()
+    print(f""Tiempo total: {fin - inicio:.2f}s"")   # ~3s, no 7s
+    print(f""Resultados: {resultados}"")
+
+asyncio.run(principal())
+
+# Tasks - para más control
+async def con_tasks():
+    task1 = asyncio.create_task(tarea(1, 2))
+    task2 = asyncio.create_task(tarea(2, 1))
+    
+    # Puedo hacer otras cosas mientras las tasks se ejecutan
+    print(""Las tasks están corriendo en segundo plano..."")
+    
+    r1 = await task1
+    r2 = await task2
+    print(f""r1={r1}, r2={r2}"")
+
+asyncio.run(con_tasks())",Python Avanzado
+28,Metaclases y descriptores,,"En Python, todo es un objeto, incluidas las clases. Una metaclase es la ""clase de una clase"": define cómo se comporta una clase, igual que una clase define cómo se comporta un objeto.
+
+Metaclases:
+La metaclase por defecto es type. Puedes crear metaclases propias heredando de type y sobreescribiendo __new__ o __init__ para personalizar la creación de clases.
+
+Usos de metaclases:
+- Registrar clases automáticamente
+- Validar que las clases implementan ciertos métodos
+- Implementar patrones singleton
+- ORM (SQLAlchemy, Django models)
+
+Descriptores:
+Un descriptor es un objeto que define cómo se accede a un atributo. Se implementan con __get__, __set__ y/o __delete__. Son la base de properties, classmethods y staticmethods.
+
+@property: forma pythónica de crear getters y setters sin cambiar la interfaz pública de la clase.","# @property - la forma más común de usar descriptores
+class Temperatura:
+    def __init__(self, celsius=0):
+        self._celsius = celsius
+    
+    @property
+    def celsius(self):
+        return self._celsius
+    
+    @celsius.setter
+    def celsius(self, valor):
+        if valor < -273.15:
+            raise ValueError(""Temperatura por debajo del cero absoluto"")
+        self._celsius = valor
+    
+    @property
+    def fahrenheit(self):
+        return self._celsius * 9/5 + 32
+    
+    @property
+    def kelvin(self):
+        return self._celsius + 273.15
+
+t = Temperatura(25)
+print(f""{t.celsius}°C = {t.fahrenheit}°F = {t.kelvin}K"")
+t.celsius = 100
+print(f""Agua hirviendo: {t.fahrenheit}°F"")
+
+# Descriptor personalizado
+class Positivo:
+    """"""Descriptor que solo acepta valores positivos""""""
+    def __set_name__(self, owner, name):
+        self.name = name
+    
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        return getattr(obj, f""_{self.name}"", None)
+    
+    def __set__(self, obj, value):
+        if value <= 0:
+            raise ValueError(f""{self.name} debe ser positivo, got {value}"")
+        setattr(obj, f""_{self.name}"", value)
+
+class Rectangulo:
+    ancho  = Positivo()
+    alto   = Positivo()
+    
+    def __init__(self, ancho, alto):
+        self.ancho = ancho
+        self.alto  = alto
+    
+    @property
+    def area(self):
+        return self.ancho * self.alto
+
+r = Rectangulo(5, 3)
+print(f""Área: {r.area}"")   # 15
+
+try:
+    r.ancho = -1
+except ValueError as e:
+    print(e)   # ancho debe ser positivo, got -1",Python Avanzado
+29,Tipado estático con type hints,,"Python es dinámicamente tipado, pero desde Python 3.5 puedes añadir anotaciones de tipo (type hints) que documentan qué tipos esperan y devuelven las funciones. Herramientas como mypy, pyright o los IDEs las usan para detectar errores antes de ejecutar el código.
+
+Las type hints son opcionales y no afectan al comportamiento en tiempo de ejecución, pero mejoran enormemente la legibilidad y mantenibilidad del código.
+
+Módulo typing (Python 3.9+: muchos tipos ya están en los built-ins):
+- List[str] → list[str]
+- Dict[str, int] → dict[str, int]
+- Optional[str] → str | None
+- Union[int, str] → int | str
+- Tuple[int, ...], Callable, TypeVar, Generic
+
+TypeVar y Generic: para crear funciones y clases genéricas que funcionan con cualquier tipo.
+
+Protocolo (Protocol): duck typing estructural, sin herencia explícita.","from typing import Optional, Union, Callable, TypeVar
+from collections.abc import Sequence
+
+# Anotaciones básicas
+def saludar(nombre: str, veces: int = 1) -> str:
+    return (f""¡Hola, {nombre}! "" * veces).strip()
+
+print(saludar(""Ana""))
+print(saludar(""Luis"", 3))
+
+# Tipos compuestos (Python 3.10+ usa | para Union)
+def procesar(valor: int | str) -> str:
+    if isinstance(valor, int):
+        return f""Número: {valor}""
+    return f""Texto: {valor}""
+
+# Optional (puede ser None)
+def buscar_usuario(id: int) -> Optional[dict]:
+    usuarios = {1: {""nombre"": ""Ana""}, 2: {""nombre"": ""Luis""}}
+    return usuarios.get(id)   # puede devolver None
+
+usuario = buscar_usuario(1)
+if usuario:
+    print(usuario[""nombre""])
+
+# Tipos de colecciones
+def sumar_lista(numeros: list[int]) -> int:
+    return sum(numeros)
+
+def contar_palabras(texto: str) -> dict[str, int]:
+    conteo: dict[str, int] = {}
+    for palabra in texto.split():
+        conteo[palabra] = conteo.get(palabra, 0) + 1
+    return conteo
+
+# TypeVar - función genérica
+T = TypeVar('T')
+
+def primero(secuencia: Sequence[T]) -> T | None:
+    return secuencia[0] if secuencia else None
+
+print(primero([1, 2, 3]))       # int
+print(primero([""a"", ""b""]))      # str
+print(primero([]))              # None
+
+# Callable
+def aplicar(funcion: Callable[[int], int], valor: int) -> int:
+    return funcion(valor)
+
+print(aplicar(lambda x: x ** 2, 5))   # 25",Python Avanzado
+30,Testing con pytest,,"Las pruebas automáticas son esenciales para escribir código de calidad. pytest es el framework de testing más popular en Python por su simplicidad y potencia.
+
+Conceptos básicos:
+- Los archivos de test se llaman test_*.py o *_test.py
+- Las funciones de test empiezan con test_
+- pytest usa la instrucción assert de Python
+- Si el assert falla, pytest muestra un mensaje de error detallado
+
+Fixtures:
+Las fixtures son funciones que preparan el estado necesario para los tests. Se aplican con el decorador @pytest.fixture y se pasan como parámetros a las funciones de test.
+
+Parametrize:
+@pytest.mark.parametrize permite ejecutar el mismo test con múltiples conjuntos de datos.
+
+Monkeypatch:
+Permite reemplazar funciones, métodos o atributos durante el test.
+
+Buenas prácticas: AAA (Arrange, Act, Assert)","# archivo: calculadora.py
+def sumar(a, b):
+    return a + b
+
+def dividir(a, b):
+    if b == 0:
+        raise ZeroDivisionError(""No se puede dividir entre cero"")
+    return a / b
+
+def es_primo(n):
+    if n < 2:
+        return False
+    return all(n % i != 0 for i in range(2, int(n**0.5) + 1))
+
+
+# archivo: test_calculadora.py
+import pytest
+# from calculadora import sumar, dividir, es_primo
+
+# Test básico
+def test_sumar():
+    assert sumar(2, 3) == 5
+    assert sumar(-1, 1) == 0
+    assert sumar(0, 0) == 0
+
+# Test de excepción
+def test_dividir_entre_cero():
+    with pytest.raises(ZeroDivisionError, match=""No se puede dividir""):
+        dividir(10, 0)
+
+def test_dividir():
+    assert dividir(10, 2) == 5.0
+    assert dividir(7, 2) == 3.5
+
+# Parametrize - mismo test con varios datos
+@pytest.mark.parametrize(""numero, esperado"", [
+    (2,  True),
+    (3,  True),
+    (4,  False),
+    (17, True),
+    (18, False),
+    (97, True),
+    (1,  False),
+    (0,  False),
+])
+def test_es_primo(numero, esperado):
+    assert es_primo(numero) == esperado
+
+# Fixture
+@pytest.fixture
+def lista_numeros():
+    return [5, 2, 8, 1, 9, 3, 7, 4, 6]
+
+def test_suma_lista(lista_numeros):
+    assert sum(lista_numeros) == 45
+
+def test_maximo(lista_numeros):
+    assert max(lista_numeros) == 9
+
+# Ejecutar: pytest test_calculadora.py -v",Python Avanzado

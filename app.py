@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, Blueprint
 from flask_cors import CORS
 from config import Config
 
@@ -6,8 +6,7 @@ from backend.api.auth_routes import auth_api
 from backend.api.user_routes import user_api
 from backend.api.lesson_routes import lesson_api
 from backend.api.code_routes import code_api
-from backend.api.admin_routes import admin_api   # ← NUEVO
-
+from backend.api.admin_routes import admin_api  
 
 def create_app():
     app = Flask(__name__)
@@ -18,7 +17,7 @@ def create_app():
     app.register_blueprint(user_api,   url_prefix='/api/user')
     app.register_blueprint(lesson_api, url_prefix='/api/lessons')
     app.register_blueprint(code_api,   url_prefix='/api/code')
-    app.register_blueprint(admin_api,  url_prefix='/api/admin')  # ← NUEVO
+    app.register_blueprint(admin_api,  url_prefix='/api/admin')  
 
     # ── Rutas de plantillas ────────────────────────────────────────
     @app.route('/')
@@ -59,7 +58,11 @@ def create_app():
     def profile_page():
         if 'user_id' not in session:
             return redirect(url_for('login_page'))
-        return render_template('profile.html')
+        return render_template(
+        "profile.html",
+        cloud_name=Config.CLOUDINARY_CLOUD_NAME,
+        upload_preset=Config.CLOUDINARY_UPLOAD_PRESET
+    )
 
     @app.route('/placement-test')
     def placement_test_page():
@@ -67,11 +70,16 @@ def create_app():
             return redirect(url_for('login_page'))
         return render_template('placement_test.html')
 
-    @app.route('/n8n')
-    def n8n_page():
-        if 'user_id' not in session:
-            return redirect(url_for('login_page'))
-        return render_template('n8n.html')
+
+    n8n_bp = Blueprint(
+        'n8n',
+        __name__,
+        static_folder='static/server_n8n',
+        static_url_path='/server-n8n'
+    )
+
+    # ¡IMPORTANTE! Debes registrar el blueprint en la app
+    app.register_blueprint(n8n_bp, url_prefix='/server-n8n')
 
     @app.route('/admin')                          # ← NUEVO
     def admin_page():

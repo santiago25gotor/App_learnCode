@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PYLEARN - Login & Registro</title>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
@@ -38,53 +36,104 @@
             },
         }
     </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup }
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyBdz1cyFzEcg1MHYp0FT6WXiVEZKbtg2Ds",
+            authDomain:        "python-learning-platform-44eb2.firebaseapp.com",
+            projectId:         "python-learning-platform-44eb2",
+            storageBucket:     "python-learning-platform-44eb2.firebasestorage.app",
+            messagingSenderId: "660728914480",
+            appId:             "1:660728914480:web:22a11742b64e122f8543f5"
+        };
+        const app      = initializeApp(firebaseConfig);
+        const auth     = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        window._googleSignIn = async function () {
+            const btn = document.getElementById('googleBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>`;
+            try {
+                const result  = await signInWithPopup(auth, provider);
+                const idToken = await result.user.getIdToken();
+
+                const res  = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_token: idToken })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    showAlert('¡Login exitoso! Redirigiendo...', 'success');
+                    setTimeout(() => {
+                        window.location.href = data.is_new ? '/placement-test' : '/course';
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Error al iniciar sesión con Google.');
+                    resetGoogleBtn();
+                }
+            } catch (err) {
+                if (err.code !== 'auth/popup-closed-by-user') {
+                    showAlert('Error al conectar con Google. Inténtalo de nuevo.');
+                }
+                resetGoogleBtn();
+            }
+        };
+
+        function resetGoogleBtn() {
+            const btn = document.getElementById('googleBtn');
+            btn.disabled = false;
+            btn.innerHTML = `
+                <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google`;
+        }
+    </script>
+
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #e5e5e5;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d4d4d4;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d4d4d4; }
     </style>
 </head>
 
-<body
-    class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased overflow-x-hidden">
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased overflow-x-hidden">
     <div class="min-h-screen w-full flex">
-        <!-- Left Panel - Branding -->
+
+        <!-- Left decorative panel -->
         <div class="hidden lg:flex w-1/2 bg-primary flex-col justify-between p-12 relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 pointer-events-none"
                 style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 32px 32px;"></div>
-
             <div class="z-10">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-4xl text-black font-bold">terminal</span>
                     <h1 class="text-black tracking-tight text-[32px] font-bold leading-tight">PYLEARN</h1>
                 </div>
             </div>
-
             <div class="z-10 flex flex-col items-center justify-center flex-1">
                 <div class="w-full max-w-md aspect-square relative">
-                    <div
-                        class="w-full h-full flex items-center justify-center rounded-xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 ease-out border-4 border-black bg-gray-900">
+                    <div class="w-full h-full flex items-center justify-center rounded-xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 ease-out border-4 border-black bg-gray-900">
                         <div class="text-center text-white p-8">
                             <span class="material-symbols-outlined text-9xl mb-4 text-primary">code</span>
                             <h2 class="text-3xl font-bold">Python Learning</h2>
                             <p class="text-gray-300 mt-4">Interactive Code Editor</p>
                         </div>
                     </div>
-                    <div
-                        class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-green-600">check_circle</span>
                             <span class="text-black font-bold text-sm">Python 3.12 Ready</span>
@@ -92,7 +141,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="z-10 mt-12">
                 <p class="text-black text-4xl font-black leading-tight tracking-[-0.033em] mb-4">
                     Master Python,<br>One Line at a Time.
@@ -103,301 +151,680 @@
             </div>
         </div>
 
-        <!-- Right Panel - Auth Form -->
-        <div
-            class="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-background-light dark:bg-background-dark relative">
-            <!-- Mobile Logo -->
+        <!-- Right: Auth panel -->
+        <div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-24 bg-background-light dark:bg-background-dark relative">
+
             <div class="lg:hidden absolute top-6 left-6 flex items-center gap-2">
                 <span class="material-symbols-outlined text-3xl text-primary font-bold">terminal</span>
                 <span class="text-[#1c190d] dark:text-white tracking-tight text-2xl font-bold">PYLEARN</span>
             </div>
 
             <div class="w-full max-w-[420px] flex flex-col gap-8">
-                <!-- Toggle between Login/Register -->
-                <div class="flex flex-col gap-6">
-                    <div
-                        class="flex h-12 w-full items-center justify-center rounded-lg bg-[#f4f1e7] dark:bg-stone-800 p-1">
-                        <label
-                            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
+
+                <!-- Tab switcher (hidden in forgot-password mode) -->
+                <div class="flex flex-col gap-6" id="tabSection">
+                    <div class="flex h-12 w-full items-center justify-center rounded-lg bg-[#f4f1e7] dark:bg-stone-800 p-1">
+                        <label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
                             <span class="truncate text-sm font-bold">Login</span>
-                            <input checked class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Login"
-                                onclick="showLogin()">
+                            <input checked class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Login" onclick="showLogin()">
                         </label>
-                        <label
-                            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
+                        <label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-stone-700 has-[:checked]:shadow-sm text-[#9c8e49] dark:text-stone-400 has-[:checked]:text-[#1c190d] dark:has-[:checked]:text-white transition-all duration-200">
                             <span class="truncate text-sm font-bold">Register</span>
-                            <input class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Register"
-                                onclick="showRegister()">
+                            <input class="invisible w-0 absolute" name="auth-toggle" type="radio" value="Register" onclick="showRegister()">
                         </label>
                     </div>
 
-                    <!-- Dynamic Header -->
                     <div class="flex flex-col gap-2" id="formHeader">
                         <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Welcome Back</h2>
-                        <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to
-                            sign in.</p>
+                        <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to sign in.</p>
                     </div>
                 </div>
 
-                <!-- Alert Messages -->
                 <div id="alertContainer"></div>
 
-                <!-- Login Form -->
                 <form class="flex-col gap-4" id="loginForm">
                     <div class="flex flex-col gap-1.5 mb-4">
-                        <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="login-identifier">Email or
-                            Username</label>
+                        <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="login-identifier">Email or Username</label>
                         <div class="relative flex items-center">
-                            <input
-                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                            <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
                                 id="login-identifier" placeholder="dev@example.com or username" type="text" required>
-                            <span
-                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
+                            <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
                         </div>
                     </div>
 
                     <div class="flex flex-col gap-1.5 mb-4">
                         <div class="flex items-center justify-between">
-                            <label class="text-sm font-bold text-[#1c190d] dark:text-white"
-                                for="login-password">Password</label>
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="login-password">Password</label>
+                           
+                            <button type="button" onclick="showForgotPassword()"
+                                class="text-xs text-stone-400 hover:text-primary dark:hover:text-primary transition-colors font-medium">
+                                Forgot password?
+                            </button>
                         </div>
                         <div class="relative flex items-center">
-                            <input
-                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                            <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
                                 id="login-password" placeholder="••••••••" type="password" required>
-                            <span
-                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                            <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
                                 onclick="togglePassword('login-password')">visibility_off</span>
                         </div>
                     </div>
 
-                    <button
-                        class="mt-2 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl"
+                    <button class="mt-2 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl"
                         type="submit">
                         Log In
                         <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
                     </button>
-                </form>
 
-                <!-- Register Form (Hidden by default) -->
-                <form class="hidden flex-col gap-4" id="registerForm">
-                    <div class="flex flex-col gap-1.5 mb-4">
-                        <label class="text-sm font-bold text-[#1c190d] dark:text-white"
-                            for="register-username">Username</label>
-                        <div class="relative flex items-center">
-                            <input
-                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
-                                id="register-username" placeholder="johndoe" type="text" required>
-                            <span
-                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">person</span>
-                        </div>
+                    
+                    <div class="flex items-center gap-3 mt-4">
+                        <div class="flex-1 h-px bg-stone-200 dark:bg-stone-700"></div>
+                        <span class="text-xs text-stone-400 font-medium">or</span>
+                        <div class="flex-1 h-px bg-stone-200 dark:bg-stone-700"></div>
                     </div>
 
-                    <div class="flex flex-col gap-1.5 mb-4">
-                        <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="register-email">Email
-                            address</label>
-                        <div class="relative flex items-center">
-                            <input
-                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
-                                id="register-email" placeholder="dev@example.com" type="email" required>
-                            <span
-                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-1.5 mb-4">
-                        <label class="text-sm font-bold text-[#1c190d] dark:text-white"
-                            for="register-password">Password</label>
-                        <div class="relative flex items-center">
-                            <input
-                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
-                                id="register-password" placeholder="••••••••" type="password" required>
-                            <span
-                                class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
-                                onclick="togglePassword('register-password')">visibility_off</span>
-                        </div>
-                        <p class="text-xs text-stone-500 mt-1">Min 6 characters, at least one number</p>
-                    </div>
-
-                    <button
-                        class="mt-2 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl"
-                        type="submit">
-                        Create Account
-                        <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                    
+                    <button type="button" id="googleBtn" onclick="window._googleSignIn()"
+                        class="mt-1 flex w-full items-center justify-center gap-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 px-4 py-3 text-sm font-bold text-[#1c190d] dark:text-white transition-all hover:bg-stone-50 dark:hover:bg-stone-700 hover:scale-[1.01] active:scale-[0.99] shadow-sm hover:shadow-md">
+                        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Continue with Google
                     </button>
                 </form>
+
+                <!-- ═══════════════════════════════════════
+                     REGISTER FORM
+                     ═══════════════════════════════════════ -->
+                <div class="hidden flex-col gap-4" id="registerForm">
+
+                    <div id="reg-step-1" class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white">
+                                Profile photo <span class="text-stone-400 font-normal">(optional)</span>
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <div class="relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('regAvatarInput').click()">
+                                    <div id="regAvatarCircle" class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-black text-xl font-black overflow-hidden border-2 border-stone-200 dark:border-stone-700 select-none">
+                                        <span id="regAvatarInitial">?</span>
+                                        <img id="regAvatarImg" src="" alt="" class="hidden w-full h-full object-cover">
+                                    </div>
+                                    <div class="absolute inset-0 rounded-full bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                        <span class="material-symbols-outlined text-white text-base">photo_camera</span>
+                                    </div>
+                                    <input type="file" id="regAvatarInput" accept="image/*" class="hidden" onchange="handleRegisterAvatar(event)">
+                                </div>
+                                <div class="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">
+                                    Click to upload a photo<br>JPG, PNG · Max 500KB<br>
+                                    <button type="button" id="regRemoveBtn" onclick="clearRegisterAvatar()"
+                                        class="hidden text-red-500 hover:underline mt-1 text-xs">Remove photo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="register-username">Username</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="register-username" placeholder="johndoe" type="text">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">person</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="register-email">Email address</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="register-email" placeholder="dev@example.com" type="email">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="register-password">Password</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="register-password" placeholder="••••••••" type="password">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                                    onclick="togglePassword('register-password')">visibility_off</span>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-0.5">Min 8 chars · uppercase · number · special char</p>
+                        </div>
+                        <button id="reg-send-btn" onclick="sendCode()"
+                            class="mt-1 flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl">
+                            Send Verification Code
+                            <span class="material-symbols-outlined ml-2 text-[18px]">send</span>
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1 h-px bg-stone-200 dark:bg-stone-700"></div>
+                            <span class="text-xs text-stone-400 font-medium">or</span>
+                            <div class="flex-1 h-px bg-stone-200 dark:bg-stone-700"></div>
+                        </div>
+
+                        <!-- Google Register Button -->
+                        <button type="button" id="googleBtnReg" onclick="window._googleSignIn()"
+                            class="flex w-full items-center justify-center gap-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 px-4 py-3 text-sm font-bold text-[#1c190d] dark:text-white transition-all hover:bg-stone-50 dark:hover:bg-stone-700 hover:scale-[1.01] active:scale-[0.99] shadow-sm hover:shadow-md">
+                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Sign up with Google
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Verification code -->
+                    <div id="reg-step-2" class="hidden flex-col gap-5">
+                        <button type="button" onclick="regGoBack()"
+                            class="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors w-fit">
+                            <span class="material-symbols-outlined text-base">arrow_back</span> Back
+                        </button>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-primary/10 border border-primary/30">
+                            <span class="material-symbols-outlined text-primary mt-0.5 flex-shrink-0">mark_email_read</span>
+                            <div>
+                                <p class="text-sm font-bold text-[#1c190d] dark:text-white">Check your inbox</p>
+                                <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                                    We sent a 6-digit code to<br>
+                                    <strong id="reg-email-display" class="text-[#1c190d] dark:text-white"></strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="reg-code-input">Verification code</label>
+                            <input id="reg-code-input"
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-4 text-3xl text-center font-black tracking-[0.55em] text-[#1c190d] placeholder:text-stone-300 placeholder:tracking-normal focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white"
+                                placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                        </div>
+                        <button id="reg-verify-btn" onclick="verifyAndRegister()"
+                            class="flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl">
+                            Create Account
+                            <span class="material-symbols-outlined ml-2 text-[18px]">check_circle</span>
+                        </button>
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" id="reg-resend-btn" onclick="resendCode()"
+                                class="text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                                Resend code
+                            </button>
+                            <span id="reg-timer" class="text-xs text-stone-400"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════════════════
+                     FORGOT PASSWORD FORM
+                     ═══════════════════════════════════════ -->
+                <div class="hidden flex-col gap-5" id="forgotForm">
+
+                    <!-- Step 1: Enter email -->
+                    <div id="fp-step-1" class="flex flex-col gap-4">
+                        <button type="button" onclick="showLogin()"
+                            class="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors w-fit">
+                            <span class="material-symbols-outlined text-base">arrow_back</span> Back to login
+                        </button>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="fp-email">Your email address</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="fp-email" placeholder="dev@example.com" type="email">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px]">mail</span>
+                            </div>
+                        </div>
+                        <button id="fp-send-btn" onclick="fpSendCode()"
+                            class="flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl">
+                            Send Reset Code
+                            <span class="material-symbols-outlined ml-2 text-[18px]">send</span>
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Code + new password -->
+                    <div id="fp-step-2" class="hidden flex-col gap-4">
+                        <button type="button" onclick="fpGoBack()"
+                            class="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors w-fit">
+                            <span class="material-symbols-outlined text-base">arrow_back</span> Back
+                        </button>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-primary/10 border border-primary/30">
+                            <span class="material-symbols-outlined text-primary mt-0.5 flex-shrink-0">lock_reset</span>
+                            <div>
+                                <p class="text-sm font-bold text-[#1c190d] dark:text-white">Code sent!</p>
+                                <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                                    Check your inbox at <strong id="fp-email-display" class="text-[#1c190d] dark:text-white"></strong><br>
+                                    and enter the 6-digit code below.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white">Verification code</label>
+                            <input id="fp-code-input"
+                                class="w-full rounded-lg border border-stone-200 bg-white px-4 py-4 text-3xl text-center font-black tracking-[0.55em] text-[#1c190d] placeholder:text-stone-300 placeholder:tracking-normal focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white"
+                                placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="fp-new-password">New password</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="fp-new-password" placeholder="••••••••" type="password">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                                    onclick="togglePassword('fp-new-password')">visibility_off</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-bold text-[#1c190d] dark:text-white" for="fp-confirm-password">Confirm new password</label>
+                            <div class="relative flex items-center">
+                                <input class="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm text-[#1c190d] placeholder:text-stone-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-stone-700 dark:bg-stone-800 dark:text-white dark:placeholder:text-stone-500"
+                                    id="fp-confirm-password" placeholder="••••••••" type="password">
+                                <span class="material-symbols-outlined absolute right-3 text-stone-400 text-[20px] cursor-pointer hover:text-stone-600 dark:hover:text-stone-300"
+                                    onclick="togglePassword('fp-confirm-password')">visibility_off</span>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-0.5">Min 8 chars · uppercase · number · special char</p>
+                        </div>
+
+                        <button id="fp-reset-btn" onclick="fpReset()"
+                            class="flex w-full items-center justify-center rounded-lg bg-black dark:bg-white px-4 py-3.5 text-sm font-bold text-white dark:text-black transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg hover:shadow-xl">
+                            Reset Password
+                            <span class="material-symbols-outlined ml-2 text-[18px]">lock_reset</span>
+                        </button>
+
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" id="fp-resend-btn" onclick="fpResendCode()"
+                                class="text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                                Resend code
+                            </button>
+                            <span id="fp-timer" class="text-xs text-stone-400"></span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="absolute bottom-6 text-center w-full px-6">
                 <p class="text-xs text-stone-400">
-                    By continuing, you agree to our <a class="underline hover:text-stone-600 dark:hover:text-stone-300"
-                        href="#">Terms of Service</a> and <a
-                        class="underline hover:text-stone-600 dark:hover:text-stone-300" href="#">Privacy Policy</a>.
+                    By continuing, you agree to our <a class="underline hover:text-stone-600 dark:hover:text-stone-300" href="#">Terms of Service</a> and <a class="underline hover:text-stone-600 dark:hover:text-stone-300" href="#">Privacy Policy</a>.
                 </p>
             </div>
         </div>
     </div>
 
     <script>
-        // Toggle between login and register forms
+        // ── HELPERS ────────────────────────────────────────────────
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const bgColor = type === 'success'
+                ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-700 dark:text-green-300'
+                : 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-700 dark:text-red-300';
+            alertContainer.innerHTML = `<div class="${bgColor} border rounded-lg p-4 text-sm font-medium">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 5000);
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon  = input.nextElementSibling;
+            if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility'; }
+            else { input.type = 'password'; icon.textContent = 'visibility_off'; }
+        }
+
+        function setBtnLoading(btnId, loading, label) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.disabled = loading;
+            btn.innerHTML = loading
+                ? '<svg class="animate-spin h-4 w-4 mr-2 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Loading...'
+                : label;
+        }
+
+        // ── VIEW SWITCHERS ────────────────────────────────────────
+        function _hideAllForms() {
+            ['loginForm', 'registerForm', 'forgotForm'].forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+        }
+
         function showLogin() {
+            _hideAllForms();
+            document.getElementById('tabSection').classList.remove('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
             document.getElementById('loginForm').classList.add('flex');
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.remove('flex');
             document.getElementById('formHeader').innerHTML = `
                 <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Welcome Back</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to sign in.</p>
-            `;
+                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Please enter your details to sign in.</p>`;
+            // Make sure Login radio is checked visually
+            document.querySelectorAll('input[name="auth-toggle"]')[0].checked = true;
         }
 
         function showRegister() {
+            _hideAllForms();
+            document.getElementById('tabSection').classList.remove('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
             document.getElementById('registerForm').classList.add('flex');
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('loginForm').classList.remove('flex');
+            const s1 = document.getElementById('reg-step-1');
+            const s2 = document.getElementById('reg-step-2');
+            s1.classList.remove('hidden'); s1.classList.add('flex');
+            s2.classList.add('hidden');    s2.classList.remove('flex');
             document.getElementById('formHeader').innerHTML = `
                 <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Create Account</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Join PyLearn and start coding today.</p>
-            `;
+                <p class="text-stone-500 dark:text-stone-400 text-base font-normal">Join PyLearn and start coding today.</p>`;
         }
 
-        // Toggle password visibility
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const icon = input.nextElementSibling;
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.textContent = 'visibility';
-            } else {
-                input.type = 'password';
-                icon.textContent = 'visibility_off';
+        function showForgotPassword() {
+            _hideAllForms();
+            document.getElementById('tabSection').classList.add('hidden');
+            document.getElementById('forgotForm').classList.remove('hidden');
+            document.getElementById('forgotForm').classList.add('flex');
+            // Show step 1
+            document.getElementById('fp-step-1').classList.remove('hidden');
+            document.getElementById('fp-step-1').classList.add('flex');
+            document.getElementById('fp-step-2').classList.add('hidden');
+            document.getElementById('fp-step-2').classList.remove('flex');
+            // Update header
+            document.getElementById('alertContainer').innerHTML = '';
+            // Inject a temporary header above the form
+            const header = document.getElementById('formHeader');
+            if (header) {
+                header.innerHTML = `
+                    <h2 class="text-[#1c190d] dark:text-white text-3xl font-black leading-tight">Reset Password</h2>
+                    <p class="text-stone-500 dark:text-stone-400 text-base font-normal">We'll send a verification code to your email.</p>`;
             }
+            document.getElementById('tabSection').classList.remove('hidden');
         }
 
-        // Show alert message
-        function showAlert(message, type = 'error') {
-            const alertContainer = document.getElementById('alertContainer');
-            const bgColor = type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800';
-
-            alertContainer.innerHTML = `
-                <div class="${bgColor} border rounded-lg p-4 text-sm font-medium animate-pulse">
-                    ${message}
-                </div>
-            `;
-
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                alertContainer.innerHTML = '';
-            }, 5000);
-        }
-
+        // ── LOGIN ─────────────────────────────────────────────────
         function setLoading(formId, isLoading) {
-            const form = document.getElementById(formId);
+            const form   = document.getElementById(formId);
             const button = form.querySelector('button[type="submit"]');
-
             if (isLoading) {
-                const originalText = button.dataset.originalText || button.innerHTML;
-                button.dataset.originalText = originalText;
-                button.innerHTML = `
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                `;
+                button.dataset.originalText = button.innerHTML;
+                button.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...';
                 button.disabled = true;
                 button.classList.add('opacity-75', 'cursor-not-allowed');
             } else {
                 button.innerHTML = button.dataset.originalText;
-                button.disabled = false;
+                button.disabled  = false;
                 button.classList.remove('opacity-75', 'cursor-not-allowed');
             }
         }
 
-        // Handle login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("Login submitted");
-
             setLoading('loginForm', true);
             const identifier = document.getElementById('login-identifier').value.trim();
-            const password = document.getElementById('login-password').value;
-
+            const password   = document.getElementById('login-password').value;
             try {
-                // Timeout controller
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
-
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ identifier, password }),
-                    signal: controller.signal
+                const timeoutId  = setTimeout(() => controller.abort(), 8000);
+                const response   = await fetch('/api/auth/login', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password }), signal: controller.signal
                 });
-
                 clearTimeout(timeoutId);
-
                 const data = await response.json();
-
                 if (data.success) {
                     showAlert('Login successful! Redirecting...', 'success');
-                    setTimeout(() => {
-                        window.location.href = '/course';
-                    }, 1000);
+                    setTimeout(() => { window.location.href = '/course'; }, 1000);
                 } else {
                     showAlert(data.message || 'Login failed. Please try again.');
                     setLoading('loginForm', false);
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                let msg = 'An error occurred. Please try again.';
-                if (error.name === 'AbortError') {
-                    msg = 'Connection timed out. Check your server.';
-                }
-                showAlert(msg);
+                showAlert(error.name === 'AbortError' ? 'Connection timed out.' : 'An error occurred. Please try again.');
                 setLoading('loginForm', false);
             }
         });
 
-        // Handle register
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            setLoading('registerForm', true);
+        // ── REGISTER ──────────────────────────────────────────────
+        let regAvatarBase64 = '';
 
-            const username = document.getElementById('register-username').value.trim();
-            const email = document.getElementById('register-email').value.trim();
-            const password = document.getElementById('register-password').value;
+        document.getElementById('register-username').addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            document.getElementById('regAvatarInitial').textContent = val ? val[0].toUpperCase() : '?';
+        });
 
-            try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, email, password })
-                });
+        function handleRegisterAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { alert('Please select a valid image file'); return; }
+            if (file.size > 500 * 1024) { alert('Image cannot exceed 500KB'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                regAvatarBase64 = e.target.result;
+                document.getElementById('regAvatarImg').src = regAvatarBase64;
+                document.getElementById('regAvatarImg').classList.remove('hidden');
+                document.getElementById('regAvatarInitial').classList.add('hidden');
+                document.getElementById('regRemoveBtn').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
 
-                const data = await response.json();
+        function clearRegisterAvatar() {
+            regAvatarBase64 = '';
+            document.getElementById('regAvatarImg').src = '';
+            document.getElementById('regAvatarImg').classList.add('hidden');
+            document.getElementById('regAvatarInitial').classList.remove('hidden');
+            document.getElementById('regRemoveBtn').classList.add('hidden');
+            document.getElementById('regAvatarInput').value = '';
+        }
 
-                if (data.success) {
-                    showAlert('Account created successfully! Redirecting...', 'success');
-                    setTimeout(() => {
-                        // Nuevos usuarios van al placement test
-                        window.location.href = '/placement-test';
-                    }, 1000);
-                } else {
-                    showAlert(data.message || 'Registration failed. Please try again.');
-                    setLoading('registerForm', false);
+        let _regEmail = '', _regUser = '', _regPass = '', _resendTimer = null;
+
+        function regSetBtnLoading(btnId, loading, label) {
+            setBtnLoading(btnId, loading, label);
+        }
+
+        function regGoBack() {
+            document.getElementById('reg-step-1').classList.remove('hidden');
+            document.getElementById('reg-step-1').classList.add('flex');
+            document.getElementById('reg-step-2').classList.add('hidden');
+            document.getElementById('reg-step-2').classList.remove('flex');
+        }
+
+        function startResendTimer(timerEl, resendBtnId) {
+            let secs = 60;
+            const resend = document.getElementById(resendBtnId);
+            const timer  = document.getElementById(timerEl);
+            resend.disabled = true;
+            if (_resendTimer) clearInterval(_resendTimer);
+            _resendTimer = setInterval(() => {
+                timer.textContent = `(${--secs}s)`;
+                if (secs <= 0) {
+                    clearInterval(_resendTimer);
+                    resend.disabled  = false;
+                    timer.textContent = '';
                 }
-            } catch (error) {
-                console.error('Registration error:', error);
-                showAlert('An error occurred. Please try again.');
-                setLoading('registerForm', false);
+            }, 1000);
+        }
+
+        async function sendCode() {
+            const btn  = 'reg-send-btn';
+            const orig = 'Send Verification Code <span class="material-symbols-outlined ml-2 text-[18px]">send</span>';
+            _regUser  = document.getElementById('register-username').value.trim();
+            _regEmail = document.getElementById('register-email').value.trim();
+            _regPass  = document.getElementById('register-password').value;
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/send-code', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: _regUser, email: _regEmail, password: _regPass })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('reg-email-display').textContent = _regEmail;
+                    document.getElementById('reg-step-1').classList.add('hidden');
+                    document.getElementById('reg-step-1').classList.remove('flex');
+                    document.getElementById('reg-step-2').classList.remove('hidden');
+                    document.getElementById('reg-step-2').classList.add('flex');
+                    document.getElementById('reg-code-input').value = '';
+                    document.getElementById('reg-code-input').focus();
+                    showAlert(data.message, 'success');
+                    startResendTimer('reg-timer', 'reg-resend-btn');
+                } else {
+                    showAlert(data.message || 'No se pudo enviar el código.');
+                }
+            } catch (_) { showAlert('Error de conexión. Inténtalo de nuevo.'); }
+            setBtnLoading(btn, false, orig);
+        }
+
+        async function resendCode() {
+            const btn  = 'reg-resend-btn';
+            const orig = 'Resend code';
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/send-code', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: _regUser, email: _regEmail, password: _regPass })
+                });
+                const data = await res.json();
+                showAlert(data.message, data.success ? 'success' : 'error');
+                if (data.success) startResendTimer('reg-timer', 'reg-resend-btn');
+            } catch (_) { showAlert('Error de conexión.'); }
+            setBtnLoading(btn, false, orig);
+        }
+
+        async function verifyAndRegister() {
+            const btn  = 'reg-verify-btn';
+            const orig = 'Create Account <span class="material-symbols-outlined ml-2 text-[18px]">check_circle</span>';
+            const code = document.getElementById('reg-code-input').value.trim();
+            if (code.length !== 6) { showAlert('Introduce los 6 dígitos del código.'); return; }
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/register', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: _regUser, email: _regEmail, password: _regPass, code })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (regAvatarBase64) {
+                        try {
+                            await fetch('/api/user/avatar', { method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ avatar: regAvatarBase64 }) });
+                            localStorage.setItem('userAvatar', regAvatarBase64);
+                        } catch (_) {}
+                    }
+                    showAlert('¡Cuenta creada! Redirigiendo...', 'success');
+                    setTimeout(() => { window.location.href = '/placement-test'; }, 1200);
+                } else {
+                    showAlert(data.message || 'Código incorrecto. Inténtalo de nuevo.');
+                    setBtnLoading(btn, false, orig);
+                }
+            } catch (_) {
+                showAlert('Error de conexión. Inténtalo de nuevo.');
+                setBtnLoading(btn, false, orig);
             }
+        }
+
+        // ── FORGOT PASSWORD ───────────────────────────────────────
+        let _fpEmail = '', _fpResendTimer = null;
+
+        function fpGoBack() {
+            document.getElementById('fp-step-1').classList.remove('hidden');
+            document.getElementById('fp-step-1').classList.add('flex');
+            document.getElementById('fp-step-2').classList.add('hidden');
+            document.getElementById('fp-step-2').classList.remove('flex');
+        }
+
+        async function fpSendCode() {
+            const btn  = 'fp-send-btn';
+            const orig = 'Send Reset Code <span class="material-symbols-outlined ml-2 text-[18px]">send</span>';
+            _fpEmail = document.getElementById('fp-email').value.trim();
+            if (!_fpEmail) { showAlert('Por favor introduce tu email.'); return; }
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/forgot-password/send-code', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: _fpEmail })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('fp-email-display').textContent = _fpEmail;
+                    document.getElementById('fp-step-1').classList.add('hidden');
+                    document.getElementById('fp-step-1').classList.remove('flex');
+                    document.getElementById('fp-step-2').classList.remove('hidden');
+                    document.getElementById('fp-step-2').classList.add('flex');
+                    document.getElementById('fp-code-input').value = '';
+                    document.getElementById('fp-code-input').focus();
+                    showAlert(data.message, 'success');
+                    fpStartResendTimer();
+                } else {
+                    showAlert(data.message || 'No se pudo enviar el código.');
+                }
+            } catch (_) { showAlert('Error de conexión. Inténtalo de nuevo.'); }
+            setBtnLoading(btn, false, orig);
+        }
+
+        async function fpResendCode() {
+            const btn  = 'fp-resend-btn';
+            const orig = 'Resend code';
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/forgot-password/send-code', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: _fpEmail })
+                });
+                const data = await res.json();
+                showAlert(data.message, data.success ? 'success' : 'error');
+                if (data.success) fpStartResendTimer();
+            } catch (_) { showAlert('Error de conexión.'); }
+            setBtnLoading(btn, false, orig);
+        }
+
+        function fpStartResendTimer() {
+            let secs = 60;
+            const resend = document.getElementById('fp-resend-btn');
+            const timer  = document.getElementById('fp-timer');
+            resend.disabled = true;
+            if (_fpResendTimer) clearInterval(_fpResendTimer);
+            _fpResendTimer = setInterval(() => {
+                timer.textContent = `(${--secs}s)`;
+                if (secs <= 0) {
+                    clearInterval(_fpResendTimer);
+                    resend.disabled  = false;
+                    timer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        async function fpReset() {
+            const btn  = 'fp-reset-btn';
+            const orig = 'Reset Password <span class="material-symbols-outlined ml-2 text-[18px]">lock_reset</span>';
+            const code          = document.getElementById('fp-code-input').value.trim();
+            const new_password  = document.getElementById('fp-new-password').value;
+            const confirm_password = document.getElementById('fp-confirm-password').value;
+
+            if (code.length !== 6)   { showAlert('Introduce los 6 dígitos del código.'); return; }
+            if (!new_password)       { showAlert('Introduce tu nueva contraseña.'); return; }
+            if (new_password !== confirm_password) { showAlert('Las contraseñas no coinciden.'); return; }
+
+            setBtnLoading(btn, true, orig);
+            try {
+                const res  = await fetch('/api/auth/forgot-password/reset', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: _fpEmail, code, new_password, confirm_password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    setTimeout(() => showLogin(), 2000);
+                } else {
+                    showAlert(data.message || 'No se pudo restablecer la contraseña.');
+                    setBtnLoading(btn, false, orig);
+                }
+            } catch (_) {
+                showAlert('Error de conexión. Inténtalo de nuevo.');
+                setBtnLoading(btn, false, orig);
+            }
+        }
+
+        // ── INIT ──────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            // Numeric-only code inputs
+            ['reg-code-input', 'fp-code-input'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', () => { el.value = el.value.replace(/\D/g, '').slice(0, 6); });
+            });
         });
     </script>
 </body>
