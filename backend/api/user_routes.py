@@ -61,53 +61,78 @@ def update_avatar():
 @user_api.route('/placement-test/submit', methods=['POST'])
 @login_required
 def submit_placement_test():
-    
     try:
         user_id = session.get('user_id')
-        data = request.get_json()
-        scores = data.get('scores', {})
-        
-        basic_score = scores.get('basic', 0)
-        intermediate_score = scores.get('intermediate', 0)
-        advanced_score = scores.get('advanced', 0)
-        
-        # Desbloquear niveles según puntuación
+        data    = request.get_json()
+        scores  = data.get('scores', {})
+
         unlocked_categories = ['Python Básico']  # Siempre desbloqueado
-        lessons_unlocked = 0
-        
-        # Si aprueba básico, desbloquear todas las lecciones básicas y dar acceso a intermedio
-        if basic_score >= 70:
-            unlocked_categories.append('Python Intermedio')
-            # Marcar todas las lecciones básicas como completadas
-            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
-            if success:
-                lessons_unlocked += count
-        
-        # Si aprueba intermedio, desbloquear todas las lecciones intermedias y dar acceso a avanzado
-        if intermediate_score >= 75:
-            unlocked_categories.append('Python Avanzado')
-            # Marcar todas las lecciones intermedias como completadas
-            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
-            if success:
-                lessons_unlocked += count
-        
-        # Si aprueba avanzado, desbloquear todas las avanzadas
-        if advanced_score >= 80:
-            success, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Avanzado')
-            if success:
-                lessons_unlocked += count
-        
-        # Guardar resultados en Firebase
+        lessons_unlocked    = 0
+        nivel               = None
+
+        # ── Formato 1: score total único (0-100) ──────────────────────────────
+        # Enviado por placement_test.html → { scores: { total: 85 } }
+        if 'total' in scores:
+            total_score = scores.get('total', 0)
+
+            if total_score <= 50:
+                nivel = 'Básico'
+            elif total_score <= 79:
+                nivel = 'Intermedio'
+            else:
+                nivel = 'Avanzado'
+
+            if nivel in ('Intermedio', 'Avanzado'):
+                unlocked_categories.append('Python Intermedio')
+                ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
+                if ok:
+                    lessons_unlocked += count
+
+            if nivel == 'Avanzado':
+                unlocked_categories.append('Python Avanzado')
+                ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
+                if ok:
+                    lessons_unlocked += count
+
+        # ── Formato 2: scores por categoría separados ─────────────────────────
+        # Enviado por otros frontends → { scores: { basic: 80, intermediate: 75, advanced: 60 } }
+        else:
+            basic_score        = scores.get('basic', 0)
+            intermediate_score = scores.get('intermediate', 0)
+            advanced_score     = scores.get('advanced', 0)
+
+            if basic_score >= 70:
+                unlocked_categories.append('Python Intermedio')
+                ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
+                if ok:
+                    lessons_unlocked += count
+
+            if intermediate_score >= 75:
+                unlocked_categories.append('Python Avanzado')
+                ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
+                if ok:
+                    lessons_unlocked += count
+
+            if advanced_score >= 80:
+                ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Avanzado')
+                if ok:
+                    lessons_unlocked += count
+
         firebase_service.save_placement_test_results(user_id, scores, unlocked_categories)
-        
+
+        msg = f'Test completado. {lessons_unlocked} lecciones desbloqueadas.'
+        if nivel:
+            msg = f'Test completado. Nivel: {nivel}. {lessons_unlocked} lecciones desbloqueadas.'
+
         return jsonify({
-            'success': True,
-            'scores': scores,
+            'success':             True,
+            'scores':              scores,
+            'nivel':               nivel,
             'unlocked_categories': unlocked_categories,
-            'lessons_unlocked': lessons_unlocked,
-            'message': f'Test completado. {lessons_unlocked} lecciones desbloqueadas.'
+            'lessons_unlocked':    lessons_unlocked,
+            'message':             msg
         }), 200
-        
+
     except Exception as e:
         return jsonify({
             'success': False,
