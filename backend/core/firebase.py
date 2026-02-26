@@ -168,12 +168,14 @@ class FirebaseService:
                 'categoria', '==', category
             ).order_by('numero_leccion').get()
 
-            return [
+            result = [
                 {**lesson.to_dict(), 'id': lesson.id}
                 for lesson in lessons
             ]
+            print(f"[FIREBASE] get_lessons_by_category('{category}') -> {len(result)} lecciones")
+            return result
         except Exception as e:
-            print(f"Error al obtener lecciones: {str(e)}")
+            print(f"[FIREBASE] get_lessons_by_category('{category}') ERROR: {str(e)}")
             return []
 
     def get_all_lessons(self):
@@ -286,25 +288,24 @@ class FirebaseService:
     def save_placement_test_results(self, user_id, scores, unlocked_categories):
         try:
             user_ref = self.db.collection(Config.USERS_COLLECTION).document(user_id)
-            user_doc = user_ref.get()
 
-            if not user_doc.exists:
-                return False, "Usuario no encontrado"
+            # Usar dot notation para actualizar campos específicos de forma atómica.
+            # Esto evita el problema de SERVER_TIMESTAMP dentro de un dict anidado
+            # pasado a update(), que puede fallar silenciosamente con el SDK de Python.
+            user_ref.update({
+                'progress.placement_test': {
+                    'scores': scores,
+                    'completed_at': firestore.SERVER_TIMESTAMP
+                },
+                'progress.unlocked_categories':    unlocked_categories,
+                'progress.placement_test_completed': True
+            })
 
-            user_data = user_doc.to_dict()
-            progress = user_data.get('progress', {})
-
-            progress['placement_test'] = {
-                'scores': scores,
-                'completed_at': firestore.SERVER_TIMESTAMP
-            }
-            progress['unlocked_categories'] = unlocked_categories
-            progress['placement_test_completed'] = True
-
-            user_ref.update({'progress': progress})
+            print(f"[FIREBASE] save_placement_test_results -> unlocked_categories={unlocked_categories}")
             return True, "Resultados guardados"
 
         except Exception as e:
+            print(f"[FIREBASE] save_placement_test_results ERROR: {str(e)}")
             return False, f"Error: {str(e)}"
 
     def unlock_all_lessons_for_category(self, user_id, category):
@@ -332,6 +333,7 @@ class FirebaseService:
             progress['total_points'] = progress.get('total_points', 0) + (count * 10)
 
             user_ref.update({'progress': progress})
+            print(f"[FIREBASE] unlock_all_lessons '{category}' -> {count} lecciones añadidas a completed_lessons")
             return True, count
 
         except Exception as e:

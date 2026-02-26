@@ -95,7 +95,8 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a id="navPlacementLink" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors hidden"
+                    <a id="navPlacementLink"
+                        class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors hidden"
                         href="/placement-test">
                         Test de Nivel
                     </a>
@@ -104,7 +105,7 @@
                         Mi Perfil
                     </a>
                     <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors flex items-center gap-1"
-                    href="/static/js/server_n8n/html/eduai.html">
+                        href="/static/js/server_n8n/html/eduai.html">
                         <span class="material-symbols-outlined text-sm">smart_toy</span>
                         Videos IA
                     </a>
@@ -164,7 +165,8 @@
             </div>
 
             <!-- Test de Nivel Card -->
-            <div id="placementTestCard" class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 rounded-xl shadow-lg mt-6 text-white hidden">
+            <div id="placementTestCard"
+                class="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 rounded-xl shadow-lg mt-6 text-white hidden">
                 <div class="flex items-center gap-3 mb-3">
                     <span class="material-icons text-2xl">psychology</span>
                     <h3 class="font-bold">Test de Nivel</h3>
@@ -187,67 +189,62 @@
                     </div>
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Temario del Curso</h2>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Completa las lecciones para ganar recompensas</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Completa las lecciones para ganar
+                            recompensas</p>
                     </div>
                 </div>
             </div>
-                <!-- Barra de Búsqueda -->
-                <div class="mt-4 relative">
-                    <div class="flex gap-2">
-                        <div class="relative flex-1">
-                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                            <input
-                                type="text"
-                                id="searchInput"
-                                placeholder="Buscar lecciones por título o contenido..."
-                                class="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                autocomplete="off"
-                            />
-                            <button
-                                id="clearSearchBtn"
-                                onclick="clearSearch()"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors hidden"
-                            >
-                                <span class="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <button
-                            onclick="performSearch()"
-                            id="searchBtn"
-                            class="px-6 py-3 bg-primary hover:bg-yellow-400 text-black font-bold rounded-lg transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
-                        >
-                            <span class="material-symbols-outlined">search</span>
-                            <span class="hidden sm:inline">Buscar</span>
+            <!-- Barra de Búsqueda -->
+            <div class="mt-4 relative">
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                        <input type="text" id="searchInput" placeholder="Buscar lecciones por título o contenido..."
+                            class="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                            autocomplete="off" />
+                        <button id="clearSearchBtn" onclick="clearSearch()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors hidden">
+                            <span class="material-symbols-outlined">close</span>
                         </button>
                     </div>
-                    
-                    <!-- Indicador de búsqueda activa -->
-                    <div id="searchIndicator" class="hidden mt-2 flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-primary text-lg">filter_alt</span>
-                        <span class="text-gray-600 dark:text-gray-400">
-                            Buscando: <strong id="searchQuery" class="text-black dark:text-white"></strong>
-                        </span>
-                        <button onclick="clearSearch()" class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline text-sm">
-                            Limpiar
-                        </button>
-                    </div>
+                    <button onclick="performSearch()" id="searchBtn"
+                        class="px-6 py-3 bg-primary hover:bg-yellow-400 text-black font-bold rounded-lg transition-all flex items-center gap-2 shadow-md hover:shadow-lg">
+                        <span class="material-symbols-outlined">search</span>
+                        <span class="hidden sm:inline">Buscar</span>
+                    </button>
+                </div>
 
-                    <!-- Mensaje de resultados -->
-                    <div id="searchResults" class="hidden mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                        <div class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
-                            <span class="material-symbols-outlined">info</span>
-                            <span id="searchResultsText"></span>
-                        </div>
-                    </div>
+                <!-- Indicador de búsqueda activa -->
+                <div id="searchIndicator" class="hidden mt-2 flex items-center gap-2 text-sm">
+                    <span class="material-symbols-outlined text-primary text-lg">filter_alt</span>
+                    <span class="text-gray-600 dark:text-gray-400">
+                        Buscando: <strong id="searchQuery" class="text-black dark:text-white"></strong>
+                    </span>
+                    <button onclick="clearSearch()"
+                        class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline text-sm">
+                        Limpiar
+                    </button>
+                </div>
 
-                    <!-- Mensaje sin resultados -->
-                    <div id="noResults" class="hidden mt-2 p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
-                        <div class="flex items-center gap-2 text-sm text-orange-700 dark:text-orange-300">
-                            <span class="material-symbols-outlined">search_off</span>
-                            <span>No se encontraron lecciones. Intenta con otros términos.</span>
-                        </div>
+                <!-- Mensaje de resultados -->
+                <div id="searchResults"
+                    class="hidden mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+                        <span class="material-symbols-outlined">info</span>
+                        <span id="searchResultsText"></span>
                     </div>
                 </div>
+
+                <!-- Mensaje sin resultados -->
+                <div id="noResults"
+                    class="hidden mt-2 p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                    <div class="flex items-center gap-2 text-sm text-orange-700 dark:text-orange-300">
+                        <span class="material-symbols-outlined">search_off</span>
+                        <span>No se encontraron lecciones. Intenta con otros términos.</span>
+                    </div>
+                </div>
+            </div>
             </div>
 
             <!-- Tab Content: Temario -->
@@ -330,50 +327,50 @@
                     </div>
                 </div>
             </div>
-            
+
             <!--aqui va-->
-             	
-<div id="contentPath" class="tab-content hidden">
-    <!-- SVG Path for Zigzag Connector (Desktop) -->
-    <svg class="absolute top-0 w-full h-full pointer-events-none z-0 hidden md:block"
-        preserveAspectRatio="none" viewBox="0 0 400 1200">
-        <defs>
-            <linearGradient id="pathGradient" x1="0%" x2="0%" y1="0%" y2="100%">
-                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"></stop>
-                <stop offset="40%" style="stop-color:#f4d125;stop-opacity:1"></stop>
-                <stop offset="100%" style="stop-color:#9ca3af;stop-opacity:0.3"></stop>
-            </linearGradient>
-        </defs>
-        <path class="path-line opacity-50 dark:opacity-30"
-            d="M 200,50 Q 200,100 200,120 C 200,180 350,180 350,250 C 350,320 50,320 50,450 C 50,580 200,580 200,650 C 200,720 350,720 350,850 C 350,980 200,980 200,1100"
-            fill="none" stroke="url(#pathGradient)" stroke-dasharray="8 8" stroke-width="4">
-        </path>
-    </svg>
 
-    <!-- Vertical line for mobile -->
-    <div
-        class="absolute top-0 bottom-0 left-8 md:hidden w-1 bg-gradient-to-b from-green-500 via-primary to-gray-300 dark:to-gray-700 z-0">
-    </div>
+            <div id="contentPath" class="tab-content hidden">
+                <!-- SVG Path for Zigzag Connector (Desktop) -->
+                <svg class="absolute top-0 w-full h-full pointer-events-none z-0 hidden md:block"
+                    preserveAspectRatio="none" viewBox="0 0 400 1200">
+                    <defs>
+                        <linearGradient id="pathGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"></stop>
+                            <stop offset="40%" style="stop-color:#f4d125;stop-opacity:1"></stop>
+                            <stop offset="100%" style="stop-color:#9ca3af;stop-opacity:0.3"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path class="path-line opacity-50 dark:opacity-30"
+                        d="M 200,50 Q 200,100 200,120 C 200,180 350,180 350,250 C 350,320 50,320 50,450 C 50,580 200,580 200,650 C 200,720 350,720 350,850 C 350,980 200,980 200,1100"
+                        fill="none" stroke="url(#pathGradient)" stroke-dasharray="8 8" stroke-width="4">
+                    </path>
+                </svg>
 
-    <!-- Path Items Container -->
-    <div class="w-full space-y-24 md:space-y-32 relative z-10 pt-10 pb-32" id="lessonsPath">
-        <!-- Loading State -->
-        <div class="flex justify-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
-            </div>
-        </div>
-    </div>
+                <!-- Vertical line for mobile -->
+                <div
+                    class="absolute top-0 bottom-0 left-8 md:hidden w-1 bg-gradient-to-b from-green-500 via-primary to-gray-300 dark:to-gray-700 z-0">
+                </div>
 
-    <!-- Future Path Indicator -->
-    <div class="w-full flex justify-center mt-4">
-        <div class="flex flex-col items-center gap-2 opacity-30">
-            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
-            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Más por
-                venir</span>
-        </div>
-    </div>
+                <!-- Path Items Container -->
+                <div class="w-full space-y-24 md:space-y-32 relative z-10 pt-10 pb-32" id="lessonsPath">
+                    <!-- Loading State -->
+                    <div class="flex justify-center py-20">
+                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Future Path Indicator -->
+                <div class="w-full flex justify-center mt-4">
+                    <div class="flex flex-col items-center gap-2 opacity-30">
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Más por
+                            venir</span>
+                    </div>
+                </div>
         </section>
 
         <!-- Right Sidebar: Stats & Leaderboard -->
@@ -434,7 +431,7 @@
     <!-- Modal System -->
     <script src="/static/js/modal-system.js"></script>
 
-     <!-- Sistema de Búsqueda -->
+    <!-- Sistema de Búsqueda -->
     <script src="/static/js/search-system.js"></script>
 
     <script>
@@ -567,13 +564,20 @@
 
                 categoryLessons.forEach((lesson, lessonIndex) => {
                     const isCompleted = completed.includes(lesson.id);
-                    const isActive = !isCompleted && !currentActive;
+                    const unlockedCats = userProgress.unlocked_categories || ['Python Básico'];
+                    const catUnlocked = unlockedCats.includes(category);
 
-                    if (isActive) {
-                        currentActive = lesson;
-                        html += renderActiveLesson(lesson, index);
-                    } else if (isCompleted) {
+                    // Accesible si: la categoría está desbloqueada Y
+                    // es la primera lección de esa categoría sin completar
+                    const prevAllDone = lessonIndex === 0 ||
+                        categoryLessons.slice(0, lessonIndex).every(l => completed.includes(l.id));
+                    const isActive = catUnlocked && !isCompleted && prevAllDone;
+
+                    if (isCompleted) {
                         html += renderCompletedLesson(lesson, index);
+                    } else if (isActive) {
+                        if (!currentActive) currentActive = lesson;
+                        html += renderActiveLesson(lesson, index);
                     } else {
                         html += renderLockedLesson(lesson, index);
                     }
@@ -792,7 +796,13 @@
                 // Render lessons
                 container.innerHTML = lessons.map((lesson, index) => {
                     const isCompleted = completedLessons.includes(lesson.id);
-                    const isLocked = !isCompleted && index > 0 && !completedLessons.includes(lessons[index - 1]?.id);
+                    const unlockedCats = userProgress.unlocked_categories || ['Python Básico'];
+                    const catUnlocked = unlockedCats.includes(catName);
+                    // Primera lección de categoría desbloqueada: siempre accesible
+                    // Resto: solo si la anterior está completada
+                    const isLocked = !isCompleted &&
+                        !(catUnlocked && index === 0) &&
+                        (index === 0 || !completedLessons.includes(lessons[index - 1]?.id));
 
                     return `
                         <div class="flex items-center gap-3 p-3 rounded-lg ${isLocked ? 'opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'} transition-colors"

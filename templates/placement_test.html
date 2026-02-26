@@ -695,6 +695,7 @@
             const totalScore = Math.round((totalCorrect / questions.length) * 100);
 
             // Save results
+            let unlockedCategories = ['Python Básico'];
             try {
                 const saveRes = await fetch('/api/user/placement-test/submit', {
                     method: 'POST',
@@ -702,17 +703,19 @@
                     body: JSON.stringify({ scores: { total: totalScore } })
                 });
                 const saveData = await saveRes.json();
-                if (!saveData.success) {
+                if (saveData.success) {
+                    unlockedCategories = saveData.unlocked_categories || unlockedCategories;
+                } else {
                     console.error('Error guardando resultados:', saveData.message);
                 }
             } catch (error) {
                 console.error('Error saving results:', error);
             }
 
-            showResults(totalScore);
+            showResults(totalScore, unlockedCategories);
         }
 
-        function showResults(score) {
+        function showResults(score, unlockedCategories) {
             document.getElementById('testScreen').classList.add('hidden');
             document.getElementById('resultsScreen').classList.remove('hidden');
 
@@ -759,7 +762,43 @@
 
             document.getElementById('resultTitle').textContent = title;
             document.getElementById('resultMessage').textContent = message;
-            document.getElementById('unlockedLevels').innerHTML = '';
+
+            // Render unlocked levels
+            const unlockedContainer = document.getElementById('unlockedLevels');
+            const levelConfig = {
+                'Python Básico': { color: 'blue', icon: 'school', label: 'Python Básico' },
+                'Python Intermedio': { color: 'purple', icon: 'emoji_events', label: 'Python Intermedio' },
+                'Python Avanzado': { color: 'green', icon: 'workspace_premium', label: 'Python Avanzado' }
+            };
+            const allLevels = ['Python Básico', 'Python Intermedio', 'Python Avanzado'];
+            unlockedContainer.innerHTML = `
+                <h3 class="text-lg font-bold mb-4 text-center">Niveles disponibles en tu ruta</h3>
+                <div class="grid gap-3">
+                    ${allLevels.map(lvl => {
+                const cfg = levelConfig[lvl];
+                const isUnlocked = (unlockedCategories || []).includes(lvl);
+                return `
+                        <div class="flex items-center gap-4 p-4 rounded-xl border-2 ${isUnlocked
+                        ? `border-${cfg.color}-300 dark:border-${cfg.color}-700 bg-${cfg.color}-50 dark:bg-${cfg.color}-900/20`
+                        : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 opacity-60'
+                    }">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${isUnlocked
+                        ? `bg-${cfg.color}-100 dark:bg-${cfg.color}-900/40`
+                        : 'bg-gray-200 dark:bg-gray-700'
+                    }">
+                                <span class="material-symbols-outlined ${isUnlocked ? `text-${cfg.color}-600` : 'text-gray-400'
+                    }">${isUnlocked ? cfg.icon : 'lock'}</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-bold ${isUnlocked ? '' : 'text-gray-400 dark:text-gray-500'
+                    }">${cfg.label}</div>
+                                <div class="text-xs ${isUnlocked ? `text-${cfg.color}-600 dark:text-${cfg.color}-400` : 'text-gray-400'
+                    }">${isUnlocked ? '✓ Desbloqueado' : 'Bloqueado'}</div>
+                            </div>
+                        </div>`;
+            }).join('')}
+                </div>
+            `;
         }
 
         function skipTest() {

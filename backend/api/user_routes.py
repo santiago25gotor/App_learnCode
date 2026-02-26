@@ -85,12 +85,14 @@ def submit_placement_test():
             if nivel in ('Intermedio', 'Avanzado'):
                 unlocked_categories.append('Python Intermedio')
                 ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Básico')
+                print(f"[PLACEMENT] unlock_all_lessons 'Python Básico' -> ok={ok}, count={count}")
                 if ok:
                     lessons_unlocked += count
 
             if nivel == 'Avanzado':
                 unlocked_categories.append('Python Avanzado')
                 ok, count = firebase_service.unlock_all_lessons_for_category(user_id, 'Python Intermedio')
+                print(f"[PLACEMENT] unlock_all_lessons 'Python Intermedio' -> ok={ok}, count={count}")
                 if ok:
                     lessons_unlocked += count
 
@@ -119,6 +121,8 @@ def submit_placement_test():
                     lessons_unlocked += count
 
         firebase_service.save_placement_test_results(user_id, scores, unlocked_categories)
+
+        print(f"[PLACEMENT] nivel={nivel}, unlocked_categories={unlocked_categories}, lessons_unlocked={lessons_unlocked}")
 
         msg = f'Test completado. {lessons_unlocked} lecciones desbloqueadas.'
         if nivel:
