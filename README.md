@@ -258,9 +258,9 @@ El contenido está dividido en tres niveles. Por defecto, solo **Python Básico*
 
 | Nivel | Lecciones | Desbloqueo |
 |---|---|---|
-| 🎯 Python Básico | 762 | Al registrarse |
-| ⚡ Python Intermedio | 580 | Al completar Básico o placement test ≥ 70 en básico |
-| 🚀 Python Avanzado | 423 | Al completar Intermedio o placement test ≥ 75 en intermedio |
+| 🎯 Python Básico | 15 | Al registrarse |
+| ⚡ Python Intermedio | 9 | Al completar Básico o placement test ≥ 70 en básico |
+| 🚀 Python Avanzado | 6 | Al completar Intermedio o placement test ≥ 75 en intermedio |
 
 ### Placement Test
 
