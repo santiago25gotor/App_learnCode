@@ -564,15 +564,18 @@
 
                 categoryLessons.forEach((lesson, lessonIndex) => {
                     const isCompleted = completed.includes(lesson.id);
-                    const categoryUnlocked = (userProgress.unlocked_categories || ['Python Básico']).includes(category);
-                    // Una lección es "activa" si su categoría está desbloqueada,
-                    // no está completada, y es la primera sin completar de esa categoría.
-                    const isActiveInCategory = categoryUnlocked && !isCompleted &&
+                    const unlockedCats = userProgress.unlocked_categories || ['Python Básico'];
+                    const catUnlocked = unlockedCats.includes(category);
+
+                    // Accesible si: la categoría está desbloqueada Y
+                    // es la primera lección de esa categoría sin completar
+                    const prevAllDone = lessonIndex === 0 ||
                         categoryLessons.slice(0, lessonIndex).every(l => completed.includes(l.id));
+                    const isActive = catUnlocked && !isCompleted && prevAllDone;
 
                     if (isCompleted) {
                         html += renderCompletedLesson(lesson, index);
-                    } else if (isActiveInCategory) {
+                    } else if (isActive) {
                         if (!currentActive) currentActive = lesson;
                         html += renderActiveLesson(lesson, index);
                     } else {
@@ -793,8 +796,13 @@
                 // Render lessons
                 container.innerHTML = lessons.map((lesson, index) => {
                     const isCompleted = completedLessons.includes(lesson.id);
-                    const categoryUnlocked = (userProgress.unlocked_categories || ['Python Básico']).includes(catName);
-                    const isLocked = !isCompleted && !(categoryUnlocked && index === 0) && (index === 0 || !completedLessons.includes(lessons[index - 1]?.id));
+                    const unlockedCats = userProgress.unlocked_categories || ['Python Básico'];
+                    const catUnlocked = unlockedCats.includes(catName);
+                    // Primera lección de categoría desbloqueada: siempre accesible
+                    // Resto: solo si la anterior está completada
+                    const isLocked = !isCompleted &&
+                        !(catUnlocked && index === 0) &&
+                        (index === 0 || !completedLessons.includes(lessons[index - 1]?.id));
 
                     return `
                         <div class="flex items-center gap-3 p-3 rounded-lg ${isLocked ? 'opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer'} transition-colors"
