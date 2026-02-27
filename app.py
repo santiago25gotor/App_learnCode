@@ -20,7 +20,6 @@ def create_app():
     app.register_blueprint(code_api,   url_prefix='/api/code')
     app.register_blueprint(admin_api,  url_prefix='/api/admin')  
 
-    # ── Rutas de plantillas ────────────────────────────────────────
     @app.route('/')
     def index():
         if 'user_id' in session:

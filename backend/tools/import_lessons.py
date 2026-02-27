@@ -1,18 +1,7 @@
-"""
-import_lessons.py  ·  tools/
-Importa las lecciones desde pylearn_lecciones.csv a Firestore.
-Uso: python tools/import_lessons.py
-"""
-
 import pandas as pd
 import os
 import sys
 
-# Subir hasta la raíz del proyecto (App_learnCode/)
-# __file__ = backend/tools/import_lessons.py
-# dirname x1 = backend/tools/
-# dirname x2 = backend/
-# dirname x3 = App_learnCode/  ← raíz
 raiz = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, raiz)
 
@@ -24,7 +13,6 @@ CSV_PATH = os.path.join('data', 'pylearn_lecciones.csv')
 
 
 def borrar_lecciones_existentes():
-    """Elimina todas las lecciones actuales de Firestore."""
     print("🗑️  Borrando lecciones existentes...")
     lecciones = firebase_service.db.collection(Config.LESSONS_COLLECTION).stream()
     batch = firebase_service.db.batch()
@@ -32,7 +20,7 @@ def borrar_lecciones_existentes():
     for doc in lecciones:
         batch.delete(doc.reference)
         count += 1
-        if count % 400 == 0:          # Firestore limita a 500 por batch
+        if count % 400 == 0:          
             batch.commit()
             batch = firebase_service.db.batch()
     if count % 400 != 0:
@@ -53,7 +41,7 @@ def importar_lecciones():
     df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
     print(f"\n📂 Lecciones encontradas en el CSV: {len(df)}")
 
-    # Distribución por categoría
+    
     for cat, n in df['categoria'].value_counts().items():
         print(f"   • {cat}: {n}")
 

@@ -23,11 +23,6 @@ def _rate_limited(email: str) -> bool:
     hist.append(now)
     return False
 
-
-# ─────────────────────────────────────────────────────────
-#  REGISTRO CON VERIFICACIÓN DE EMAIL EN DOS PASOS
-# ─────────────────────────────────────────────────────────
-
 @auth_api.route('/send-code', methods=['POST'])
 def send_code():
     """Paso 1: Validar datos y enviar código de verificación al email"""
@@ -105,10 +100,6 @@ def register():
         return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
 
 
-# ─────────────────────────────────────────────────────────
-#  LOGIN / LOGOUT
-# ─────────────────────────────────────────────────────────
-
 @auth_api.route('/login', methods=['POST'])
 def login():
     try:
@@ -155,10 +146,6 @@ def logout():
     return jsonify({'success': True, 'message': 'Sesión cerrada'}), 200
 
 
-# ─────────────────────────────────────────────────────────
-#  CAMBIO DE CONTRASEÑA (usuario autenticado)
-# ─────────────────────────────────────────────────────────
-
 @auth_api.route('/change-password', methods=['POST'])
 @login_required
 def change_password():
@@ -190,10 +177,6 @@ def change_password():
         return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
 
 
-# ─────────────────────────────────────────────────────────
-#  RECUPERACIÓN DE CONTRASEÑA (sin sesión)
-# ─────────────────────────────────────────────────────────
-
 @auth_api.route('/forgot-password/send-code', methods=['POST'])
 def forgot_password_send_code():
     """Enviar código de verificación para recuperar contraseña"""
@@ -209,7 +192,7 @@ def forgot_password_send_code():
 
         user = firebase_service.get_user_by_email(email)
         if not user:
-            # Por seguridad, no revelar si el email existe o no
+            
             return jsonify({'success': True, 'message': 'Si ese email existe en nuestra base de datos, recibirás un código de verificación.'}), 200
 
         if _rate_limited(email):
@@ -265,11 +248,6 @@ def forgot_password_reset():
 
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error en el servidor: {str(e)}'}), 500
-
-
-# ─────────────────────────────────────────────────────────
-#  LOGIN CON GOOGLE
-# ─────────────────────────────────────────────────────────
 
 @auth_api.route('/google', methods=['POST'])
 def google_login():
