@@ -123,19 +123,41 @@
                     </div>
                     <span class="text-2xl font-black tracking-tight">PYLEARN</span>
                 </div>
+                <!-- Desktop nav -->
                 <div class="hidden md:flex items-center gap-6">
                     <a href="#features"
                         class="text-gray-700 hover:text-black font-medium transition-colors">Características</a>
                     <a href="#how-it-works" class="text-gray-700 hover:text-black font-medium transition-colors">Cómo
                         Funciona</a>
-                    <a href="#testimonials"
-                        class="text-gray-700 hover:text-black font-medium transition-colors">Testimonios</a>
                     <a href="/login"
                         class="px-6 py-2 bg-primary text-black font-bold rounded-lg hover:bg-yellow-400 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                         Comenzar Gratis
                     </a>
                 </div>
+                <!-- Mobile nav -->
+                <div class="flex md:hidden items-center gap-2">
+                    <a href="/login" class="px-4 py-2 bg-primary text-black font-bold rounded-lg text-sm">Comenzar</a>
+                    <button onclick="toggleIndexSearchMenu()" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined" id="indexSearchMenuIcon">menu</span>
+                    </button>
+                </div>
             </div>
+        </div>
+        <!-- Mobile dropdown -->
+        <div id="indexSearchMenu" class="hidden md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 px-4 py-4 space-y-3">
+            <a href="#features" onclick="toggleIndexSearchMenu()"
+                class="flex items-center gap-2 text-gray-700 hover:text-black font-medium py-2 transition-colors">
+                <span class="material-symbols-outlined text-primary text-lg">star</span>Características
+            </a>
+            <a href="#how-it-works" onclick="toggleIndexSearchMenu()"
+                class="flex items-center gap-2 text-gray-700 hover:text-black font-medium py-2 transition-colors">
+                <span class="material-symbols-outlined text-primary text-lg">route</span>Cómo Funciona
+            </a>
+            <a href="/login"
+                class="flex items-center justify-center gap-2 w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-gray-800 transition-all mt-2">
+                <span>Comenzar Gratis</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
         </div>
     </nav>
 
@@ -418,6 +440,14 @@
     </footer>
 
     <script>
+        function toggleIndexSearchMenu() {
+            const menu = document.getElementById('indexSearchMenu');
+            const icon = document.getElementById('indexSearchMenuIcon');
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            icon.textContent = isHidden ? 'close' : 'menu';
+        }
+
         // Add scroll animations
         const observerOptions = {
             threshold: 0.1,

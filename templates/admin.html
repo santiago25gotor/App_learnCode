@@ -31,14 +31,15 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased">
 
 <!-- NAVBAR -->
-<nav class="sticky top-0 z-50 bg-white/90 dark:bg-[#1a1708]/90 backdrop-blur border-b border-gray-200 dark:border-gray-800 px-6 py-3">
+<nav class="sticky top-0 z-50 bg-white/90 dark:bg-[#1a1708]/90 backdrop-blur border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-3">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-2xl text-primary">terminal</span>
             <span class="font-bold text-xl tracking-tight">PYLEARN</span>
             <span class="ml-2 px-2 py-0.5 rounded bg-primary text-black text-xs font-bold">ADMIN</span>
         </div>
-        <div class="flex items-center gap-4">
+        <!-- Desktop nav -->
+        <div class="hidden sm:flex items-center gap-4">
             <span class="text-sm text-gray-500 dark:text-gray-400">
                 <span class="material-symbols-outlined text-base align-middle">person</span>
                 <span id="adminUsername" class="ml-1">Admin</span>
@@ -53,10 +54,32 @@
                 Salir
             </button>
         </div>
+        <!-- Mobile nav -->
+        <div class="flex sm:hidden items-center gap-2">
+            <button onclick="toggleDark()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined text-xl" id="themeIconMobile">dark_mode</span>
+            </button>
+            <button onclick="toggleAdminMenu()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined" id="adminMenuIcon">menu</span>
+            </button>
+        </div>
+    </div>
+    <!-- Mobile dropdown -->
+    <div id="adminMenu" class="hidden sm:hidden pt-3 pb-1 border-t border-gray-200 dark:border-gray-800 mt-3 space-y-2">
+        <p class="text-sm text-gray-500 dark:text-gray-400 px-1 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">person</span>
+            <span id="adminUsernameMobile">Admin</span>
+        </p>
+        <a href="/course" class="flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span class="material-symbols-outlined text-base">arrow_back</span>Volver al curso
+        </a>
+        <button onclick="logout()" class="w-full flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200">
+            <span class="material-symbols-outlined text-base">logout</span>Salir
+        </button>
     </div>
 </nav>
 
-<div class="max-w-7xl mx-auto px-6 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
     <!-- HEADER -->
     <div class="mb-8">
@@ -160,5 +183,33 @@
 </div>
 
     <script src="/static/js/admin.js"></script>
-</body>
+    <script>
+        function toggleAdminMenu() {
+            const menu = document.getElementById('adminMenu');
+            const icon = document.getElementById('adminMenuIcon');
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            icon.textContent = isHidden ? 'close' : 'menu';
+        }
+        // Sync mobile theme icon and username
+        const origToggleDark = window.toggleDark;
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileIcon = document.getElementById('themeIconMobile');
+            if (mobileIcon) {
+                const html = document.documentElement;
+                mobileIcon.textContent = html.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+            }
+        });
+        // Patch toggleDark to also update mobile icon
+        document.addEventListener('DOMContentLoaded', () => {
+            const origBtn = document.getElementById('themeIcon');
+            const mobBtn = document.getElementById('themeIconMobile');
+            if (mobBtn && origBtn) {
+                const observer = new MutationObserver(() => {
+                    mobBtn.textContent = origBtn.textContent;
+                });
+                observer.observe(origBtn, { childList: true, characterData: true, subtree: true });
+            }
+        });
+    </script>
 </html>

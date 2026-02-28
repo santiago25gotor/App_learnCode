@@ -236,7 +236,11 @@ function escHtml(str) {
 
     // Cargar username
     const me = await apiFetch('/api/user/me');
-    if (me.success) document.getElementById('adminUsername').textContent = me.user.username;
+    if (me.success) {
+        document.getElementById('adminUsername').textContent = me.user.username;
+        const mobileEl = document.getElementById('adminUsernameMobile');
+        if (mobileEl) mobileEl.textContent = me.user.username;
+    }
 
     loadStats();
     loadUsers();

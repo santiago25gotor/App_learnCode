@@ -94,6 +94,7 @@
                     <span class="font-bold text-xl tracking-tight">PYLEARN</span>
                 </div>
 
+                <!-- Desktop nav -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a id="navPlacementLink"
                         class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors hidden"
@@ -126,7 +127,47 @@
                         <img id="headerAvatarImg" src="" alt="" class="hidden w-full h-full object-cover">
                     </a>
                 </div>
+
+                <!-- Mobile nav: points + avatar + hamburger -->
+                <div class="flex md:hidden items-center gap-3">
+                    <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">
+                        <span class="material-icons text-primary text-sm">bolt</span>
+                        <span class="text-sm font-bold" id="headerPointsMobile">0</span>
+                    </div>
+                    <a href="/profile"
+                        class="h-8 w-8 rounded-full bg-primary border-2 border-black dark:border-white overflow-hidden flex items-center justify-center text-black font-bold flex-shrink-0"
+                        id="headerAvatarMobile">
+                        <span id="headerAvatarInitialMobile">U</span>
+                        <img id="headerAvatarImgMobile" src="" alt="" class="hidden w-full h-full object-cover">
+                    </a>
+                    <button onclick="toggleCourseMenu()"
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <span class="material-symbols-outlined" id="courseMenuIcon">menu</span>
+                    </button>
+                </div>
             </div>
+        </div>
+        <!-- Mobile dropdown -->
+        <div id="courseMenu" class="hidden md:hidden bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 px-4 py-4 space-y-3">
+            <a id="navPlacementLinkMobile" href="/placement-test" onclick="toggleCourseMenu()"
+                class="hidden items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-symbols-outlined text-primary">psychology</span>Test de Nivel
+            </a>
+            <a href="/profile" onclick="toggleCourseMenu()"
+                class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-symbols-outlined text-primary">person</span>Mi Perfil
+            </a>
+            <a href="/static/js/server_n8n/html/eduai.html" onclick="toggleCourseMenu()"
+                class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-symbols-outlined text-primary">smart_toy</span>Videos IA
+            </a>
+            <button onclick="toggleDarkMode(); toggleCourseMenu()"
+                class="flex items-center gap-3 w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-icons dark:hidden text-primary">dark_mode</span>
+                <span class="material-icons hidden dark:block text-primary">light_mode</span>
+                <span class="dark:hidden">Modo Oscuro</span>
+                <span class="hidden dark:block">Modo Claro</span>
+            </button>
         </div>
     </nav>
 
@@ -435,6 +476,14 @@
     <script src="/static/js/search-system.js"></script>
 
     <script>
+        function toggleCourseMenu() {
+            const menu = document.getElementById('courseMenu');
+            const icon = document.getElementById('courseMenuIcon');
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            icon.textContent = isHidden ? 'close' : 'menu';
+        }
+
         let allLessons = [];
         let userProgress = {};
         let currentUsername = '{{ username }}';
@@ -476,6 +525,22 @@
                         localStorage.setItem(`userAvatar_${userId}`, avatarSrc);
                     }
                     document.getElementById('headerPoints').textContent = userProgress.total_points || 0;
+                    // Sync mobile elements
+                    document.getElementById('headerPointsMobile').textContent = userProgress.total_points || 0;
+                    const mobileInitialEl = document.getElementById('headerAvatarInitialMobile');
+                    const mobileImgEl = document.getElementById('headerAvatarImgMobile');
+                    if (mobileInitialEl) mobileInitialEl.textContent = initial;
+                    if (avatarSrc && mobileImgEl) {
+                        mobileImgEl.src = avatarSrc;
+                        mobileImgEl.classList.remove('hidden');
+                        mobileInitialEl.classList.add('hidden');
+                    }
+                    // Show placement test link in mobile menu too
+                    const mobileNavLink = document.getElementById('navPlacementLinkMobile');
+                    if (!userProgress.placement_test_completed && mobileNavLink) {
+                        mobileNavLink.classList.remove('hidden');
+                        mobileNavLink.classList.add('flex');
+                    }
 
                     // Update stats sidebar
                     document.getElementById('totalXP').textContent = userProgress.total_points || 0;

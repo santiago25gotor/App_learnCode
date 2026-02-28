@@ -86,43 +86,31 @@
     <nav
         class="fixed top-0 w-full z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
+            <div class="flex justify-between h-16 items-center gap-2">
+                <div class="flex items-center space-x-3 flex-shrink-0">
                     <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-black">
                         <span class="material-symbols-outlined text-xl">terminal</span>
                     </div>
                     <span class="font-bold text-xl tracking-tight">PYLEARN</span>
                 </div>
 
-<div class="hidden md:flex flex-1 md:ml-[16%] lg:ml-[10%]">
-    <div class="relative w-full max-w-sm group">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors text-xl">search</span>
-        </div>
-        <input type="text" 
-               id="lessonSearch"
-               class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm" 
-               placeholder="Busca el tema que deseas">
-    </div>
-</div>
+                <!-- Search bar - visible on md+ -->
+                <div class="hidden md:flex flex-1 md:ml-[16%] lg:ml-[10%]">
+                    <div class="relative w-full max-w-sm group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors text-xl">search</span>
+                        </div>
+                        <input type="text" 
+                               id="lessonSearch"
+                               class="block w-full pl-10 pr-3 py-1.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm" 
+                               placeholder="Busca el tema que deseas">
+                    </div>
+                </div>
 
+                <!-- Desktop nav -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a class="text-gray-900 dark:text-white font-medium border-b-2 border-primary" href="#">Ruta de
-                        Aprendizaje</a>
-
-
-                   
-
-                    </a>
-                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
-                        href="/profile">
-                        Mi Perfil
-                    </a>
-                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors flex items-center gap-1"
-                        href="/n8n">
-                       
-                    </a>
-
+                    <a class="text-gray-900 dark:text-white font-medium border-b-2 border-primary" href="#">Ruta de Aprendizaje</a>
+                    <a class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors" href="/profile">Mi Perfil</a>
                     <button onclick="toggleDarkMode()"
                         class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <span class="material-icons dark:hidden">dark_mode</span>
@@ -134,11 +122,46 @@
                     </div>
                     <a href="/profile"
                         class="h-8 w-8 rounded-full bg-primary border-2 border-black dark:border-white overflow-hidden flex items-center justify-center text-black font-bold hover:scale-110 transition-transform cursor-pointer"
-                        id="headerAvatar">
-                        U
-                    </a>
+                        id="headerAvatar">U</a>
+                </div>
+
+                <!-- Mobile nav: points + avatar + hamburger -->
+                <div class="flex md:hidden items-center gap-2 flex-shrink-0">
+                    <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">
+                        <span class="material-icons text-primary text-sm">bolt</span>
+                        <span class="text-sm font-bold" id="headerPointsMobile">0</span>
+                    </div>
+                    <a href="/profile"
+                        class="h-8 w-8 rounded-full bg-primary border-2 border-black dark:border-white overflow-hidden flex items-center justify-center text-black font-bold flex-shrink-0">U</a>
+                    <button onclick="toggleHomeMenu()"
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <span class="material-symbols-outlined" id="homeMenuIcon">menu</span>
+                    </button>
                 </div>
             </div>
+        </div>
+        <!-- Mobile search + menu dropdown -->
+        <div id="homeMenu" class="hidden md:hidden bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 px-4 py-4 space-y-3">
+            <!-- Mobile search -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="material-symbols-outlined text-gray-400 text-xl">search</span>
+                </div>
+                <input type="text" id="lessonSearchMobile"
+                    class="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm" 
+                    placeholder="Busca el tema que deseas">
+            </div>
+            <a href="/profile" onclick="toggleHomeMenu()"
+                class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-symbols-outlined text-primary">person</span>Mi Perfil
+            </a>
+            <button onclick="toggleDarkMode(); toggleHomeMenu()"
+                class="flex items-center gap-3 w-full py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors">
+                <span class="material-icons dark:hidden text-primary">dark_mode</span>
+                <span class="material-icons hidden dark:block text-primary">light_mode</span>
+                <span class="dark:hidden">Modo Oscuro</span>
+                <span class="hidden dark:block">Modo Claro</span>
+            </button>
         </div>
     </nav>
 
@@ -334,6 +357,14 @@
     <script src="/static/js/modal-system.js"></script>
 
     <script>
+        function toggleHomeMenu() {
+            const menu = document.getElementById('homeMenu');
+            const icon = document.getElementById('homeMenuIcon');
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            icon.textContent = isHidden ? 'close' : 'menu';
+        }
+
         let allLessons = [];
         let userProgress = {};
         let currentUsername = '{{ username }}';
