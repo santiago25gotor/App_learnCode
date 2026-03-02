@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYLEARN - Panel Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4d125",
+                        "background-dark": "#221f10",
+                        "background-light": "#f8f8f5",
+                    },
+                    fontFamily: { "display": ["Space Grotesk", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #444; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased">
+
+<!-- NAVBAR -->
+<nav class="sticky top-0 z-50 bg-white/90 dark:bg-[#1a1708]/90 backdrop-blur border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-2xl text-primary">terminal</span>
+            <span class="font-bold text-xl tracking-tight">PYLEARN</span>
+            <span class="ml-2 px-2 py-0.5 rounded bg-primary text-black text-xs font-bold">ADMIN</span>
+        </div>
+        <!-- Desktop nav -->
+        <div class="hidden sm:flex items-center gap-4">
+            <span class="text-sm text-gray-500 dark:text-gray-400">
+                <span class="material-symbols-outlined text-base align-middle">person</span>
+                <span id="adminUsername" class="ml-1">Admin</span>
+            </span>
+            <button onclick="toggleDark()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined text-xl" id="themeIcon">dark_mode</span>
+            </button>
+            <a href="/course" class="text-sm px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
+                Volver al curso
+            </a>
+            <button onclick="logout()" class="text-sm px-3 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200">
+                Salir
+            </button>
+        </div>
+        <!-- Mobile nav -->
+        <div class="flex sm:hidden items-center gap-2">
+            <button onclick="toggleDark()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined text-xl" id="themeIconMobile">dark_mode</span>
+            </button>
+            <button onclick="toggleAdminMenu()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined" id="adminMenuIcon">menu</span>
+            </button>
+        </div>
+    </div>
+    <!-- Mobile dropdown -->
+    <div id="adminMenu" class="hidden sm:hidden pt-3 pb-1 border-t border-gray-200 dark:border-gray-800 mt-3 space-y-2">
+        <p class="text-sm text-gray-500 dark:text-gray-400 px-1 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">person</span>
+            <span id="adminUsernameMobile">Admin</span>
+        </p>
+        <a href="/course" class="flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span class="material-symbols-outlined text-base">arrow_back</span>Volver al curso
+        </a>
+        <button onclick="logout()" class="w-full flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200">
+            <span class="material-symbols-outlined text-base">logout</span>Salir
+        </button>
+    </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- HEADER -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold">Panel de Administración</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Gestión de usuarios y estadísticas de la plataforma</p>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white dark:bg-[#2a2510] rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-gray-500">Total usuarios</span>
+                <span class="material-symbols-outlined text-primary text-2xl">group</span>
+            </div>
+            <p class="text-3xl font-bold" id="statUsers">—</p>
+        </div>
+        <div class="bg-white dark:bg-[#2a2510] rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-gray-500">Usuarios activos</span>
+                <span class="material-symbols-outlined text-green-500 text-2xl">trending_up</span>
+            </div>
+            <p class="text-3xl font-bold" id="statActive">—</p>
+        </div>
+        <div class="bg-white dark:bg-[#2a2510] rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-gray-500">Total lecciones</span>
+                <span class="material-symbols-outlined text-blue-500 text-2xl">menu_book</span>
+            </div>
+            <p class="text-3xl font-bold" id="statLessons">—</p>
+        </div>
+        <div class="bg-white dark:bg-[#2a2510] rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-gray-500">Puntos promedio</span>
+                <span class="material-symbols-outlined text-purple-500 text-2xl">star</span>
+            </div>
+            <p class="text-3xl font-bold" id="statAvg">—</p>
+        </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="bg-white dark:bg-[#2a2510] rounded-xl border border-gray-200 dark:border-gray-800">
+        <div class="p-5 border-b border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 class="font-bold text-lg">Usuarios</h2>
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
+                    <input id="searchInput" type="text" placeholder="Buscar usuario..."
+                        class="pl-9 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1c1a0e] text-sm focus:outline-none focus:ring-2 focus:ring-primary w-56"
+                        oninput="loadUsers()">
+                </div>
+                <button onclick="loadUsers()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <span class="material-symbols-outlined text-xl">refresh</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400">
+                        <th class="text-left px-5 py-3 font-medium">Usuario</th>
+                        <th class="text-left px-5 py-3 font-medium hidden md:table-cell">Email</th>
+                        <th class="text-left px-5 py-3 font-medium hidden sm:table-cell">Rol</th>
+                        <th class="text-left px-5 py-3 font-medium hidden lg:table-cell">Puntos</th>
+                        <th class="text-left px-5 py-3 font-medium hidden lg:table-cell">Lecciones</th>
+                        <th class="text-right px-5 py-3 font-medium">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr><td colspan="6" class="text-center py-12 text-gray-400">
+                        <span class="material-symbols-outlined text-4xl block mb-2">hourglass_empty</span>
+                        Cargando usuarios...
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-500" id="tableFooter"></div>
+    </div>
+</div>
+
+<!-- MODAL DETALLE/ACCIONES -->
+<div id="modalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div id="modalBox" class="bg-white dark:bg-[#2a2510] rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <h3 class="font-bold text-lg" id="modalTitle">Detalles del usuario</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div id="modalContent" class="p-6"></div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 z-[100] hidden">
+    <div id="toastInner" class="flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-sm font-medium">
+        <span class="material-symbols-outlined text-xl" id="toastIcon">check_circle</span>
+        <span id="toastMsg"></span>
+    </div>
+</div>
+
+    <script src="/static/js/admin.js"></script>
+    <script>
+        function toggleAdminMenu() {
+            const menu = document.getElementById('adminMenu');
+            const icon = document.getElementById('adminMenuIcon');
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            icon.textContent = isHidden ? 'close' : 'menu';
+        }
+        // Sync mobile theme icon and username
+        const origToggleDark = window.toggleDark;
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileIcon = document.getElementById('themeIconMobile');
+            if (mobileIcon) {
+                const html = document.documentElement;
+                mobileIcon.textContent = html.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+            }
+        });
+        // Patch toggleDark to also update mobile icon
+        document.addEventListener('DOMContentLoaded', () => {
+            const origBtn = document.getElementById('themeIcon');
+            const mobBtn = document.getElementById('themeIconMobile');
+            if (mobBtn && origBtn) {
+                const observer = new MutationObserver(() => {
+                    mobBtn.textContent = origBtn.textContent;
+                });
+                observer.observe(origBtn, { childList: true, characterData: true, subtree: true });
+            }
+        });
+    </script>
+</html>
