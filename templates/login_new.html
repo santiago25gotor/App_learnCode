@@ -12,6 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
 
+    <style>
+    body { top: 0 !important; }
+    .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+    .skiptranslate { display: none !important; }
+    #google_translate_element { display: none !important; }
+    </style>
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
@@ -110,6 +117,35 @@
         ::-webkit-scrollbar-thumb:hover { background: #d4d4d4; }
     </style>
 </head>
+
+<div id="google_translate_element"></div>
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: 'en,fr,it,pt,de',
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    // Esto aplica automáticamente la traducción guardada en cookie al cargar la página
+    (function autoTranslate() {
+        const match = document.cookie.match(/googtrans=\/es\/([a-z]{2})/);
+        if (!match) return;
+        const langCode = match[1];
+        const interval = setInterval(() => {
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                clearInterval(interval);
+                select.value = langCode;
+                select.dispatchEvent(new Event('change'));
+            }
+        }, 300);
+    })();
+</script>
 
 <body class="bg-background-light dark:bg-background-dark font-display text-[#1c190d] dark:text-[#f8f8f5] antialiased overflow-x-hidden">
     <div class="min-h-screen w-full flex">
